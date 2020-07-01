@@ -35,18 +35,12 @@ import butterknife.BindView;
 import rx.Subscription;
 import rx.functions.Action1;
 
-/**
- * create by libo
- * create on 2020-05-19
- * description 个人主页fragment
- */
+
 public class PersonalHomeFragment extends BaseFragment implements View.OnClickListener {
     @BindView(R.id.iv_bg)
     ImageView ivBg;
     @BindView(R.id.iv_head)
     CircleImageView ivHead;
-    @BindView(R.id.rl_dropdown)
-    RelativeLayout rlDropdown;
     @BindView(R.id.ll_focus)
     LinearLayout llFocus;
     @BindView(R.id.ll_fans)
@@ -59,8 +53,7 @@ public class PersonalHomeFragment extends BaseFragment implements View.OnClickLi
     TextView tvFocus;
     @BindView(R.id.iv_more)
     IconFontTextView ivMore;
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
+
     @BindView(R.id.tablayout)
     XTabLayout tabLayout;
     @BindView(R.id.appbarlayout)
@@ -92,8 +85,6 @@ public class PersonalHomeFragment extends BaseFragment implements View.OnClickLi
     @Override
     protected void init() {
 
-        //解决toolbar左边距问题
-        toolbar.setContentInsetsAbsolute(0, 0);
 
         setAppbarLayoutPercent();
 
@@ -212,12 +203,7 @@ public class PersonalHomeFragment extends BaseFragment implements View.OnClickLi
             case R.id.iv_head:
                 transitionAnim(ivHead, curUserBean.getHead());
                 break;
-            case R.id.iv_bg:
-
-                break;
             case R.id.ll_focus:
-                startActivity(new Intent(getActivity(), FocusActivity.class));
-                break;
             case R.id.ll_fans:
                 startActivity(new Intent(getActivity(), FocusActivity.class));
                 break;

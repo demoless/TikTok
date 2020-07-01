@@ -6,7 +6,6 @@ import rx.subjects.SerializedSubject;
 import rx.subjects.Subject;
 
 /**
- * create by libo
  * create on 2020/5/21
  * description RxBus管理类
  */

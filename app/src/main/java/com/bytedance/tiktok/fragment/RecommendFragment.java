@@ -16,7 +16,6 @@ import com.bytedance.tiktok.bean.DataCreate;
 import com.bytedance.tiktok.bean.MainPageChangeEvent;
 import com.bytedance.tiktok.bean.PauseVideoEvent;
 import com.bytedance.tiktok.utils.OnVideoControllerListener;
-import com.bytedance.tiktok.utils.RxBus;
 import com.bytedance.tiktok.view.CommentDialog;
 import com.bytedance.tiktok.view.ControllerView;
 import com.bytedance.tiktok.view.FullScreenVideoView;
@@ -25,10 +24,12 @@ import com.bytedance.tiktok.view.ShareDialog;
 import com.bytedance.tiktok.view.viewpagerlayoutmanager.OnViewPagerListener;
 import com.bytedance.tiktok.view.viewpagerlayoutmanager.ViewPagerLayoutManager;
 import butterknife.BindView;
+import rx.Subscription;
 import rx.functions.Action1;
 
+import static com.bytedance.tiktok.utils.RxBus.getDefault;
+
 /**
- * create by libo
  * create on 2020-05-19
  * description 推荐播放页
  */
@@ -36,6 +37,7 @@ public class RecommendFragment extends BaseFragment {
     @BindView(R.id.recyclerview)
     RecyclerView recyclerView;
     private VideoAdapter adapter;
+    private Subscription subscribe;
     private ViewPagerLayoutManager viewPagerLayoutManager;
     /** 当前播放视频位置 */
     private int curPlayPos = -1;
@@ -62,14 +64,14 @@ public class RecommendFragment extends BaseFragment {
         setRefreshEvent();
 
         //监听播放或暂停事件
-        RxBus.getDefault().toObservable(PauseVideoEvent.class)
-            .subscribe((Action1<PauseVideoEvent>) event -> {
-                if (event.isPlayOrPause()) {
-                    videoView.start();
-                } else {
-                    videoView.pause();
-                }
-            });
+        subscribe = getDefault().toObservable(PauseVideoEvent.class)
+                .subscribe((Action1<PauseVideoEvent>) event -> {
+                    if (event.isPlayOrPause()) {
+                        videoView.start();
+                    } else {
+                        videoView.pause();
+                    }
+                });
 
     }
 
@@ -93,8 +95,15 @@ public class RecommendFragment extends BaseFragment {
     @Override
     public void onStop() {
         super.onStop();
-
         videoView.stopPlayback();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (subscribe!= null && subscribe.isUnsubscribed()) {
+            subscribe.unsubscribe();
+        }
     }
 
     private void setViewPagerLayoutManager() {
@@ -169,7 +178,7 @@ public class RecommendFragment extends BaseFragment {
         likeShareEvent(controllerView);
 
         //切换播放视频的作者主页数据
-        RxBus.getDefault().post(new CurUserBean(DataCreate.datas.get(position).getUserBean()));
+        getDefault().post(new CurUserBean(DataCreate.datas.get(position).getUserBean()));
 
         curPlayPos = position;
 
@@ -224,7 +233,7 @@ public class RecommendFragment extends BaseFragment {
         controllerView.setListener(new OnVideoControllerListener() {
             @Override
             public void onHeadClick() {
-                RxBus.getDefault().post(new MainPageChangeEvent(1));
+                getDefault().post(new MainPageChangeEvent(1));
             }
 
             @Override

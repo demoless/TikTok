@@ -8,11 +8,7 @@ import com.gyf.immersionbar.ImmersionBar;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-/**
- * create by libo
- * create on 2020-05-19
- * description activity基类
- */
+
 public abstract class BaseActivity extends AppCompatActivity {
     protected Unbinder unbinder;
 

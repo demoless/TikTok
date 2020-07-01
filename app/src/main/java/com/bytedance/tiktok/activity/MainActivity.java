@@ -18,11 +18,7 @@ import butterknife.BindView;
 import rx.Subscription;
 import rx.functions.Action1;
 
-/**
- * create by libo
- * create on 2020/5/19
- * description 主页面
- */
+
 public class MainActivity extends BaseActivity {
     @BindView(R.id.viewpager)
     ViewPager viewPager;
