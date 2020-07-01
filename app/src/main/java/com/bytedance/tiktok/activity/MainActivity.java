@@ -15,6 +15,7 @@ import com.bytedance.tiktok.fragment.RecommendFragment;
 import com.bytedance.tiktok.utils.RxBus;
 import java.util.ArrayList;
 import butterknife.BindView;
+import rx.Subscription;
 import rx.functions.Action1;
 
 /**
@@ -32,6 +33,7 @@ public class MainActivity extends BaseActivity {
     private PersonalHomeFragment personalHomeFragment = new PersonalHomeFragment();
     /** 上次点击返回键时间 */
     private long lastTime;
+    private Subscription subscribe;
     /** 连续按返回键退出时间 */
     private final int EXIT_TIME = 2000;
 
@@ -49,13 +51,12 @@ public class MainActivity extends BaseActivity {
         viewPager.setAdapter(pagerAdapter);
 
         //点击头像切换页面
-        RxBus.getDefault().toObservable(MainPageChangeEvent.class)
+        subscribe = RxBus.getDefault().toObservable(MainPageChangeEvent.class)
                 .subscribe((Action1<MainPageChangeEvent>) event -> {
                     if (viewPager != null) {
                         viewPager.setCurrentItem(event.getPage());
                     }
                 });
-
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -68,7 +69,7 @@ public class MainActivity extends BaseActivity {
 
                 if (position == 0) {
                     RxBus.getDefault().post(new PauseVideoEvent(true));
-                } else if (position == 1){
+                } else if (position == 1) {
                     RxBus.getDefault().post(new PauseVideoEvent(false));
                 }
             }
@@ -86,12 +87,20 @@ public class MainActivity extends BaseActivity {
         if (System.currentTimeMillis() - lastTime > EXIT_TIME) {
             if (viewPager.getCurrentItem() == 1) {
                 viewPager.setCurrentItem(0);
-            }else{
+            } else {
                 Toast.makeText(getApplicationContext(), "再按一次退出", Toast.LENGTH_SHORT).show();
                 lastTime = System.currentTimeMillis();
             }
         } else {
             super.onBackPressed();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (subscribe.isUnsubscribed()) {
+            subscribe.unsubscribe();
         }
     }
 }
