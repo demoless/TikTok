@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import butterknife.BindView;
 
 /**
- * create by libo
  * create on 2020-05-14
  * description 粉丝关注人页面
  */
@@ -42,5 +41,11 @@ public class FocusActivity extends BaseActivity {
         pagerAdapter = new CommPagerAdapter(getSupportFragmentManager(), fragments, titles);
         viewPager.setAdapter(pagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        fragments.clear();
     }
 }

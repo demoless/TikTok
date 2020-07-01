@@ -9,7 +9,6 @@ import com.bytedance.tiktok.bean.DataCreate;
 import butterknife.BindView;
 
 /**
- * create by libo
  * create on 2020-05-19
  * description 个人作品fragment
  */

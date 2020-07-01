@@ -213,7 +213,9 @@ public class PersonalHomeFragment extends BaseFragment implements View.OnClickLi
     @Override
     public void onDestroy() {
         super.onDestroy();
-
+        if (fragments != null && !fragments.isEmpty()) {
+            fragments.clear();
+        }
         if (subscription != null) {
             subscription.unsubscribe();
         }

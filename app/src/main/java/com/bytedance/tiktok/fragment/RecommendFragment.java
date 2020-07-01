@@ -38,6 +38,7 @@ public class RecommendFragment extends BaseFragment {
     RecyclerView recyclerView;
     private VideoAdapter adapter;
     private Subscription subscribe;
+    private Action1<PauseVideoEvent> pauseVideoEventAction1;
     private ViewPagerLayoutManager viewPagerLayoutManager;
     /** 当前播放视频位置 */
     private int curPlayPos = -1;
@@ -64,15 +65,15 @@ public class RecommendFragment extends BaseFragment {
         setRefreshEvent();
 
         //监听播放或暂停事件
+        pauseVideoEventAction1 = event -> {
+            if (event.isPlayOrPause()) {
+                videoView.start();
+            } else {
+                videoView.pause();
+            }
+        };
         subscribe = getDefault().toObservable(PauseVideoEvent.class)
-                .subscribe((Action1<PauseVideoEvent>) event -> {
-                    if (event.isPlayOrPause()) {
-                        videoView.start();
-                    } else {
-                        videoView.pause();
-                    }
-                });
-
+                .subscribe(pauseVideoEventAction1);
     }
 
     @Override
@@ -103,6 +104,9 @@ public class RecommendFragment extends BaseFragment {
         super.onDestroy();
         if (subscribe!= null && subscribe.isUnsubscribed()) {
             subscribe.unsubscribe();
+        }
+        if (pauseVideoEventAction1 != null) {
+            pauseVideoEventAction1 = null;
         }
     }
 
