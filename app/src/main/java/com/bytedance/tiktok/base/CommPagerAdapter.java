@@ -8,9 +8,8 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 import java.util.ArrayList;
 
 /**
- * create by libo
  * create on 2020/5/19
- * description 公共viewPageradapter
+ * description 公共viewPagerAdapter
  */
 public class CommPagerAdapter extends FragmentStatePagerAdapter {
 

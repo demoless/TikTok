@@ -3,6 +3,8 @@ package com.bytedance.tiktok.activity;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
 import com.bytedance.tiktok.R;
 import com.bytedance.tiktok.base.BaseActivity;
@@ -13,6 +15,8 @@ import com.bytedance.tiktok.fragment.MainFragment;
 import com.bytedance.tiktok.fragment.PersonalHomeFragment;
 import com.bytedance.tiktok.fragment.RecommendFragment;
 import com.bytedance.tiktok.utils.RxBus;
+import com.bytedance.tiktok.viewmodels.MainViewModel;
+
 import java.util.ArrayList;
 import butterknife.BindView;
 import rx.Subscription;
@@ -29,9 +33,9 @@ public class MainActivity extends BaseActivity {
     private PersonalHomeFragment personalHomeFragment = new PersonalHomeFragment();
     /** 上次点击返回键时间 */
     private long lastTime;
-    private Subscription subscribe;
     /** 连续按返回键退出时间 */
     private final int EXIT_TIME = 2000;
+    private MainViewModel mainViewModel;
 
     @Override
     protected int setLayoutId() {
@@ -40,19 +44,18 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void init() {
-
+        mainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
         fragments.add(mainFragment);
         fragments.add(personalHomeFragment);
         pagerAdapter = new CommPagerAdapter(getSupportFragmentManager(), fragments, new String[]{"",""});
         viewPager.setAdapter(pagerAdapter);
 
         //点击头像切换页面
-        subscribe = RxBus.getDefault().toObservable(MainPageChangeEvent.class)
-                .subscribe((Action1<MainPageChangeEvent>) event -> {
-                    if (viewPager != null) {
-                        viewPager.setCurrentItem(event.getPage());
-                    }
-                });
+        mainViewModel.getPageChangeEvent().observe(this, page -> {
+            if (viewPager != null) {
+                viewPager.setCurrentItem(page);
+            }
+        });
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -64,12 +67,13 @@ public class MainActivity extends BaseActivity {
                 curMainPage = position;
 
                 if (position == 0) {
+                    mainViewModel.getState().postValue(true);
                     RxBus.getDefault().post(new PauseVideoEvent(true));
                 } else if (position == 1) {
+                    mainViewModel.getState().postValue(false);
                     RxBus.getDefault().post(new PauseVideoEvent(false));
                 }
             }
-
             @Override
             public void onPageScrollStateChanged(int state) {
 
@@ -95,8 +99,5 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (subscribe.isUnsubscribed()) {
-            subscribe.unsubscribe();
-        }
     }
 }

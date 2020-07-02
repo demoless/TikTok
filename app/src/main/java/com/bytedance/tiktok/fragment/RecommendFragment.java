@@ -4,6 +4,9 @@ import android.os.CountDownTimer;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.bytedance.tiktok.R;
@@ -23,6 +26,8 @@ import com.bytedance.tiktok.view.LikeView;
 import com.bytedance.tiktok.view.ShareDialog;
 import com.bytedance.tiktok.view.viewpagerlayoutmanager.OnViewPagerListener;
 import com.bytedance.tiktok.view.viewpagerlayoutmanager.ViewPagerLayoutManager;
+import com.bytedance.tiktok.viewmodels.MainViewModel;
+
 import butterknife.BindView;
 import rx.Subscription;
 import rx.functions.Action1;
@@ -46,6 +51,7 @@ public class RecommendFragment extends BaseFragment {
     @BindView(R.id.refreshlayout)
     SwipeRefreshLayout refreshLayout;
     private ImageView ivCurCover;
+    private MainViewModel mainViewModel;
 
     @Override
     protected int setLayoutId() {
@@ -54,7 +60,7 @@ public class RecommendFragment extends BaseFragment {
 
     @Override
     protected void init() {
-
+        mainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
         adapter = new VideoAdapter(getActivity(), DataCreate.datas);
         recyclerView.setAdapter(adapter);
 
@@ -63,6 +69,14 @@ public class RecommendFragment extends BaseFragment {
         setViewPagerLayoutManager();
 
         setRefreshEvent();
+
+        mainViewModel.getState().observe(this, aBoolean -> {
+            if (aBoolean) {
+                videoView.start();
+            } else {
+                videoView.pause();
+            }
+        });
 
         //监听播放或暂停事件
         pauseVideoEventAction1 = event -> {
@@ -81,7 +95,7 @@ public class RecommendFragment extends BaseFragment {
         super.onResume();
 
         //返回时，推荐页面可见，则继续播放视频
-        if (MainActivity.curMainPage == 0 && MainFragment.curPage == 1) {
+        if (MainActivity.curMainPage == 0 && MainFragment.CUR_PAGE == 1) {
             videoView.start();
         }
     }
@@ -111,7 +125,7 @@ public class RecommendFragment extends BaseFragment {
     }
 
     private void setViewPagerLayoutManager() {
-        viewPagerLayoutManager = new ViewPagerLayoutManager(getActivity());
+        viewPagerLayoutManager = new ViewPagerLayoutManager(getContext());
         recyclerView.setLayoutManager(viewPagerLayoutManager);
         recyclerView.scrollToPosition(PlayListActivity.initPos);
 

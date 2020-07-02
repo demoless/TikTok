@@ -6,20 +6,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 /**
- * create by libo
  * create on 2018/11/15
  * description RecyclerAdapter基类
  * tip多套布局T传Object类型，其他直接传具体类型
  */
 public abstract class BaseRvAdapter<T,VH extends BaseRvViewHolder> extends RecyclerView.Adapter<VH> {
     protected Context context;
-    protected List<T> mDatas;
+    protected List<T> mDataList;
     protected OnItemClickListener onItemClickListener;
     protected OnItemLongClickListener onItemLongClickListener;
 
     public BaseRvAdapter(Context context, List<T> datas) {
         this.context = context;
-        mDatas = datas;
+        mDataList = datas;
     }
 
     @Override
@@ -30,47 +29,47 @@ public abstract class BaseRvAdapter<T,VH extends BaseRvViewHolder> extends Recyc
                 onItemClickListener.onItemClick(v, position);
             });
         }
-        onBindData(holder,mDatas.get(position),position);
+        onBindData(holder, mDataList.get(position),position);
     }
 
     @Override
     public int getItemCount() {
-        return mDatas == null ? 0 : mDatas.size();
+        return mDataList == null ? 0 : mDataList.size();
     }
 
     protected abstract void onBindData(VH holder, T data, int position);
 
     public void addData(T data) {
-        mDatas.add(data);
+        mDataList.add(data);
         notifyDataSetChanged();
     }
 
-    public void addDataToPostion(T data,int position) {
-        mDatas.add(position,data);
+    public void addDataToPosition(T data,int position) {
+        mDataList.add(position,data);
         notifyItemInserted(position);
     }
 
-    public void addDatas(List<T> datas) {
-        int oldCount  = mDatas.size();
-        mDatas.addAll(datas);
+    public void addDataList(List<T> datas) {
+        int oldCount  = mDataList.size();
+        mDataList.addAll(datas);
         notifyItemRangeInserted(oldCount, datas.size());
     }
 
     public void removeDataFromPosition(int position) {
-        mDatas.remove(position);
+        mDataList.remove(position);
         notifyDataSetChanged();
     }
 
     public void onlyRemoveItem(int position) {
-        mDatas.remove(position);
+        mDataList.remove(position);
     }
 
     public List<T> getDatas() {
-        return mDatas;
+        return mDataList;
     }
 
-    public void clearDatas() {
-        mDatas.clear();
+    public void clearDataList() {
+        mDataList.clear();
         notifyDataSetChanged();
     }
 

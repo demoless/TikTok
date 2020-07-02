@@ -12,6 +12,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.ActivityOptionsCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
 
 import com.androidkun.xtablayout.XTabLayout;
@@ -27,6 +28,7 @@ import com.bytedance.tiktok.utils.NumUtils;
 import com.bytedance.tiktok.utils.RxBus;
 import com.bytedance.tiktok.view.CircleImageView;
 import com.bytedance.tiktok.view.IconFontTextView;
+import com.bytedance.tiktok.viewmodels.MainViewModel;
 import com.google.android.material.appbar.AppBarLayout;
 
 import java.util.ArrayList;
@@ -76,6 +78,7 @@ public class PersonalHomeFragment extends BaseFragment implements View.OnClickLi
     private CommPagerAdapter pagerAdapter;
     private VideoBean.UserBean curUserBean;
     private Subscription subscription;
+    private MainViewModel mainViewModel;
 
     @Override
     protected int setLayoutId() {
@@ -85,7 +88,7 @@ public class PersonalHomeFragment extends BaseFragment implements View.OnClickLi
     @Override
     protected void init() {
 
-
+        mainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
         setAppbarLayoutPercent();
 
         ivReturn.setOnClickListener(this);
@@ -198,7 +201,7 @@ public class PersonalHomeFragment extends BaseFragment implements View.OnClickLi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.iv_return:
-                RxBus.getDefault().post(new MainPageChangeEvent(0));
+                mainViewModel.getPageChangeEvent().postValue(0);
                 break;
             case R.id.iv_head:
                 transitionAnim(ivHead, curUserBean.getHead());

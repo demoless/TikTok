@@ -10,6 +10,7 @@ import com.bytedance.tiktok.base.CommPagerAdapter;
 import com.bytedance.tiktok.bean.PauseVideoEvent;
 import com.bytedance.tiktok.utils.RxBus;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import butterknife.BindView;
 
@@ -25,7 +26,7 @@ public class MainFragment extends BaseFragment {
     private ArrayList<Fragment> fragments = new ArrayList<>();
     private CommPagerAdapter pagerAdapter;
     /** 默认显示第一页推荐页 */
-    public static int curPage = 1;
+    public static int CUR_PAGE = 1;
 
     @Override
     protected int setLayoutId() {
@@ -52,7 +53,7 @@ public class MainFragment extends BaseFragment {
         viewPager.setAdapter(pagerAdapter);
         tabTitle.setupWithViewPager(viewPager);
 
-        tabTitle.getTabAt(1).select();
+        Objects.requireNonNull(tabTitle.getTabAt(1)).select();
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -63,7 +64,7 @@ public class MainFragment extends BaseFragment {
             @Override
             public void onPageSelected(int position) {
 
-                curPage = position;
+                CUR_PAGE = position;
 
                 if (position == 1) {
                     //继续播放
