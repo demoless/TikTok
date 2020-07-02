@@ -18,7 +18,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * create by libo
  * create on 2020-05-25
  * description 分享弹框
  */

@@ -13,7 +13,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 /**
- * create by libo
  * create on 2020-05-27
  * description
  */

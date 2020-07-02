@@ -28,7 +28,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * create by libo
  * create on 2020/5/21
  * description 高亮带有@ # herf标签的TextView
  */

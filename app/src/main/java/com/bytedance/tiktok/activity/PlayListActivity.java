@@ -5,7 +5,6 @@ import com.bytedance.tiktok.base.BaseActivity;
 import com.bytedance.tiktok.fragment.RecommendFragment;
 
 /**
- * create by libo
  * create on 2020-05-24
  * description 视频全屏播放页
  */

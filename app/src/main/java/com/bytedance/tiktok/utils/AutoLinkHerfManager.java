@@ -7,7 +7,6 @@ import com.bytedance.tiktok.utils.autolinktextview.AutoLinkMode;
 import com.bytedance.tiktok.utils.autolinktextview.AutoLinkTextView;
 
 /**
- * create by libo
  * create on 2020-05-21
  * description
  */

@@ -4,7 +4,6 @@ import com.bytedance.tiktok.R;
 import java.util.ArrayList;
 
 /**
- * create by libo
  * create on 2020-06-03
  * description 本地数据创建，代替接口获取数据
  */

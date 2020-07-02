@@ -18,7 +18,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.gyf.immersionbar.ImmersionBar;
 
 /**
- * create by libo
  * create on 2020/5/20
  * description 全屏下拉弹框基类
  */

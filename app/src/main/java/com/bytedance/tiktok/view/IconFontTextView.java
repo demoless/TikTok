@@ -7,7 +7,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
 
 /**
- * create by libo
  * create on 2018/11/20
  * description 用于加载iconfont的TextView
  */

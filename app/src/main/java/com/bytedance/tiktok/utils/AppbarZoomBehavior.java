@@ -11,7 +11,6 @@ import com.bytedance.tiktok.R;
 import com.google.android.material.appbar.AppBarLayout;
 
 /**
- * create by libo
  * create on 2020-05-22
  * description
  */

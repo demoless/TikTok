@@ -7,7 +7,6 @@ import com.bytedance.tiktok.R;
 import com.bytedance.tiktok.base.BaseActivity;
 
 /**
- * create by libo
  * create on 2020/5/19
  * description App启动页面
  */

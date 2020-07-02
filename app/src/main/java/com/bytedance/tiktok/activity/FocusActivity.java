@@ -33,9 +33,9 @@ public class FocusActivity extends BaseActivity {
     @Override
     protected void init() {
 
-        for (int i=0;i<titles.length;i++) {
+        for (String title : titles) {
             fragments.add(new FansFragment());
-            tabLayout.addTab(tabLayout.newTab().setText(titles[i]));
+            tabLayout.addTab(tabLayout.newTab().setText(title));
         }
 
         pagerAdapter = new CommPagerAdapter(getSupportFragmentManager(), fragments, titles);

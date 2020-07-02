@@ -3,7 +3,6 @@ package com.bytedance.tiktok.utils;
 import java.text.DecimalFormat;
 
 /**
- * create by libo
  * create on 2020-06-04
  * description
  */

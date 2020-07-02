@@ -15,7 +15,6 @@ import java.util.List;
 import butterknife.BindView;
 
 /**
- * create by libo
  * create on 2020-05-24
  * description
  */

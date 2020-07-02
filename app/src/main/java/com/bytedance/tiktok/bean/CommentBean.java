@@ -1,7 +1,6 @@
 package com.bytedance.tiktok.bean;
 
 /**
- * create by libo
  * create on 2020-06-04
  * description
  */

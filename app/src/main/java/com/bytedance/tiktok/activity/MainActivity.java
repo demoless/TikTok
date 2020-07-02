@@ -3,24 +3,19 @@ package com.bytedance.tiktok.activity;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
 import com.bytedance.tiktok.R;
 import com.bytedance.tiktok.base.BaseActivity;
 import com.bytedance.tiktok.base.CommPagerAdapter;
-import com.bytedance.tiktok.bean.MainPageChangeEvent;
 import com.bytedance.tiktok.bean.PauseVideoEvent;
 import com.bytedance.tiktok.fragment.MainFragment;
 import com.bytedance.tiktok.fragment.PersonalHomeFragment;
-import com.bytedance.tiktok.fragment.RecommendFragment;
 import com.bytedance.tiktok.utils.RxBus;
 import com.bytedance.tiktok.viewmodels.MainViewModel;
 
 import java.util.ArrayList;
 import butterknife.BindView;
-import rx.Subscription;
-import rx.functions.Action1;
 
 
 public class MainActivity extends BaseActivity {

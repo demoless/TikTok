@@ -15,7 +15,6 @@ import com.bytedance.tiktok.utils.AnimUtils;
 import java.util.Random;
 
 /**
- * create by libo
  * create on 2020-05-20
  * description 点赞动画view
  */

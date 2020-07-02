@@ -2,7 +2,6 @@ package com.bytedance.tiktok.view.viewpagerlayoutmanager;
 
 
 /**
- * create by libo
  * create on 2018/11/22
  * description
  */

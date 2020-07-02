@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import butterknife.BindView;
 
 /**
- * create by libo
  * create on 2020-05-19
  * description 附近的人fragment
  */

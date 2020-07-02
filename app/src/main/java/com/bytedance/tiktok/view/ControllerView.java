@@ -22,7 +22,6 @@ import butterknife.ButterKnife;
 import static android.view.animation.Animation.INFINITE;
 
 /**
- * create by libo
  * create on 2020-05-20
  * description
  */
