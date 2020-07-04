@@ -14,6 +14,7 @@ public class ViewPagerLayoutManager extends LinearLayoutManager {
     private PagerSnapHelper mPagerSnapHelper;
     private OnViewPagerListener mOnViewPagerListener;
     private RecyclerView mRecyclerView;
+    private int position;
     /**
      * 位移，用来判断移动方向
      */
@@ -65,15 +66,10 @@ public class ViewPagerLayoutManager extends LinearLayoutManager {
                 }
                 break;
             case RecyclerView.SCROLL_STATE_DRAGGING:
+            case RecyclerView.SCROLL_STATE_SETTLING:
                 View viewDrag = mPagerSnapHelper.findSnapView(this);
                 if (viewDrag != null) {
                     int positionDrag = getPosition(viewDrag);
-                }
-                break;
-            case RecyclerView.SCROLL_STATE_SETTLING:
-                View viewSettling = mPagerSnapHelper.findSnapView(this);
-                if (viewSettling != null) {
-                    int positionSettling = getPosition(viewSettling);
                 }
                 break;
         }
@@ -133,7 +129,7 @@ public class ViewPagerLayoutManager extends LinearLayoutManager {
                 if (mOnViewPagerListener != null)
                     mOnViewPagerListener.onPageRelease(false, getPosition(view));
             }
-            mOnViewPagerListener.onPageRelease(true, getPosition(view));
+            //mOnViewPagerListener.onPageRelease(true, getPosition(view));
         }
     };
 }

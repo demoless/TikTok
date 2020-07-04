@@ -8,10 +8,8 @@ import androidx.viewpager.widget.ViewPager;
 import com.bytedance.tiktok.R;
 import com.bytedance.tiktok.base.BaseActivity;
 import com.bytedance.tiktok.base.CommPagerAdapter;
-import com.bytedance.tiktok.bean.PauseVideoEvent;
 import com.bytedance.tiktok.fragment.MainFragment;
 import com.bytedance.tiktok.fragment.PersonalHomeFragment;
-import com.bytedance.tiktok.utils.RxBus;
 import com.bytedance.tiktok.viewmodels.MainViewModel;
 
 import java.util.ArrayList;
@@ -63,10 +61,8 @@ public class MainActivity extends BaseActivity {
 
                 if (position == 0) {
                     mainViewModel.getState().postValue(true);
-                    RxBus.getDefault().post(new PauseVideoEvent(true));
                 } else if (position == 1) {
                     mainViewModel.getState().postValue(false);
-                    RxBus.getDefault().post(new PauseVideoEvent(false));
                 }
             }
             @Override

@@ -58,7 +58,6 @@ public class VideoAdapter extends BaseRvAdapter<VideoBean, VideoAdapter.VideoVie
 
         public VideoViewHolder(View itemView) {
             super(itemView);
-
             ButterKnife.bind(this, itemView);
         }
     }

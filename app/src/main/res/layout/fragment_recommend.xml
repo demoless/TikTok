@@ -6,7 +6,7 @@
 
     </data>
 
-    <RelativeLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".fragment.RecommendFragment"
@@ -23,5 +23,5 @@
                 android:layout_height="match_parent"/>
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-    </RelativeLayout>
+    </FrameLayout>
 </layout>

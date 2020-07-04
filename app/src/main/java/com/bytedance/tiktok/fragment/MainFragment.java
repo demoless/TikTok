@@ -1,14 +1,15 @@
 package com.bytedance.tiktok.fragment;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
 
 import com.androidkun.xtablayout.XTabLayout;
 import com.bytedance.tiktok.R;
 import com.bytedance.tiktok.base.BaseFragment;
 import com.bytedance.tiktok.base.CommPagerAdapter;
-import com.bytedance.tiktok.bean.PauseVideoEvent;
-import com.bytedance.tiktok.utils.RxBus;
+import com.bytedance.tiktok.viewmodels.MainViewModel;
+
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -25,6 +26,7 @@ public class MainFragment extends BaseFragment {
     XTabLayout tabMainMenu;
     private ArrayList<Fragment> fragments = new ArrayList<>();
     private CommPagerAdapter pagerAdapter;
+    private MainViewModel mainViewModel;
     /** 默认显示第一页推荐页 */
     public static int CUR_PAGE = 1;
 
@@ -35,6 +37,7 @@ public class MainFragment extends BaseFragment {
 
     @Override
     protected void init() {
+        mainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
         setFragments();
 
         setMainMenu();
@@ -68,10 +71,10 @@ public class MainFragment extends BaseFragment {
 
                 if (position == 1) {
                     //继续播放
-                    RxBus.getDefault().post(new PauseVideoEvent(true));
+                    mainViewModel.getState().postValue(true);
                 } else {
                     //切换到其他页面，需要暂停视频
-                    RxBus.getDefault().post(new PauseVideoEvent(false));
+                    mainViewModel.getState().postValue(false);
                 }
             }
 

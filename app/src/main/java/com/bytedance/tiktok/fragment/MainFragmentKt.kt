@@ -9,8 +9,6 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager.widget.ViewPager
 import com.bytedance.tiktok.R
 import com.bytedance.tiktok.base.CommPagerAdapter
-import com.bytedance.tiktok.bean.PauseVideoEvent
-import com.bytedance.tiktok.utils.RxBus
 import com.bytedance.tiktok.viewmodels.MainViewModel
 import kotlinx.android.synthetic.main.fragment_main.*
 
@@ -38,7 +36,7 @@ class MainFragmentKt : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
+        setFragments()
     }
 
     private fun setFragments() {
@@ -57,11 +55,9 @@ class MainFragmentKt : Fragment() {
                 CUR_PAGE = position
                 if (position == 1) {
                     //继续播放
-                    RxBus.getDefault().post(PauseVideoEvent(true))
                     mainViewModel.state.postValue(true)
                 } else {
                     //切换到其他页面，需要暂停视频
-                    RxBus.getDefault().post(PauseVideoEvent(false))
                     mainViewModel.state.postValue(false)
                 }
             }

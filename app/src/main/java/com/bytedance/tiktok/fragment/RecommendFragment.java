@@ -5,10 +5,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.viewpager2.widget.ViewPager2;
+
 import com.bytedance.tiktok.R;
 import com.bytedance.tiktok.activity.MainActivity;
 import com.bytedance.tiktok.activity.PlayListActivity;
@@ -17,7 +18,6 @@ import com.bytedance.tiktok.base.BaseFragment;
 import com.bytedance.tiktok.bean.CurUserBean;
 import com.bytedance.tiktok.bean.DataCreate;
 import com.bytedance.tiktok.bean.MainPageChangeEvent;
-import com.bytedance.tiktok.bean.PauseVideoEvent;
 import com.bytedance.tiktok.utils.OnVideoControllerListener;
 import com.bytedance.tiktok.view.CommentDialog;
 import com.bytedance.tiktok.view.ControllerView;
@@ -29,8 +29,6 @@ import com.bytedance.tiktok.view.viewpagerlayoutmanager.ViewPagerLayoutManager;
 import com.bytedance.tiktok.viewmodels.MainViewModel;
 
 import butterknife.BindView;
-import rx.Subscription;
-import rx.functions.Action1;
 
 import static com.bytedance.tiktok.utils.RxBus.getDefault;
 
@@ -42,8 +40,6 @@ public class RecommendFragment extends BaseFragment {
     @BindView(R.id.recyclerview)
     RecyclerView recyclerView;
     private VideoAdapter adapter;
-    private Subscription subscribe;
-    private Action1<PauseVideoEvent> pauseVideoEventAction1;
     private ViewPagerLayoutManager viewPagerLayoutManager;
     /** 当前播放视频位置 */
     private int curPlayPos = -1;
@@ -61,10 +57,11 @@ public class RecommendFragment extends BaseFragment {
     @Override
     protected void init() {
         mainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
-        adapter = new VideoAdapter(getActivity(), DataCreate.datas);
+        adapter = new VideoAdapter(getContext(), DataCreate.datas);
         recyclerView.setAdapter(adapter);
+        recyclerView.setItemViewCacheSize(3);
 
-        videoView = new FullScreenVideoView(getActivity());
+        videoView = new FullScreenVideoView(getContext());
 
         setViewPagerLayoutManager();
 
@@ -77,17 +74,6 @@ public class RecommendFragment extends BaseFragment {
                 videoView.pause();
             }
         });
-
-        //监听播放或暂停事件
-        pauseVideoEventAction1 = event -> {
-            if (event.isPlayOrPause()) {
-                videoView.start();
-            } else {
-                videoView.pause();
-            }
-        };
-        subscribe = getDefault().toObservable(PauseVideoEvent.class)
-                .subscribe(pauseVideoEventAction1);
     }
 
     @Override
@@ -116,12 +102,6 @@ public class RecommendFragment extends BaseFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (subscribe!= null && subscribe.isUnsubscribed()) {
-            subscribe.unsubscribe();
-        }
-        if (pauseVideoEventAction1 != null) {
-            pauseVideoEventAction1 = null;
-        }
     }
 
     private void setViewPagerLayoutManager() {
@@ -137,9 +117,7 @@ public class RecommendFragment extends BaseFragment {
 
             @Override
             public void onPageRelease(boolean isNext, int position) {
-                if (ivCurCover != null) {
-                    ivCurCover.setVisibility(View.VISIBLE);
-                }
+
             }
 
             @Override
@@ -177,18 +155,18 @@ public class RecommendFragment extends BaseFragment {
         ViewGroup rootView = itemView.findViewById(R.id.rl_container);
         LikeView likeView = rootView.findViewById(R.id.likeview);
         ControllerView controllerView = rootView.findViewById(R.id.controller);
-        ImageView ivPlay = rootView.findViewById(R.id.iv_play);
+        ImageView ivPause = rootView.findViewById(R.id.iv_play);
         ImageView ivCover = rootView.findViewById(R.id.iv_cover);
-        ivPlay.setAlpha(0.4f);
+        ivPause.setAlpha(0.4f);
 
         //播放暂停事件
         likeView.setOnPlayPauseListener(() -> {
             if (videoView.isPlaying()) {
                 videoView.pause();
-                ivPlay.setVisibility(View.VISIBLE);
+                ivPause.setVisibility(View.VISIBLE);
             } else {
                 videoView.start();
-                ivPlay.setVisibility(View.GONE);
+                ivPause.setVisibility(View.GONE);
             }
         });
 
@@ -227,20 +205,9 @@ public class RecommendFragment extends BaseFragment {
         videoView.start();
         videoView.setOnPreparedListener(mp -> {
             mp.setLooping(true);
-
             //延迟取消封面，避免加载视频黑屏
-            new CountDownTimer(200, 200) {
-                @Override
-                public void onTick(long millisUntilFinished) {
-
-                }
-
-                @Override
-                public void onFinish() {
-                    ivCover.setVisibility(View.GONE);
-                    ivCurCover = ivCover;
-                }
-            }.start();
+            ivCurCover = ivCover;
+            ivCurCover.setVisibility(View.GONE);
         });
     }
 
