@@ -1,5 +1,7 @@
 package com.bytedance.tiktok.bean;
 
+import androidx.fragment.app.Fragment;
+
 import com.bytedance.tiktok.R;
 import java.util.ArrayList;
 
@@ -8,6 +10,7 @@ import java.util.ArrayList;
  * description 本地数据创建，代替接口获取数据
  */
 public class DataCreate {
+    public static ArrayList<Fragment> videoFragments = new ArrayList<>();
     public static ArrayList<VideoBean> datas = new ArrayList<>();
     public static ArrayList<VideoBean.UserBean> userList = new ArrayList<>();
 
