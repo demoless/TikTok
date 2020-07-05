@@ -8,7 +8,6 @@ import android.widget.ImageView;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.viewpager2.widget.ViewPager2;
 
 import com.bytedance.tiktok.R;
 import com.bytedance.tiktok.activity.MainActivity;

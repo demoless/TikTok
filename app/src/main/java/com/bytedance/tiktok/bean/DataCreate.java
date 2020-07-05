@@ -3,6 +3,8 @@ package com.bytedance.tiktok.bean;
 import androidx.fragment.app.Fragment;
 
 import com.bytedance.tiktok.R;
+import com.bytedance.tiktok.fragment.VideoItemFragment;
+
 import java.util.ArrayList;
 
 /**
