@@ -16,7 +16,7 @@ public class DataCreate {
     public static ArrayList<VideoBean> datas = new ArrayList<>();
     public static ArrayList<VideoBean.UserBean> userList = new ArrayList<>();
 
-    public void initData() {
+    public static void initData() {
 
         VideoBean videoBeanOne = new VideoBean();
         videoBeanOne.setCoverRes(R.mipmap.cover1);

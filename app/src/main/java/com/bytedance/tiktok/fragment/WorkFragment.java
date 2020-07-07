@@ -1,5 +1,7 @@
 package com.bytedance.tiktok.fragment;
 
+import android.widget.Toast;
+
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bytedance.tiktok.R;
@@ -26,6 +28,7 @@ public class WorkFragment extends BaseFragment {
     protected void init() {
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
         workAdapter = new WorkAdapter(getActivity(), DataCreate.datas);
+        //Toast.makeText(getContext(), "初始化"+DataCreate.datas.size(), Toast.LENGTH_SHORT).show();
         recyclerView.setAdapter(workAdapter);
     }
 

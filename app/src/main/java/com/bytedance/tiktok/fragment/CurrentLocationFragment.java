@@ -33,7 +33,7 @@ public class CurrentLocationFragment extends BaseFragment {
 
     @Override
     protected void init() {
-        new DataCreate().initData();
+        //new DataCreate().initData();
         
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
 

@@ -2,6 +2,7 @@ package com.bytedance.tiktok.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,7 @@ public class WorkAdapter extends BaseRvAdapter<VideoBean, WorkAdapter.WorkViewHo
 
     public WorkAdapter(Context context, List<VideoBean> datas) {
         super(context, datas);
+        Log.e("--message", "WorkAdapter: "+ datas.size());
     }
 
     @Override
