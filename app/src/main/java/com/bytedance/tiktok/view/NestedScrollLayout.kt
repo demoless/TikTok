@@ -2,10 +2,12 @@ package com.bytedance.tiktok.view
 
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
+import android.view.MotionEvent
+import android.view.VelocityTracker
 import android.view.View
+import android.view.ViewConfiguration
 import android.widget.FrameLayout
-import androidx.constraintlayout.widget.ConstraintLayout
+import android.widget.Scroller
 import androidx.core.view.NestedScrollingParent2
 import androidx.core.view.NestedScrollingParentHelper
 import androidx.core.view.ViewCompat
@@ -17,9 +19,27 @@ class NestedScrollLayout @JvmOverloads constructor(context: Context,attrs:Attrib
 
     private val topBarHeight by lazy { resources.getDimension(R.dimen.top_bar_height) }
 
+    private val contentH by lazy {resources.getDimension(R.dimen.header_height)}
+
+    private val configuration = ViewConfiguration.get(context)
+
+    private val mTouchSlop = configuration.scaledTouchSlop
+
+    private val mMaximumVelocity = configuration.scaledMaximumFlingVelocity
+
+    private val mMinimumVelocity = configuration.scaledMinimumFlingVelocity
+
+    private var mOverScrollDistance = configuration.scaledOverscrollDistance
+
 
     private val upChangeY by lazy {
         resources.getDimension(R.dimen.up_top_bar_change_y)
+    }
+
+    private var lastY = 0f
+
+    private val mVelocityTracker by lazy {
+        VelocityTracker.obtain()
     }
 
     private val downStopY by lazy { resources.getDimension(R.dimen.donw_content_alpha_y) }
@@ -28,14 +48,55 @@ class NestedScrollLayout @JvmOverloads constructor(context: Context,attrs:Attrib
         NestedScrollingParentHelper(this)
     }
 
-    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+    private val mScroll by lazy {
+        Scroller(context)
     }
 
-    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-        super.onSizeChanged(w, h, oldw, oldh)
-
-    }
+//    override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean {
+//        when (ev?.action) {
+//            MotionEvent.ACTION_DOWN -> {
+//                if (!mScroll.isFinished) {
+//                    mScroll.abortAnimation()
+//                }
+//                lastY = ev.y
+//            }
+//            MotionEvent.ACTION_MOVE -> {
+//                val movedY = ev.y
+//                val moveSlop = Math.abs(movedY - lastY)
+//                if (moveSlop > mTouchSlop) {
+//                    return true
+//                }
+//            }
+//        }
+//        return super.onInterceptTouchEvent(ev)
+//    }
+//
+//    override fun onTouchEvent(event: MotionEvent?): Boolean {
+//        when (event?.action) {
+//            MotionEvent.ACTION_MOVE -> {
+//                val oldLastY = lastY
+//                mVelocityTracker.addMovement(event)
+//                val movedY = event.y
+//                val scrollY = (lastY - movedY).toInt()
+//                overScrollBy(0,scrollY,0,scrollY,0,
+//                        computeVerticalScrollRange(),0,0,true)
+//                lastY = event.y
+//                if (oldLastY < contentH) {
+//                    return true
+//                }
+//            }
+//            MotionEvent.ACTION_UP -> {
+//                mVelocityTracker.computeCurrentVelocity(1000, mMaximumVelocity.toFloat())
+//                mOverScrollDistance = configuration.scaledOverscrollDistance
+//                val velocity = mVelocityTracker.yVelocity
+//                if (Math.abs(velocity) > mMinimumVelocity) {
+//                    mScroll.fling(0, scrollY, 0, - velocity.toInt(), 0, 0, 0, computeVerticalScrollRange())
+//                }
+//                mVelocityTracker.clear()
+//            }
+//        }
+//        return super.onTouchEvent(event)
+//    }
 
     override fun getNestedScrollAxes(): Int {
         return mParentHelper.nestedScrollAxes
