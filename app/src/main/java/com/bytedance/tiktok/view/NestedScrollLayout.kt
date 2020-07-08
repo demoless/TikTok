@@ -15,11 +15,6 @@ import kotlinx.android.synthetic.main.activity_test.view.*
 class NestedScrollLayout @JvmOverloads constructor(context: Context,attrs:AttributeSet?=null,defStyleAttr:Int=0)
     : FrameLayout(context,attrs,defStyleAttr),NestedScrollingParent2 {
 
-    private val contentY by lazy {
-        Log.e("--message","scroll_content.y:"+ scroll_content.y+"\n")
-        resources.getDimension(R.dimen.header_height)
-    }
-
     private val topBarHeight by lazy { resources.getDimension(R.dimen.top_bar_height) }
 
 
@@ -72,23 +67,24 @@ class NestedScrollLayout @JvmOverloads constructor(context: Context,attrs:Attrib
 
     override fun onNestedPreScroll(target: View, dx: Int, dy: Int, consumed: IntArray, type: Int) {
         val translationY = scroll_content.translationY - dy
+        val headerY = header.translationY - dy
         //处理上滑
         if (dy > 0) {
             if (translationY >= upChangeY) {
-                consumeTransY(scroll_content,dy.toFloat(),translationY,consumed)
+                consumeTranslationY(header,headerY,scroll_content,translationY,dy,consumed)
             } else {
-                val upY = contentY - upChangeY
-                consumeTransY(scroll_content,translationY - upChangeY,upChangeY,consumed)
+                consumeTranslationY(header,headerY - (translationY - upChangeY),
+                        scroll_content,upChangeY,(scroll_content.translationY - upChangeY).toInt(),consumed)
             }
         }
         //处理下滑
         if (dy < 0 && !target.canScrollVertically(-1)) {
 
             //下滑时处理Fling,完全折叠时，下滑Recycler(或NestedScrollView) Fling滚动到列表顶部（或视图顶部）停止Fling
-            if (type == ViewCompat.TYPE_NON_TOUCH && content.y == topBarHeight.toFloat()) {
+            if (type == ViewCompat.TYPE_NON_TOUCH && content.y == topBarHeight) {
                 return
             }
-            consumeTransY(scroll_content,dy.toFloat(),translationY,consumed)
+            consumeTranslationY(header,headerY,scroll_content,translationY,dy,consumed)
         }
     }
 
@@ -100,11 +96,10 @@ class NestedScrollLayout @JvmOverloads constructor(context: Context,attrs:Attrib
 
     }
 
-    private fun consumeTransY(target: View,consumed: Float,translationY: Float,dyConsumed: IntArray) {
-        dyConsumed[1] = consumed.toInt()
-        header.translationY = translationY
-        target.translationY = translationY
-        Log.e("--message","target.translationY:"+ translationY+"\n")
+    private fun consumeTranslationY(parent :View,parentY: Float,content: View,contentY:Float,consumed: Int,dyConsumed: IntArray) {
+        parent.translationY = parentY
+        content.translationY = contentY
+        dyConsumed[1] = consumed
     }
 
 }
