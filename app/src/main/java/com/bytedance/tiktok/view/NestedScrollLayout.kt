@@ -4,29 +4,27 @@ import android.content.Context
 import android.util.AttributeSet
 import android.util.Log
 import android.view.View
+import android.widget.FrameLayout
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.NestedScrollingParent2
 import androidx.core.view.NestedScrollingParentHelper
 import androidx.core.view.ViewCompat
+import com.bytedance.tiktok.R
 import kotlinx.android.synthetic.main.activity_test.view.*
 
 class NestedScrollLayout @JvmOverloads constructor(context: Context,attrs:AttributeSet?=null,defStyleAttr:Int=0)
-    : ConstraintLayout(context,attrs,defStyleAttr),NestedScrollingParent2 {
+    : FrameLayout(context,attrs,defStyleAttr),NestedScrollingParent2 {
 
     private val contentY by lazy {
-        scroll_content.y
+        Log.e("--message","scroll_content.y:"+ scroll_content.y+"\n")
+        resources.getDimension(R.dimen.header_height)
     }
 
-    private var contentUpdateY:Float = 0f;
+    private val topBarHeight by lazy { resources.getDimension(R.dimen.top_bar_height) }
 
-    private val topBarY by lazy { top_bar.y }
-
-    private val topBarHeight by lazy { top_bar.height }
-
-    private val topBarTranslationY by lazy { topBarY + topBarHeight}
 
     private val upChangeY by lazy {
-        (contentY - top_bar.height)*1.5
+        resources.getDimension(R.dimen.up_top_bar_change_y)
     }
 
     private val mParentHelper: NestedScrollingParentHelper by lazy {
@@ -39,9 +37,12 @@ class NestedScrollLayout @JvmOverloads constructor(context: Context,attrs:Attrib
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
-        contentUpdateY = scroll_content.y
+
     }
 
+    override fun getNestedScrollAxes(): Int {
+        return mParentHelper.nestedScrollAxes
+    }
 
     //NestedScrollingParent兼容 由NestedScrollingParent处理
     override fun onNestedScrollAccepted(child: View, target: View, axes: Int) {
@@ -65,32 +66,43 @@ class NestedScrollLayout @JvmOverloads constructor(context: Context,attrs:Attrib
         onNestedPreScroll(target, dx, dy, consumed,ViewCompat.TYPE_TOUCH)
     }
 
+    override fun onNestedFling(target: View, velocityX: Float, velocityY: Float, consumed: Boolean): Boolean {
+        return false
+    }
+
     override fun onNestedPreScroll(target: View, dx: Int, dy: Int, consumed: IntArray, type: Int) {
-        val upY = contentY - upChangeY
+        val translationY = scroll_content.translationY - dy
         //处理上滑
         if (dy > 0) {
-            if (dy <= upY) {
-                consumeTransY(scroll_content,dy.toFloat(),-dy.toFloat(),consumed)
+            if (translationY >= upChangeY) {
+                consumeTransY(scroll_content,dy.toFloat(),translationY,consumed)
             } else {
-                consumeTransY(scroll_content,upY.toFloat(),-upY.toFloat(),consumed)
+                val upY = contentY - upChangeY
+                consumeTransY(scroll_content,translationY - upChangeY,upChangeY,consumed)
             }
         }
+        //处理下滑
         if (dy < 0 && !target.canScrollVertically(-1)) {
 
-            consumeTransY(scroll_content,dy.toFloat(),-dy.toFloat(),consumed)
+            //下滑时处理Fling,完全折叠时，下滑Recycler(或NestedScrollView) Fling滚动到列表顶部（或视图顶部）停止Fling
+            if (type == ViewCompat.TYPE_NON_TOUCH && content.y == topBarHeight.toFloat()) {
+                return
+            }
+            consumeTransY(scroll_content,dy.toFloat(),translationY,consumed)
         }
     }
 
     override fun onNestedScroll(target: View, dxConsumed: Int, dyConsumed: Int, dxUnconsumed: Int, dyUnconsumed: Int, type: Int) {
-        super.onNestedScroll(target, dxConsumed, dyConsumed, dxUnconsumed, dyUnconsumed)
+
     }
 
     override fun onStopNestedScroll(target: View, type: Int) {
-        super.onStopNestedScroll(target)
+
     }
 
     private fun consumeTransY(target: View,consumed: Float,translationY: Float,dyConsumed: IntArray) {
         dyConsumed[1] = consumed.toInt()
+        header.translationY = translationY
         target.translationY = translationY
         Log.e("--message","target.translationY:"+ translationY+"\n")
     }
