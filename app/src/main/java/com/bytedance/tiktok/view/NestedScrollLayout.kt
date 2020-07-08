@@ -22,6 +22,8 @@ class NestedScrollLayout @JvmOverloads constructor(context: Context,attrs:Attrib
         resources.getDimension(R.dimen.up_top_bar_change_y)
     }
 
+    private val downStopY by lazy { resources.getDimension(R.dimen.donw_content_alpha_y) }
+
     private val mParentHelper: NestedScrollingParentHelper by lazy {
         NestedScrollingParentHelper(this)
     }
@@ -84,7 +86,13 @@ class NestedScrollLayout @JvmOverloads constructor(context: Context,attrs:Attrib
             if (type == ViewCompat.TYPE_NON_TOUCH && content.y == topBarHeight) {
                 return
             }
-            consumeTranslationY(header,headerY,scroll_content,translationY,dy,consumed)
+
+            if (translationY in upChangeY..downStopY) {
+                consumeTranslationY(header,headerY,scroll_content,translationY,dy,consumed)
+            } else {
+                consumeTranslationY(header,header.translationY + (downStopY - scroll_content.translationY),
+                        scroll_content,downStopY,(downStopY - scroll_content.translationY).toInt(),consumed)
+            }
         }
     }
 
