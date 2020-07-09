@@ -1,6 +1,7 @@
 <resources>
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="header_height">390dp</dimen>//头部高度
+    <dimen name="behavior_header_height">300</dimen>//头部高度
     <dimen name="top_bar_height">40dp</dimen>//topBar高度
     <dimen name="up_top_bar_change_y">60dp</dimen>//上滑 top_bar渐变临界高度值
     <dimen name="donw_content_alpha_y">540dp</dimen>//收起按钮、vp、sl透明度临界值

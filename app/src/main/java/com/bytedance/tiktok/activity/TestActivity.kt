@@ -19,7 +19,7 @@ class TestActivity : AppCompatActivity() {
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_test)
+        setContentView(R.layout.behavior_layout)
     }
 
     override fun onResume() {

@@ -52,51 +52,6 @@ class NestedScrollLayout @JvmOverloads constructor(context: Context,attrs:Attrib
         Scroller(context)
     }
 
-//    override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean {
-//        when (ev?.action) {
-//            MotionEvent.ACTION_DOWN -> {
-//                if (!mScroll.isFinished) {
-//                    mScroll.abortAnimation()
-//                }
-//                lastY = ev.y
-//            }
-//            MotionEvent.ACTION_MOVE -> {
-//                val movedY = ev.y
-//                val moveSlop = Math.abs(movedY - lastY)
-//                if (moveSlop > mTouchSlop) {
-//                    return true
-//                }
-//            }
-//        }
-//        return super.onInterceptTouchEvent(ev)
-//    }
-//
-//    override fun onTouchEvent(event: MotionEvent?): Boolean {
-//        when (event?.action) {
-//            MotionEvent.ACTION_MOVE -> {
-//                val oldLastY = lastY
-//                mVelocityTracker.addMovement(event)
-//                val movedY = event.y
-//                val scrollY = (lastY - movedY).toInt()
-//                overScrollBy(0,scrollY,0,scrollY,0,
-//                        computeVerticalScrollRange(),0,0,true)
-//                lastY = event.y
-//                if (oldLastY < contentH) {
-//                    return true
-//                }
-//            }
-//            MotionEvent.ACTION_UP -> {
-//                mVelocityTracker.computeCurrentVelocity(1000, mMaximumVelocity.toFloat())
-//                mOverScrollDistance = configuration.scaledOverscrollDistance
-//                val velocity = mVelocityTracker.yVelocity
-//                if (Math.abs(velocity) > mMinimumVelocity) {
-//                    mScroll.fling(0, scrollY, 0, - velocity.toInt(), 0, 0, 0, computeVerticalScrollRange())
-//                }
-//                mVelocityTracker.clear()
-//            }
-//        }
-//        return super.onTouchEvent(event)
-//    }
 
     override fun getNestedScrollAxes(): Int {
         return mParentHelper.nestedScrollAxes
@@ -134,10 +89,10 @@ class NestedScrollLayout @JvmOverloads constructor(context: Context,attrs:Attrib
         //处理上滑
         if (dy > 0) {
             if (translationY >= upChangeY) {
-                consumeTranslationY(header,headerY,scroll_content,translationY,dy,consumed)
+                consumeTranslationY(header, headerY, scroll_content, translationY, dy, consumed)
             } else {
-                consumeTranslationY(header,headerY - (translationY - upChangeY),
-                        scroll_content,upChangeY,(scroll_content.translationY - upChangeY).toInt(),consumed)
+                consumeTranslationY(header, headerY - (translationY - upChangeY),
+                        scroll_content, upChangeY, (scroll_content.translationY - upChangeY).toInt(), consumed)
             }
         }
         //处理下滑
@@ -149,10 +104,10 @@ class NestedScrollLayout @JvmOverloads constructor(context: Context,attrs:Attrib
             }
 
             if (translationY in upChangeY..downStopY) {
-                consumeTranslationY(header,headerY,scroll_content,translationY,dy,consumed)
+                consumeTranslationY(header, headerY, scroll_content, translationY, dy, consumed)
             } else {
-                consumeTranslationY(header,header.translationY + (downStopY - scroll_content.translationY),
-                        scroll_content,downStopY,(downStopY - scroll_content.translationY).toInt(),consumed)
+                consumeTranslationY(header, header.translationY + (downStopY - scroll_content.translationY),
+                        scroll_content, downStopY, (downStopY - scroll_content.translationY).toInt(), consumed)
             }
         }
     }
