@@ -43,6 +43,13 @@ public class MainFragment extends BaseFragment {
         setMainMenu();
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (fragments != null && !fragments.isEmpty())
+        fragments.clear();
+    }
+
     private void setFragments() {
         currentLocationFragment = new CurrentLocationFragment();
         recommendFragment = new RecommendFragment();
