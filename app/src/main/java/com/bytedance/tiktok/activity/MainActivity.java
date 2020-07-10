@@ -58,7 +58,6 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onPageSelected(int position) {
                 curMainPage = position;
-
                 if (position == 0) {
                     mainViewModel.getState().postValue(true);
                 } else if (position == 1) {

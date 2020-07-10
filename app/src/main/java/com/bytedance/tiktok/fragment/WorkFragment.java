@@ -18,6 +18,7 @@ public class WorkFragment extends BaseFragment {
     @BindView(R.id.recyclerview)
     RecyclerView recyclerView;
     private WorkAdapter workAdapter;
+    private RecyclerView.LayoutManager gridlayoutManager;
 
     @Override
     protected int setLayoutId() {
@@ -26,10 +27,15 @@ public class WorkFragment extends BaseFragment {
 
     @Override
     protected void init() {
-        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
-        workAdapter = new WorkAdapter(getActivity(), DataCreate.datas);
-        //Toast.makeText(getContext(), "初始化"+DataCreate.datas.size(), Toast.LENGTH_SHORT).show();
+        gridlayoutManager = new GridLayoutManager(getContext(), 3);
+        recyclerView.setLayoutManager(gridlayoutManager);
+        workAdapter = new WorkAdapter(getContext(), DataCreate.datas);
         recyclerView.setAdapter(workAdapter);
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        recyclerView.setLayoutManager(null);
+    }
 }

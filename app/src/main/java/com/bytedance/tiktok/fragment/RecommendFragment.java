@@ -16,7 +16,6 @@ import com.bytedance.tiktok.adapter.VideoAdapter;
 import com.bytedance.tiktok.base.BaseFragment;
 import com.bytedance.tiktok.bean.CurUserBean;
 import com.bytedance.tiktok.bean.DataCreate;
-import com.bytedance.tiktok.bean.MainPageChangeEvent;
 import com.bytedance.tiktok.utils.OnVideoControllerListener;
 import com.bytedance.tiktok.view.CommentDialog;
 import com.bytedance.tiktok.view.ControllerView;
@@ -28,8 +27,6 @@ import com.bytedance.tiktok.view.viewpagerlayoutmanager.ViewPagerLayoutManager;
 import com.bytedance.tiktok.viewmodels.MainViewModel;
 
 import butterknife.BindView;
-
-import static com.bytedance.tiktok.utils.RxBus.getDefault;
 
 /**
  * create on 2020-05-19
@@ -48,6 +45,9 @@ public class RecommendFragment extends BaseFragment {
     private ImageView ivCurCover;
     private MainViewModel mainViewModel;
 
+    private static final int  USER_HOME_PAGE = 1;
+    private static final int RECOMMEND_PAGE = 0;
+
     @Override
     protected int setLayoutId() {
         return R.layout.fragment_recommend;
@@ -55,7 +55,7 @@ public class RecommendFragment extends BaseFragment {
 
     @Override
     protected void init() {
-        mainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+        mainViewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
         adapter = new VideoAdapter(getContext(), DataCreate.datas);
         recyclerView.setAdapter(adapter);
         recyclerView.setItemViewCacheSize(3);
@@ -80,7 +80,7 @@ public class RecommendFragment extends BaseFragment {
         super.onResume();
 
         //返回时，推荐页面可见，则继续播放视频
-        if (MainActivity.curMainPage == 0 && MainFragment.CUR_PAGE == 1) {
+        if (MainActivity.curMainPage == RECOMMEND_PAGE && MainFragment.CUR_PAGE == USER_HOME_PAGE) {
             videoView.start();
         }
     }
@@ -101,6 +101,9 @@ public class RecommendFragment extends BaseFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        if (videoView != null) {
+            videoView = null;
+        }
     }
 
     private void setViewPagerLayoutManager() {
@@ -173,7 +176,7 @@ public class RecommendFragment extends BaseFragment {
         likeShareEvent(controllerView);
 
         //切换播放视频的作者主页数据
-        getDefault().post(new CurUserBean(DataCreate.datas.get(position).getUserBean()));
+        mainViewModel.getCurUserEvent().postValue(new CurUserBean(DataCreate.datas.get(position).getUserBean()));
 
         curPlayPos = position;
 
@@ -217,7 +220,8 @@ public class RecommendFragment extends BaseFragment {
         controllerView.setListener(new OnVideoControllerListener() {
             @Override
             public void onHeadClick() {
-                getDefault().post(new MainPageChangeEvent(1));
+
+                mainViewModel.getPageChangeEvent().postValue(USER_HOME_PAGE);
             }
 
             @Override

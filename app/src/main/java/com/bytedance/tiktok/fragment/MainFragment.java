@@ -37,7 +37,7 @@ public class MainFragment extends BaseFragment {
 
     @Override
     protected void init() {
-        mainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+        mainViewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
         setFragments();
 
         setMainMenu();

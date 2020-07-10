@@ -4,10 +4,7 @@ import android.content.Intent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.ActivityOptionsCompat;
@@ -21,11 +18,8 @@ import com.bytedance.tiktok.activity.FocusActivity;
 import com.bytedance.tiktok.activity.ShowImageActivity;
 import com.bytedance.tiktok.base.BaseFragment;
 import com.bytedance.tiktok.base.CommPagerAdapter;
-import com.bytedance.tiktok.bean.CurUserBean;
-import com.bytedance.tiktok.bean.MainPageChangeEvent;
 import com.bytedance.tiktok.bean.VideoBean;
 import com.bytedance.tiktok.utils.NumUtils;
-import com.bytedance.tiktok.utils.RxBus;
 import com.bytedance.tiktok.view.CircleImageView;
 import com.bytedance.tiktok.view.IconFontTextView;
 import com.bytedance.tiktok.viewmodels.MainViewModel;
@@ -34,8 +28,6 @@ import com.google.android.material.appbar.AppBarLayout;
 import java.util.ArrayList;
 
 import butterknife.BindView;
-import rx.Subscription;
-import rx.functions.Action1;
 
 
 public class PersonalHomeFragment extends BaseFragment implements View.OnClickListener {
@@ -77,7 +69,6 @@ public class PersonalHomeFragment extends BaseFragment implements View.OnClickLi
     private ArrayList<Fragment> fragments = new ArrayList<>();
     private CommPagerAdapter pagerAdapter;
     private VideoBean.UserBean curUserBean;
-    private Subscription subscription;
     private MainViewModel mainViewModel;
 
     @Override
@@ -88,7 +79,7 @@ public class PersonalHomeFragment extends BaseFragment implements View.OnClickLi
     @Override
     protected void init() {
 
-        mainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+        mainViewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
         setAppbarLayoutPercent();
 
         ivReturn.setOnClickListener(this);
@@ -113,38 +104,39 @@ public class PersonalHomeFragment extends BaseFragment implements View.OnClickLi
     }
 
     public void setUserInfo() {
-        subscription = RxBus.getDefault().toObservable(CurUserBean.class).subscribe((Action1<CurUserBean>) curUserBean -> {
 
-            coordinatorLayoutBackTop();
+        mainViewModel.getCurUserEvent().observe(this, curUserBean -> {
+                coordinatorLayoutBackTop();
 
-            this.curUserBean = curUserBean.getUserBean();
+                PersonalHomeFragment.this.curUserBean = curUserBean.getUserBean();
 
-            ivBg.setImageResource(curUserBean.getUserBean().getHead());
-            ivHead.setImageResource(curUserBean.getUserBean().getHead());
-            tvNickname.setText(curUserBean.getUserBean().getNickName());
-            tvSign.setText(curUserBean.getUserBean().getSign());
-            tvTitle.setText(curUserBean.getUserBean().getNickName());
+                ivBg.setImageResource(curUserBean.getUserBean().getHead());
+                ivHead.setImageResource(curUserBean.getUserBean().getHead());
+                tvNickname.setText(curUserBean.getUserBean().getNickName());
+                tvSign.setText(curUserBean.getUserBean().getSign());
+                tvTitle.setText(curUserBean.getUserBean().getNickName());
 
-            String subCount = NumUtils.numberFilter(curUserBean.getUserBean().getSubCount());
-            String focusCount = NumUtils.numberFilter(curUserBean.getUserBean().getFocusCount());
-            String fansCount = NumUtils.numberFilter(curUserBean.getUserBean().getFansCount());
+                String subCount = NumUtils.numberFilter(curUserBean.getUserBean().getSubCount());
+                String focusCount = NumUtils.numberFilter(curUserBean.getUserBean().getFocusCount());
+                String fansCount = NumUtils.numberFilter(curUserBean.getUserBean().getFansCount());
 
-            //获赞 关注 粉丝
-            tvGetLikeCount.setText(subCount);
-            tvFocusCount.setText(focusCount);
-            tvFansCount.setText(fansCount);
+                //获赞 关注 粉丝
+                tvGetLikeCount.setText(subCount);
+                tvFocusCount.setText(focusCount);
+                tvFansCount.setText(fansCount);
 
-            //关注状态
-            if (curUserBean.getUserBean().isFocused()) {
-                tvAddfocus.setText("已关注");
-                tvAddfocus.setBackgroundResource(R.drawable.shape_round_halfwhite);
-            } else {
-                tvAddfocus.setText("关注");
-                tvAddfocus.setBackgroundResource(R.drawable.shape_round_red);
+                //关注状态
+                if (curUserBean.getUserBean().isFocused()) {
+                    tvAddfocus.setText("已关注");
+                    tvAddfocus.setBackgroundResource(R.drawable.shape_round_halfwhite);
+                } else {
+                    tvAddfocus.setText("关注");
+                    tvAddfocus.setBackgroundResource(R.drawable.shape_round_red);
+                }
+
+                setTabLayout();
             }
-
-            setTabLayout();
-        });
+        );
     }
 
     private void setTabLayout() {
@@ -218,9 +210,6 @@ public class PersonalHomeFragment extends BaseFragment implements View.OnClickLi
         super.onDestroy();
         if (fragments != null && !fragments.isEmpty()) {
             fragments.clear();
-        }
-        if (subscription != null) {
-            subscription.unsubscribe();
         }
     }
 }
