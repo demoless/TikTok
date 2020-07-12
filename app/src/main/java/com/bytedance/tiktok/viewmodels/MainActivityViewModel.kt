@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import com.bytedance.tiktok.bean.CurUserBean
 import com.bytedance.tiktok.bean.DataCreate
 
-class MainViewModel : ViewModel() {
+class MainActivityViewModel : ViewModel() {
     val state by lazy {
         MutableLiveData<Boolean>().apply{
             this.value = true

@@ -5,11 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager.widget.ViewPager
 import com.bytedance.tiktok.R
 import com.bytedance.tiktok.base.CommPagerAdapter
-import com.bytedance.tiktok.viewmodels.MainViewModel
+import com.bytedance.tiktok.viewmodels.MainActivityViewModel
+import com.bytedance.tiktok.viewmodels.MainFragmentViewModel
 import kotlinx.android.synthetic.main.fragment_main.*
 
 class MainFragmentKt : Fragment() {
@@ -19,8 +21,12 @@ class MainFragmentKt : Fragment() {
         @JvmStatic var CUR_PAGE = 1
     }
 
-    private val mainViewModel : MainViewModel by lazy {
-        ViewModelProviders.of(this).get(MainViewModel::class.java)
+    private val mainActivityViewModel : MainActivityViewModel by lazy {
+        ViewModelProviders.of(context as FragmentActivity).get(MainActivityViewModel::class.java)
+    }
+
+    private val mainFragmentViewModel : MainFragmentViewModel by lazy {
+        ViewModelProviders.of(this)[MainFragmentViewModel::class.java]
     }
     private var pagerAdapter: CommPagerAdapter? = null
     private val currentLocationFragment by lazy{
@@ -37,6 +43,7 @@ class MainFragmentKt : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setFragments()
+        setMainMenu()
     }
 
     private fun setFragments() {
@@ -53,15 +60,17 @@ class MainFragmentKt : Fragment() {
 
             override fun onPageSelected(position: Int) {
                 CUR_PAGE = position
-                if (position == 1) {
-                    //继续播放
-                    mainViewModel.state.postValue(true)
-                } else {
-                    //切换到其他页面，需要暂停视频
-                    mainViewModel.state.postValue(false)
-                }
+                mainFragmentViewModel.currPageEvent.postValue(position)
+                mainActivityViewModel.state.postValue(position == 1)
             }
             override fun onPageScrollStateChanged(state: Int) {}
         })
+    }
+    private fun setMainMenu() {
+        tab_mainmenu.addTab(tab_mainmenu.newTab().setText("首页"))
+        tab_mainmenu.addTab(tab_mainmenu.newTab().setText("好友"))
+        tab_mainmenu.addTab(tab_mainmenu.newTab().setText(""))
+        tab_mainmenu.addTab(tab_mainmenu.newTab().setText("消息"))
+        tab_mainmenu.addTab(tab_mainmenu.newTab().setText("我"))
     }
 }

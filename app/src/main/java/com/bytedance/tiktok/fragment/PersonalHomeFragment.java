@@ -22,7 +22,7 @@ import com.bytedance.tiktok.bean.VideoBean;
 import com.bytedance.tiktok.utils.NumUtils;
 import com.bytedance.tiktok.view.CircleImageView;
 import com.bytedance.tiktok.view.IconFontTextView;
-import com.bytedance.tiktok.viewmodels.MainViewModel;
+import com.bytedance.tiktok.viewmodels.MainActivityViewModel;
 import com.google.android.material.appbar.AppBarLayout;
 
 import java.util.ArrayList;
@@ -69,7 +69,7 @@ public class PersonalHomeFragment extends BaseFragment implements View.OnClickLi
     private ArrayList<Fragment> fragments = new ArrayList<>();
     private CommPagerAdapter pagerAdapter;
     private VideoBean.UserBean curUserBean;
-    private MainViewModel mainViewModel;
+    private MainActivityViewModel mainViewModel;
 
     @Override
     protected int setLayoutId() {
@@ -79,7 +79,7 @@ public class PersonalHomeFragment extends BaseFragment implements View.OnClickLi
     @Override
     protected void init() {
 
-        mainViewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
+        mainViewModel = ViewModelProviders.of(getActivity()).get(MainActivityViewModel.class);
         setAppbarLayoutPercent();
 
         ivReturn.setOnClickListener(this);

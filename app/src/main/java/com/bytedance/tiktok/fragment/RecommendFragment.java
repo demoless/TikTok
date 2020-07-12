@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -24,9 +25,12 @@ import com.bytedance.tiktok.view.LikeView;
 import com.bytedance.tiktok.view.ShareDialog;
 import com.bytedance.tiktok.view.viewpagerlayoutmanager.OnViewPagerListener;
 import com.bytedance.tiktok.view.viewpagerlayoutmanager.ViewPagerLayoutManager;
-import com.bytedance.tiktok.viewmodels.MainViewModel;
+import com.bytedance.tiktok.viewmodels.MainActivityViewModel;
+import com.bytedance.tiktok.viewmodels.MainFragmentViewModel;
 
 import butterknife.BindView;
+
+import static com.bytedance.tiktok.activity.MainActivity.USER_HOME_PAGE;
 
 /**
  * create on 2020-05-19
@@ -43,10 +47,11 @@ public class RecommendFragment extends BaseFragment {
     @BindView(R.id.refreshlayout)
     SwipeRefreshLayout refreshLayout;
     private ImageView ivCurCover;
-    private MainViewModel mainViewModel;
+    private MainActivityViewModel mainViewModel;
+    private MainFragmentViewModel mainFragmentViewModel;
 
-    private static final int  USER_HOME_PAGE = 1;
-    private static final int RECOMMEND_PAGE = 0;
+    private static final int  LOCATION_PAGE = 0;
+    private static final int RECOMMEND_PAGE = 1;
 
     @Override
     protected int setLayoutId() {
@@ -55,7 +60,8 @@ public class RecommendFragment extends BaseFragment {
 
     @Override
     protected void init() {
-        mainViewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
+        mainViewModel = ViewModelProviders.of(getActivity()).get(MainActivityViewModel.class);
+        mainFragmentViewModel = ViewModelProviders.of((FragmentActivity)getContext()).get(MainFragmentViewModel.class);
         adapter = new VideoAdapter(getContext(), DataCreate.datas);
         recyclerView.setAdapter(adapter);
         recyclerView.setItemViewCacheSize(3);
@@ -78,11 +84,11 @@ public class RecommendFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-
+        videoView.start();
         //返回时，推荐页面可见，则继续播放视频
-        if (MainActivity.curMainPage == RECOMMEND_PAGE && MainFragment.CUR_PAGE == USER_HOME_PAGE) {
-            videoView.start();
-        }
+//        if (MainActivity.curMainPage == MainActivity.RECOMMEND_PAGE && MainFragmentKt.getCUR_PAGE() == RECOMMEND_PAGE) {
+//            videoView.start();
+//        }
     }
 
     @Override

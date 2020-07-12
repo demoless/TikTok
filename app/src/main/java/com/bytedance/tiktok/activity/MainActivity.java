@@ -8,9 +8,9 @@ import androidx.viewpager.widget.ViewPager;
 import com.bytedance.tiktok.R;
 import com.bytedance.tiktok.base.BaseActivity;
 import com.bytedance.tiktok.base.CommPagerAdapter;
-import com.bytedance.tiktok.fragment.MainFragment;
+import com.bytedance.tiktok.fragment.MainFragmentKt;
 import com.bytedance.tiktok.fragment.PersonalHomeFragment;
-import com.bytedance.tiktok.viewmodels.MainViewModel;
+import com.bytedance.tiktok.viewmodels.MainActivityViewModel;
 
 import java.util.ArrayList;
 import butterknife.BindView;
@@ -22,13 +22,15 @@ public class MainActivity extends BaseActivity {
     private CommPagerAdapter pagerAdapter;
     private ArrayList<Fragment> fragments = new ArrayList<>();
     public static int curMainPage;
-    private MainFragment mainFragment = new MainFragment();
+    private MainFragmentKt mainFragment = new MainFragmentKt();
     private PersonalHomeFragment personalHomeFragment = new PersonalHomeFragment();
     /** 上次点击返回键时间 */
     private long lastTime;
     /** 连续按返回键退出时间 */
     private final int EXIT_TIME = 2000;
-    private MainViewModel mainViewModel;
+    public static final int RECOMMEND_PAGE = 0;
+    public static final int USER_HOME_PAGE = 1;
+    private MainActivityViewModel mainViewModel;
 
     @Override
     protected int setLayoutId() {
@@ -37,7 +39,7 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void init() {
-        mainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+        mainViewModel = ViewModelProviders.of(this).get(MainActivityViewModel.class);
         fragments.add(mainFragment);
         fragments.add(personalHomeFragment);
         pagerAdapter = new CommPagerAdapter(getSupportFragmentManager(), fragments, new String[]{"",""});

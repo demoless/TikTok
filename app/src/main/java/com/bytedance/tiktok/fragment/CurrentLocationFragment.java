@@ -2,6 +2,8 @@ package com.bytedance.tiktok.fragment;
 
 import android.os.CountDownTimer;
 
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -10,6 +12,7 @@ import com.bytedance.tiktok.adapter.GridVideoAdapter;
 import com.bytedance.tiktok.base.BaseFragment;
 import com.bytedance.tiktok.bean.DataCreate;
 import com.bytedance.tiktok.bean.VideoBean;
+import com.bytedance.tiktok.viewmodels.MainFragmentViewModel;
 
 import java.util.ArrayList;
 import butterknife.BindView;
@@ -26,6 +29,8 @@ public class CurrentLocationFragment extends BaseFragment {
     @BindView(R.id.refreshlayout)
     SwipeRefreshLayout refreshLayout;
 
+    private MainFragmentViewModel viewModel;
+
     @Override
     protected int setLayoutId() {
         return R.layout.fragment_current_location;
@@ -34,7 +39,7 @@ public class CurrentLocationFragment extends BaseFragment {
     @Override
     protected void init() {
         //new DataCreate().initData();
-        
+        viewModel = ViewModelProviders.of((FragmentActivity) getContext()).get(MainFragmentViewModel.class);
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
 
         adapter = new GridVideoAdapter(getActivity(), DataCreate.datas);
