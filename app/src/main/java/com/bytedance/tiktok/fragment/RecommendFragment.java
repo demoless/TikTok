@@ -1,6 +1,7 @@
 package com.bytedance.tiktok.fragment;
 
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -47,6 +48,7 @@ public class RecommendFragment extends BaseFragment {
     @BindView(R.id.refreshlayout)
     SwipeRefreshLayout refreshLayout;
     private ImageView ivCurCover;
+    private int oldPosition;
     private MainActivityViewModel mainViewModel;
     private MainFragmentViewModel mainFragmentViewModel;
 
@@ -85,16 +87,11 @@ public class RecommendFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
         videoView.start();
-        //返回时，推荐页面可见，则继续播放视频
-//        if (MainActivity.curMainPage == MainActivity.RECOMMEND_PAGE && MainFragmentKt.getCUR_PAGE() == RECOMMEND_PAGE) {
-//            videoView.start();
-//        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
-
         videoView.pause();
     }
 
@@ -125,11 +122,14 @@ public class RecommendFragment extends BaseFragment {
 
             @Override
             public void onPageRelease(boolean isNext, int position) {
-
+                if (position != oldPosition && ivCurCover != null) {
+                    ivCurCover.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override
             public void onPageSelected(int position, boolean isBottom) {
+                oldPosition = position;
                 playCurVideo(position);
             }
         });
@@ -151,6 +151,9 @@ public class RecommendFragment extends BaseFragment {
     }
 
     private void playCurVideo(int position) {
+        Log.d("message","position:" + position);
+        Log.d("message","curPlayPos:" + curPlayPos);
+        Log.d("message","oldPosition:" + oldPosition);
         if (position == curPlayPos) {
             return;
         }
@@ -161,14 +164,13 @@ public class RecommendFragment extends BaseFragment {
         }
 
         ViewGroup rootView = itemView.findViewById(R.id.rl_container);
-        LikeView likeView = rootView.findViewById(R.id.likeview);
         ControllerView controllerView = rootView.findViewById(R.id.controller);
         ImageView ivPause = rootView.findViewById(R.id.iv_play);
         ImageView ivCover = rootView.findViewById(R.id.iv_cover);
         ivPause.setAlpha(0.4f);
 
         //播放暂停事件
-        likeView.setOnPlayPauseListener(() -> {
+        adapter.setOnPlayPauseListener(() -> {
             if (videoView.isPlaying()) {
                 videoView.pause();
                 ivPause.setVisibility(View.VISIBLE);

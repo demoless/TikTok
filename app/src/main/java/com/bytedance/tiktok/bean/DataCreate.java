@@ -12,7 +12,7 @@ import java.util.ArrayList;
  * description 本地数据创建，代替接口获取数据
  */
 public class DataCreate {
-    public static ArrayList<Fragment> videoFragments = new ArrayList<>();
+    public static ArrayList<VideoItemFragment> videoFragments = new ArrayList<>();
     public static ArrayList<VideoBean> datas = new ArrayList<>();
     public static ArrayList<VideoBean.UserBean> userList = new ArrayList<>();
 
@@ -234,6 +234,25 @@ public class DataCreate {
         datas.add(videoBeanSix);
         datas.add(videoBeanSeven);
         datas.add(videoBeanEight);
+
+        videoFragments.add(new VideoItemFragment(videoBeanOne));
+        videoFragments.add(new VideoItemFragment(videoBeanTwo));
+        videoFragments.add(new VideoItemFragment(videoBeanThree));
+        videoFragments.add(new VideoItemFragment(videoBeanFour));
+        videoFragments.add(new VideoItemFragment(videoBeanFive));
+        videoFragments.add(new VideoItemFragment(videoBeanSix));
+        videoFragments.add(new VideoItemFragment(videoBeanSeven));
+        videoFragments.add(new VideoItemFragment(videoBeanEight));
+
+        videoFragments.add(new VideoItemFragment(videoBeanOne));
+        videoFragments.add(new VideoItemFragment(videoBeanTwo));
+        videoFragments.add(new VideoItemFragment(videoBeanThree));
+        videoFragments.add(new VideoItemFragment(videoBeanFour));
+        videoFragments.add(new VideoItemFragment(videoBeanFive));
+        videoFragments.add(new VideoItemFragment(videoBeanSix));
+        videoFragments.add(new VideoItemFragment(videoBeanSeven));
+        videoFragments.add(new VideoItemFragment(videoBeanEight));
+
 
 
         datas.add(videoBeanOne);

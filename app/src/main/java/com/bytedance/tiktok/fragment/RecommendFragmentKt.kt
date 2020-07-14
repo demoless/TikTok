@@ -22,17 +22,17 @@ class RecommendFragmentKt : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         view_pager2.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
             override fun onPageScrollStateChanged(state: Int) {
-                super.onPageScrollStateChanged(state)
+
             }
 
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-                super.onPageScrolled(position, positionOffset, positionOffsetPixels)
+
             }
 
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
             }
         })
-        view_pager2.adapter = fragmentManager?.let { VideoListAdapter(it,DataCreate.datas) }
+        view_pager2.adapter = fragmentManager?.let { VideoListAdapter(it,DataCreate.videoFragments) }
     }
 }

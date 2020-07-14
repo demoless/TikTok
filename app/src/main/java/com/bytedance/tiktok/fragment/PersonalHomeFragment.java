@@ -14,7 +14,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.androidkun.xtablayout.XTabLayout;
 import com.bytedance.tiktok.R;
-import com.bytedance.tiktok.activity.FocusActivity;
+import com.bytedance.tiktok.activity.FocusActivityKt;
 import com.bytedance.tiktok.activity.ShowImageActivity;
 import com.bytedance.tiktok.base.BaseFragment;
 import com.bytedance.tiktok.base.CommPagerAdapter;
@@ -200,7 +200,7 @@ public class PersonalHomeFragment extends BaseFragment implements View.OnClickLi
                 break;
             case R.id.ll_focus:
             case R.id.ll_fans:
-                startActivity(new Intent(getActivity(), FocusActivity.class));
+                startActivity(new Intent(getActivity(), FocusActivityKt.class));
                 break;
         }
     }

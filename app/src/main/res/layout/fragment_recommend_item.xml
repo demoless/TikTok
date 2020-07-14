@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <SurfaceView
-        android:id="@+id/surface-view"
+        android:id="@+id/surface_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

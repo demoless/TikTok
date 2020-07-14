@@ -11,25 +11,24 @@
         android:id="@+id/tv_nickname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="@大致爱高清"
+        tools:text="@string/test_1"
         android:textStyle="bold"
         android:textSize="16sp"
         android:textColor="@color/white"/>
 
-    <com.bytedance.tiktok.utils.autolinktextview.AutoLinkTextView
+    <TextView
         android:id="@+id/tv_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="只有 #允儿 的脸我才敢拉这么近"
         android:textColor="@color/white"
         android:textSize="14sp"
-        android:layout_marginTop="10dp"
-        app:highlight_textcolor="@color/color_link"/>
+        android:layout_marginTop="10dp" />
 
-    <com.bytedance.tiktok.view.MarqueeTextView
+    <TextView
         android:layout_width="180dp"
         android:layout_height="wrap_content"
-        android:text="@大致爱高清 创作的原生 - 大致爱高清"
+        android:text="@string/test_1"
         android:textColor="@color/white"
         android:textSize="14sp"
         android:ellipsize="marquee"

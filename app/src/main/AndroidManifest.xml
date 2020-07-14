@@ -27,7 +27,7 @@
             android:name=".activity.MainActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.FocusActivity"
+            android:name=".activity.FocusActivityKt"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.PlayListActivity"

@@ -23,8 +23,14 @@ import butterknife.ButterKnife;
  */
 public class VideoAdapter extends BaseRvAdapter<VideoBean, VideoAdapter.VideoViewHolder> {
 
+    private LikeView.OnPlayPauseListener onPlayPauseListener;
+
     public VideoAdapter(Context context, List<VideoBean> datas) {
         super(context, datas);
+    }
+
+    public void setOnPlayPauseListener(LikeView.OnPlayPauseListener onPlayPauseListener) {
+        this.onPlayPauseListener = onPlayPauseListener;
     }
 
     @Override
@@ -37,8 +43,10 @@ public class VideoAdapter extends BaseRvAdapter<VideoBean, VideoAdapter.VideoVie
             if (!videoBean.isLiked()) {  //未点赞，会有点赞效果，否则无
                 holder.controllerView.like();
             }
-
         });
+        if (this.onPlayPauseListener != null) {
+            holder.likeView.setOnPlayPauseListener(this.onPlayPauseListener);
+        }
     }
 
     @NonNull

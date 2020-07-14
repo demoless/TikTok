@@ -33,7 +33,7 @@ class MainFragmentKt : Fragment() {
         CurrentLocationFragment()
     }
     private val recommendFragment by lazy {
-        RecommendFragment();
+        RecommendFragment()
     }
     private val fragments by lazy { ArrayList<Fragment>() }
 

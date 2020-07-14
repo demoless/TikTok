@@ -16,7 +16,16 @@ import kotlinx.android.synthetic.main.layout_recommend_text.*
  * created by demoless on 2020/7/5
  * description:
  */
-class VideoItemFragment(private val position: Int, private val videoBean: VideoBean) :Fragment() {
+class VideoItemFragment(private val videoBean: VideoBean) :Fragment() {
+
+    private var videoPath: String? = null
+        set(value) {
+            field = value
+        }
+
+    constructor(videoPath :String, videoBean: VideoBean) : this(videoBean){
+        this.videoPath = videoPath
+    }
 
     private val mediaPlayer:MediaPlayer by lazy {
         MediaPlayer()
@@ -24,12 +33,11 @@ class VideoItemFragment(private val position: Int, private val videoBean: VideoB
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.e("--mess","VideoListAdapter")
-
         mediaPlayer.isLooping = true
-        val videoPath : String = "android.resource://" + activity?.packageName + "/" + DataCreate.datas[position].videoRes
-        mediaPlayer.setDataSource(videoPath)
-        mediaPlayer.prepare()
+        videoPath?.let{
+            mediaPlayer.setDataSource(it)
+            mediaPlayer.prepare()
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -43,18 +51,18 @@ class VideoItemFragment(private val position: Int, private val videoBean: VideoB
         val holder = surface_view.holder.also {
             it.addCallback(object : Callback {
                 override fun surfaceChanged(holder: SurfaceHolder?, format: Int, width: Int, height: Int) {
-                    mediaPlayer.setDisplay(holder)
+
                 }
 
                 override fun surfaceCreated(holder: SurfaceHolder?) {
-                    TODO("Not yet implemented")
                 }
 
                 override fun surfaceDestroyed(holder: SurfaceHolder?) {
-                    TODO("Not yet implemented")
+
                 }
             })
         }
+        mediaPlayer.setDisplay(holder)
     }
 
     override fun onResume() {
