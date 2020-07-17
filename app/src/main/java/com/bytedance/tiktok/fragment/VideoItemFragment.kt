@@ -2,12 +2,10 @@ package com.bytedance.tiktok.fragment
 
 import android.media.MediaPlayer
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.view.SurfaceHolder.*
 import androidx.fragment.app.Fragment
 import com.bytedance.tiktok.R
-import com.bytedance.tiktok.bean.DataCreate
 import com.bytedance.tiktok.bean.VideoBean
 import kotlinx.android.synthetic.main.fragment_recommend_item.*
 import kotlinx.android.synthetic.main.layout_recommend_text.*

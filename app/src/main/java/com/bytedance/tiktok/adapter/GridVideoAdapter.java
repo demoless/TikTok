@@ -12,7 +12,6 @@ import com.bytedance.tiktok.R;
 import com.bytedance.tiktok.activity.PlayListActivity;
 import com.bytedance.tiktok.base.BaseRvAdapter;
 import com.bytedance.tiktok.base.BaseRvViewHolder;
-import com.bytedance.tiktok.bean.VideoBean;
 import com.bytedance.tiktok.view.IconFontTextView;
 
 import java.util.List;

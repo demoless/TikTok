@@ -12,17 +12,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bytedance.tiktok.R;
-import com.bytedance.tiktok.activity.MainActivity;
 import com.bytedance.tiktok.activity.PlayListActivity;
 import com.bytedance.tiktok.adapter.VideoAdapter;
 import com.bytedance.tiktok.base.BaseFragment;
-import com.bytedance.tiktok.bean.CurUserBean;
 import com.bytedance.tiktok.bean.DataCreate;
 import com.bytedance.tiktok.utils.OnVideoControllerListener;
 import com.bytedance.tiktok.view.CommentDialog;
 import com.bytedance.tiktok.view.ControllerView;
 import com.bytedance.tiktok.view.FullScreenVideoView;
-import com.bytedance.tiktok.view.LikeView;
 import com.bytedance.tiktok.view.ShareDialog;
 import com.bytedance.tiktok.view.viewpagerlayoutmanager.OnViewPagerListener;
 import com.bytedance.tiktok.view.viewpagerlayoutmanager.ViewPagerLayoutManager;

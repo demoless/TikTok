@@ -1,11 +1,9 @@
 package com.bytedance.tiktok.adapter
 
 import android.util.Log
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.adapter.FragmentViewHolder
-import com.bytedance.tiktok.bean.VideoBean
 import com.bytedance.tiktok.fragment.VideoItemFragment
 import kotlin.collections.ArrayList
 

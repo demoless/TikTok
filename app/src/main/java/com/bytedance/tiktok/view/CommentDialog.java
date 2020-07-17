@@ -57,10 +57,8 @@ public class CommentDialog extends BaseBottomSheetDialog {
 
     private void loadData() {
         for (int i = 0; i < DataCreate.userList.size(); i++) {
-            CommentBean commentBean = new CommentBean();
-            commentBean.setUserBean(DataCreate.userList.get(i));
-            commentBean.setContent(commentArray[(int) (Math.random() * commentArray.length)]);
-            commentBean.setLikeCount(likeArray[(int) (Math.random() * likeArray.length)]);
+            CommentBean commentBean = new CommentBean(commentArray[(int) (Math.random() * commentArray.length)],
+                    DataCreate.userList.get(i),likeArray[(int) (Math.random() * likeArray.length)],false);
             datas.add(commentBean);
         }
         commentAdapter.notifyDataSetChanged();

@@ -12,7 +12,7 @@ import com.bytedance.tiktok.R;
 import com.bytedance.tiktok.adapter.PrivateLetterAdapter;
 import com.bytedance.tiktok.adapter.ShareAdapter;
 import com.bytedance.tiktok.bean.DataCreate;
-import com.bytedance.tiktok.bean.ShareBean;
+
 import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;

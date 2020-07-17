@@ -11,10 +11,8 @@ import com.bytedance.tiktok.R;
 import com.bytedance.tiktok.adapter.GridVideoAdapter;
 import com.bytedance.tiktok.base.BaseFragment;
 import com.bytedance.tiktok.bean.DataCreate;
-import com.bytedance.tiktok.bean.VideoBean;
 import com.bytedance.tiktok.viewmodels.MainFragmentViewModel;
 
-import java.util.ArrayList;
 import butterknife.BindView;
 
 /**

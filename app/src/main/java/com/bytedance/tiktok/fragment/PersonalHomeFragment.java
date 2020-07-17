@@ -105,7 +105,7 @@ public class PersonalHomeFragment extends BaseFragment implements View.OnClickLi
 
     public void setUserInfo() {
 
-        mainViewModel.getCurUserEvent().observe(this, curUserBean -> {
+        mainViewModel.getCurUserEvent().observe(this,curUserBean -> {
                 coordinatorLayoutBackTop();
 
                 PersonalHomeFragment.this.curUserBean = curUserBean.getUserBean();

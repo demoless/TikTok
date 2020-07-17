@@ -12,7 +12,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.airbnb.lottie.LottieAnimationView;
 import com.bytedance.tiktok.R;
-import com.bytedance.tiktok.bean.VideoBean;
 import com.bytedance.tiktok.utils.AutoLinkHerfManager;
 import com.bytedance.tiktok.utils.NumUtils;
 import com.bytedance.tiktok.utils.OnVideoControllerListener;

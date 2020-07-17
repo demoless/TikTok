@@ -18,17 +18,6 @@ public class DataCreate {
 
     public static void initData() {
 
-        VideoBean videoBeanOne = new VideoBean();
-        videoBeanOne.setCoverRes(R.mipmap.cover1);
-        videoBeanOne.setContent("#街坊 #颜值打分 给自己颜值打100分的女生集合");
-        videoBeanOne.setVideoRes(R.raw.video1);
-        videoBeanOne.setDistance(7.9f);
-        videoBeanOne.setFocused(false);
-        videoBeanOne.setLiked(true);
-        videoBeanOne.setLikeCount(226823);
-        videoBeanOne.setCommentCount(3480);
-        videoBeanOne.setShareCount(4252);
-
         VideoBean.UserBean userBeanOne = new VideoBean.UserBean();
         userBeanOne.setUid(1);
         userBeanOne.setHead(R.mipmap.head1);
@@ -41,19 +30,19 @@ public class DataCreate {
         userBeanOne.setDynamicCount(42);
         userBeanOne.setLikeCount(821);
 
-        userList.add(userBeanOne);
-        videoBeanOne.setUserBean(userBeanOne);
+        VideoBean videoBeanOne = new VideoBean(userBeanOne);
+        videoBeanOne.setCoverRes(R.mipmap.cover1);
+        videoBeanOne.setContent("#街坊 #颜值打分 给自己颜值打100分的女生集合");
+        videoBeanOne.setVideoRes(R.raw.video1);
+        videoBeanOne.setDistance(7.9f);
+        videoBeanOne.setFocused(false);
+        videoBeanOne.setLiked(true);
+        videoBeanOne.setLikeCount(226823);
+        videoBeanOne.setCommentCount(3480);
+        videoBeanOne.setShareCount(4252);
 
-        VideoBean videoBeanTwo = new VideoBean();
-        videoBeanTwo.setCoverRes(R.mipmap.cover2);
-        videoBeanTwo.setContent("400 户摊主开进济南环联夜市，你们要的烟火气终于来了！");
-        videoBeanTwo.setVideoRes(R.raw.video2);
-        videoBeanTwo.setDistance(19.7f);
-        videoBeanTwo.setFocused(true);
-        videoBeanTwo.setLiked(false);
-        videoBeanTwo.setLikeCount(1938230);
-        videoBeanTwo.setCommentCount(8923);
-        videoBeanTwo.setShareCount(5892);
+
+        userList.add(userBeanOne);
 
         VideoBean.UserBean userBeanTwo = new VideoBean.UserBean();
         userBeanTwo.setUid(2);
@@ -68,18 +57,18 @@ public class DataCreate {
         userBeanTwo.setLikeCount(344);
 
         userList.add(userBeanTwo);
-        videoBeanTwo.setUserBean(userBeanTwo);
 
-        VideoBean videoBeanThree = new VideoBean();
-        videoBeanThree.setCoverRes(R.mipmap.cover3);
-        videoBeanThree.setContent("科比生涯霸气庆祝动作，最后动作诠释了一生荣耀 #科比 @路人王篮球 ");
-        videoBeanThree.setVideoRes(R.raw.video3);
-        videoBeanThree.setDistance(15.9f);
-        videoBeanThree.setFocused(false);
-        videoBeanThree.setLiked(false);
-        videoBeanThree.setLikeCount(592032);
-        videoBeanThree.setCommentCount(9221);
-        videoBeanThree.setShareCount(982);
+        VideoBean videoBeanTwo = new VideoBean(userBeanTwo);
+        videoBeanTwo.setCoverRes(R.mipmap.cover2);
+        videoBeanTwo.setContent("400 户摊主开进济南环联夜市，你们要的烟火气终于来了！");
+        videoBeanTwo.setVideoRes(R.raw.video2);
+        videoBeanTwo.setDistance(19.7f);
+        videoBeanTwo.setFocused(true);
+        videoBeanTwo.setLiked(false);
+        videoBeanTwo.setLikeCount(1938230);
+        videoBeanTwo.setCommentCount(8923);
+        videoBeanTwo.setShareCount(5892);
+
 
         VideoBean.UserBean userBeanThree = new VideoBean.UserBean();
         userBeanThree.setUid(3);
@@ -94,18 +83,16 @@ public class DataCreate {
         userBeanThree.setLikeCount(1724);
 
         userList.add(userBeanThree);
-        videoBeanThree.setUserBean(userBeanThree);
-
-        VideoBean videoBeanFour = new VideoBean();
-        videoBeanFour.setCoverRes(R.mipmap.cover4);
-        videoBeanFour.setContent("美好的一天，从发现美开始 #莉莉柯林斯 ");
-        videoBeanFour.setVideoRes(R.raw.video4);
-        videoBeanFour.setDistance(25.2f);
-        videoBeanFour.setFocused(false);
-        videoBeanFour.setLiked(false);
-        videoBeanFour.setLikeCount(887232);
-        videoBeanFour.setCommentCount(2731);
-        videoBeanFour.setShareCount(8924);
+        VideoBean videoBeanThree = new VideoBean(userBeanThree);
+        videoBeanThree.setCoverRes(R.mipmap.cover3);
+        videoBeanThree.setContent("科比生涯霸气庆祝动作，最后动作诠释了一生荣耀 #科比 @路人王篮球 ");
+        videoBeanThree.setVideoRes(R.raw.video3);
+        videoBeanThree.setDistance(15.9f);
+        videoBeanThree.setFocused(false);
+        videoBeanThree.setLiked(false);
+        videoBeanThree.setLikeCount(592032);
+        videoBeanThree.setCommentCount(9221);
+        videoBeanThree.setShareCount(982);
 
         VideoBean.UserBean userBeanFour = new VideoBean.UserBean();
         userBeanFour.setUid(4);
@@ -120,18 +107,16 @@ public class DataCreate {
         userBeanFour.setLikeCount(4310);
 
         userList.add(userBeanFour);
-        videoBeanFour.setUserBean(userBeanFour);
-
-        VideoBean videoBeanFive = new VideoBean();
-        videoBeanFive.setCoverRes(R.mipmap.cover5);
-        videoBeanFive.setContent("有梦就去追吧，我说到做到。 #网球  #网球小威 ");
-        videoBeanFive.setVideoRes(R.raw.video5);
-        videoBeanFive.setDistance(9.2f);
-        videoBeanFive.setFocused(false);
-        videoBeanFive.setLiked(false);
-        videoBeanFive.setLikeCount(8293241);
-        videoBeanFive.setCommentCount(982);
-        videoBeanFive.setShareCount(8923);
+        VideoBean videoBeanFour = new VideoBean(userBeanFour);
+        videoBeanFour.setCoverRes(R.mipmap.cover4);
+        videoBeanFour.setContent("美好的一天，从发现美开始 #莉莉柯林斯 ");
+        videoBeanFour.setVideoRes(R.raw.video4);
+        videoBeanFour.setDistance(25.2f);
+        videoBeanFour.setFocused(false);
+        videoBeanFour.setLiked(false);
+        videoBeanFour.setLikeCount(887232);
+        videoBeanFour.setCommentCount(2731);
+        videoBeanFour.setShareCount(8924);
 
         VideoBean.UserBean userBeanFive = new VideoBean.UserBean();
         userBeanFive.setUid(5);
@@ -146,18 +131,16 @@ public class DataCreate {
         userBeanFive.setLikeCount(9);
 
         userList.add(userBeanFive);
-        videoBeanFive.setUserBean(userBeanFive);
-
-        VideoBean videoBeanSix = new VideoBean();
-        videoBeanSix.setCoverRes(R.mipmap.cover6);
-        videoBeanSix.setContent("能力越大，责任越大，英雄可能会迟到，但永远不会缺席  #蜘蛛侠 ");
-        videoBeanSix.setVideoRes(R.raw.video6);
-        videoBeanSix.setDistance(16.4f);
-        videoBeanSix.setFocused(true);
-        videoBeanSix.setLiked(true);
-        videoBeanSix.setLikeCount(2109823);
-        videoBeanSix.setCommentCount(9723);
-        videoBeanFive.setShareCount(424);
+        VideoBean videoBeanFive = new VideoBean(userBeanFive);
+        videoBeanFive.setCoverRes(R.mipmap.cover5);
+        videoBeanFive.setContent("有梦就去追吧，我说到做到。 #网球  #网球小威 ");
+        videoBeanFive.setVideoRes(R.raw.video5);
+        videoBeanFive.setDistance(9.2f);
+        videoBeanFive.setFocused(false);
+        videoBeanFive.setLiked(false);
+        videoBeanFive.setLikeCount(8293241);
+        videoBeanFive.setCommentCount(982);
+        videoBeanFive.setShareCount(8923);
 
         VideoBean.UserBean userBeanSix = new VideoBean.UserBean();
         userBeanSix.setUid(6);
@@ -172,18 +155,17 @@ public class DataCreate {
         userBeanSix.setLikeCount(0);
 
         userList.add(userBeanSix);
-        videoBeanSix.setUserBean(userBeanSix);
+        VideoBean videoBeanSix = new VideoBean(userBeanSix);
+        videoBeanSix.setCoverRes(R.mipmap.cover6);
+        videoBeanSix.setContent("能力越大，责任越大，英雄可能会迟到，但永远不会缺席  #蜘蛛侠 ");
+        videoBeanSix.setVideoRes(R.raw.video6);
+        videoBeanSix.setDistance(16.4f);
+        videoBeanSix.setFocused(true);
+        videoBeanSix.setLiked(true);
+        videoBeanSix.setLikeCount(2109823);
+        videoBeanSix.setCommentCount(9723);
+        videoBeanFive.setShareCount(424);
 
-        VideoBean videoBeanSeven = new VideoBean();
-        videoBeanSeven.setCoverRes(R.mipmap.cover7);
-        videoBeanSeven.setContent("真的拍不出来你的神颜！现场看大屏帅疯！#陈情令南京演唱会 #王一博 😭");
-        videoBeanSeven.setVideoRes(R.raw.video7);
-        videoBeanSeven.setDistance(16.4f);
-        videoBeanSeven.setFocused(false);
-        videoBeanSeven.setLiked(false);
-        videoBeanSeven.setLikeCount(185782);
-        videoBeanSeven.setCommentCount(2452);
-        videoBeanSeven.setShareCount(3812);
 
         VideoBean.UserBean userBeanSeven = new VideoBean.UserBean();
         userBeanSeven.setUid(7);
@@ -198,18 +180,16 @@ public class DataCreate {
         userBeanSeven.setLikeCount(839);
 
         userList.add(userBeanSeven);
-        videoBeanSeven.setUserBean(userBeanSeven);
-
-        VideoBean videoBeanEight = new VideoBean();
-        videoBeanEight.setCoverRes(R.mipmap.cover8);
-        videoBeanEight.setContent("逆序只是想告诉大家，学了舞蹈的她气质开了挂！");
-        videoBeanEight.setVideoRes(R.raw.video8);
-        videoBeanEight.setDistance(8.4f);
-        videoBeanEight.setFocused(false);
-        videoBeanEight.setLiked(false);
-        videoBeanEight.setLikeCount(1708324);
-        videoBeanEight.setCommentCount(8372);
-        videoBeanEight.setShareCount(982);
+        VideoBean videoBeanSeven = new VideoBean(userBeanSeven);
+        videoBeanSeven.setCoverRes(R.mipmap.cover7);
+        videoBeanSeven.setContent("真的拍不出来你的神颜！现场看大屏帅疯！#陈情令南京演唱会 #王一博 😭");
+        videoBeanSeven.setVideoRes(R.raw.video7);
+        videoBeanSeven.setDistance(16.4f);
+        videoBeanSeven.setFocused(false);
+        videoBeanSeven.setLiked(false);
+        videoBeanSeven.setLikeCount(185782);
+        videoBeanSeven.setCommentCount(2452);
+        videoBeanSeven.setShareCount(3812);
 
         VideoBean.UserBean userBeanEight = new VideoBean.UserBean();
         userBeanEight.setUid(8);
@@ -224,7 +204,16 @@ public class DataCreate {
         userBeanEight.setLikeCount(0);
 
         userList.add(userBeanEight);
-        videoBeanEight.setUserBean(userBeanEight);
+        VideoBean videoBeanEight = new VideoBean(userBeanEight);
+        videoBeanEight.setCoverRes(R.mipmap.cover8);
+        videoBeanEight.setContent("逆序只是想告诉大家，学了舞蹈的她气质开了挂！");
+        videoBeanEight.setVideoRes(R.raw.video8);
+        videoBeanEight.setDistance(8.4f);
+        videoBeanEight.setFocused(false);
+        videoBeanEight.setLiked(false);
+        videoBeanEight.setLikeCount(1708324);
+        videoBeanEight.setCommentCount(8372);
+        videoBeanEight.setShareCount(982);
 
         datas.add(videoBeanOne);
         datas.add(videoBeanTwo);
