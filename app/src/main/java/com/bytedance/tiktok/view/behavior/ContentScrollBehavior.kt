@@ -48,7 +48,6 @@ class ContentScrollBehavior @JvmOverloads constructor(context: Context,attribute
             return true
         }
         return false
-        //return super.onMeasureChild(parent, child, parentWidthMeasureSpec, widthUsed, parentHeightMeasureSpec, heightUsed)
     }
 
     override fun onLayoutChild(parent: CoordinatorLayout, child: View, layoutDirection: Int): Boolean {
@@ -99,15 +98,18 @@ class ContentScrollBehavior @JvmOverloads constructor(context: Context,attribute
 
     override fun onNestedPreScroll(coordinatorLayout: CoordinatorLayout, child: View, target: View,
                                    dx: Int, dy: Int, consumed: IntArray, type: Int) {
-        Log.e("message","child.y:" + child.y)
         val transY = child.y - dy
-
+        val head = coordinatorLayout.getChildAt(0)
+        var headY = head.y - dy
         //处理上滑
         if (dy > 0) {
             if (transY >= topBarY) {
+                head.y = headY
                 consumeTranslationY(child,transY,dy,consumed)
             } else {
                 val consY = child.y - topBarY
+                headY = head.y - consY
+                head.y = headY
                 consumeTranslationY(child,topBarY,consY.toInt(),consumed)
             }
         }
@@ -122,9 +124,12 @@ class ContentScrollBehavior @JvmOverloads constructor(context: Context,attribute
 
             //真正处理下滑
             if (transY >= topBarY && transY <= downEndY) {
+                head.y = headY
                 consumeTranslationY(child,transY, dy, consumed)
             } else {
                 val consY = downEndY - child.y
+                headY = head.y - consY
+                head.y = headY
                 consumeTranslationY(child,downEndY, consY.toInt(), consumed)
             }
         }
@@ -153,7 +158,6 @@ class ContentScrollBehavior @JvmOverloads constructor(context: Context,attribute
     private fun consumeTranslationY(target: View,transY: Float,dy: Int,consumed: IntArray) {
         target.y = transY
         consumed[1] = dy
-        Log.e("message","child.y:" + target.y)
     }
 
 }

@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import com.bytedance.tiktok.R;
 import com.bytedance.tiktok.base.BaseRvAdapter;
 import com.bytedance.tiktok.base.BaseRvViewHolder;
+import com.bytedance.tiktok.bean.VideoBean;
 import com.bytedance.tiktok.view.ControllerView;
 import com.bytedance.tiktok.view.LikeView;
 import java.util.List;
