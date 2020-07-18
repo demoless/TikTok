@@ -1,6 +1,6 @@
 package com.bytedance.tiktok.adapter
 
-import android.util.Log
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.adapter.FragmentViewHolder
@@ -11,10 +11,11 @@ import kotlin.collections.ArrayList
  * created by demoless on 2020/7/5
  * description:
  */
-class VideoListAdapter(fragmentManager: FragmentManager,private val data: ArrayList<VideoItemFragment>) : FragmentStateAdapter(fragmentManager) {
+class VideoListAdapter @JvmOverloads constructor(fragmentManager: FragmentManager,
+                                                 private val data: java.util.ArrayList<Fragment> = ArrayList())
+    : FragmentStateAdapter(fragmentManager) {
 
-    override fun getItem(position: Int): VideoItemFragment {
-        Log.e("--mess","VideoListAdapter")
+    override fun getItem(position: Int): Fragment {
         return data[position]
     }
 

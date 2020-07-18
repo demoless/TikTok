@@ -12,7 +12,7 @@ import java.util.ArrayList;
  * description 本地数据创建，代替接口获取数据
  */
 public class DataCreate {
-    public static ArrayList<VideoItemFragment> videoFragments = new ArrayList<>();
+    public static ArrayList<Fragment> videoFragments = new ArrayList<>();
     public static ArrayList<VideoBean> datas = new ArrayList<>();
     public static ArrayList<VideoBean.UserBean> userList = new ArrayList<>();
 

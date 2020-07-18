@@ -5,9 +5,12 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.bytedance.tiktok.R
+import com.bytedance.tiktok.adapter.VideoListAdapter
 import com.bytedance.tiktok.base.CommPagerAdapter
+import com.bytedance.tiktok.fragment.ViewPagerFragment
 import com.bytedance.tiktok.fragment.WorkFragment
 import kotlinx.android.synthetic.main.activity_test.*
+import kotlinx.android.synthetic.main.view_pager2.*
 
 class TestActivity : AppCompatActivity() {
 
@@ -15,16 +18,21 @@ class TestActivity : AppCompatActivity() {
 
 
     private val fragments by lazy {
-        ArrayList<Fragment>()
+        ArrayList<Fragment>().apply {
+            for (index in 0 .. 10) {
+                this.add( ViewPagerFragment())
+            }
+        }
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.behavior_layout)
+        setContentView(R.layout.view_pager2)
     }
 
     override fun onResume() {
         super.onResume()
-        setTabLayout()
+        //setTabLayout()
+        viewpager2.adapter = VideoListAdapter(supportFragmentManager,fragments)
     }
 
     private fun setTabLayout() {
