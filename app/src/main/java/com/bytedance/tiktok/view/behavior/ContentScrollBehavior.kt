@@ -2,7 +2,7 @@ package com.bytedance.tiktok.view.behavior
 
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
+
 import android.view.View
 import android.view.ViewGroup.LayoutParams
 import android.widget.OverScroller
@@ -14,7 +14,7 @@ import com.bytedance.tiktok.R
 import java.lang.reflect.Field
 
 
-class ContentScrollBehavior @JvmOverloads constructor(context: Context,attributeSet: AttributeSet)
+class ContentScrollBehavior constructor(context: Context,attributeSet: AttributeSet)
     : CoordinatorLayout.Behavior<View>(context,attributeSet) {
 
     private lateinit var content : View
@@ -105,7 +105,9 @@ class ContentScrollBehavior @JvmOverloads constructor(context: Context,attribute
         if (dy > 0) {
             if (transY >= topBarY) {
                 head.y = headY
-                consumeTranslationY(child,transY,dy,consumed)
+                target.y = transY
+                consumed[1] = dy
+                //consumeTranslationY(child,transY,dy,consumed)
             } else {
                 val consY = child.y - topBarY
                 headY = head.y - consY
