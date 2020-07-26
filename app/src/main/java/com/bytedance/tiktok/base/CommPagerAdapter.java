@@ -5,6 +5,9 @@ import android.os.Parcelable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
+
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 
 /**
@@ -24,9 +27,10 @@ public class CommPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public int getCount() {
-        return items.size()==0 ? 0 :items.size();
+        return items.size();
     }
 
+    @NotNull
     @Override
     public Fragment getItem(int position) {
         return items.get(position);

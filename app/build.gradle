@@ -55,7 +55,7 @@ dependencies {
 
     implementation 'com.airbnb.android:lottie:2.8.0'
 
-    implementation 'androidx.viewpager2:viewpager2:1.0.0-alpha01'
+    implementation 'androidx.viewpager2:viewpager2:1.0.0'
 
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0'
 

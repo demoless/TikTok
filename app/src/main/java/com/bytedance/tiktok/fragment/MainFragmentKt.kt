@@ -35,7 +35,15 @@ class MainFragmentKt : Fragment() {
     private val recommendFragment by lazy {
         RecommendFragment()
     }
-    private val fragments by lazy { ArrayList<Fragment>() }
+
+    private val recommendFragmentKt by lazy{
+        RecommendFragmentKt()
+    }
+    private val fragments by lazy { ArrayList<Fragment>().apply {
+        this.add(currentLocationFragment)
+        this.add(recommendFragmentKt)
+        }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_main,container,false)
@@ -43,12 +51,9 @@ class MainFragmentKt : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setFragments()
-        setMainMenu()
     }
 
     private fun setFragments() {
-        fragments.add(currentLocationFragment)
-        fragments.add(recommendFragment)
         tab_title.addTab(tab_title.newTab().setText("重庆"))
         tab_title.addTab(tab_title.newTab().setText("推荐"))
         pagerAdapter = CommPagerAdapter(childFragmentManager, fragments, arrayOf("重庆", "推荐"))
@@ -65,12 +70,5 @@ class MainFragmentKt : Fragment() {
             }
             override fun onPageScrollStateChanged(state: Int) {}
         })
-    }
-    private fun setMainMenu() {
-        tab_mainmenu.addTab(tab_mainmenu.newTab().setText("首页"))
-        tab_mainmenu.addTab(tab_mainmenu.newTab().setText("好友"))
-        tab_mainmenu.addTab(tab_mainmenu.newTab().setText(""))
-        tab_mainmenu.addTab(tab_mainmenu.newTab().setText("消息"))
-        tab_mainmenu.addTab(tab_mainmenu.newTab().setText("我"))
     }
 }

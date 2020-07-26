@@ -32,7 +32,7 @@ class TestActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         //setTabLayout()
-        viewpager2.adapter = VideoListAdapter(supportFragmentManager,fragments)
+        viewpager2.adapter = VideoListAdapter(this)
     }
 
     private fun setTabLayout() {

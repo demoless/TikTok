@@ -149,9 +149,6 @@ public class RecommendFragment extends BaseFragment {
     }
 
     private void playCurVideo(int position) {
-        Log.d("message","position:" + position);
-        Log.d("message","curPlayPos:" + curPlayPos);
-        Log.d("message","oldPosition:" + oldPosition);
         if (position == curPlayPos) {
             return;
         }

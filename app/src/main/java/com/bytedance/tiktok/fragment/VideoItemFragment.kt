@@ -2,10 +2,13 @@ package com.bytedance.tiktok.fragment
 
 import android.media.MediaPlayer
 import android.os.Bundle
-import android.view.*
-import android.view.SurfaceHolder.*
+import android.view.LayoutInflater
+import android.view.SurfaceHolder
+import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.bytedance.tiktok.R
+import com.bytedance.tiktok.bean.DataCreate
 import com.bytedance.tiktok.bean.VideoBean
 import kotlinx.android.synthetic.main.fragment_recommend_item.*
 import kotlinx.android.synthetic.main.layout_recommend_text.*
@@ -15,26 +18,18 @@ import kotlinx.android.synthetic.main.layout_recommend_text.*
  * description:
  */
 class VideoItemFragment(private val videoBean: VideoBean) :Fragment() {
-
     private var videoPath: String? = null
-        set(value) {
-            field = value
-        }
 
     constructor(videoPath :String, videoBean: VideoBean) : this(videoBean){
         this.videoPath = videoPath
     }
 
     private val mediaPlayer:MediaPlayer by lazy {
-        MediaPlayer()
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        mediaPlayer.isLooping = true
-        videoPath?.let{
-            mediaPlayer.setDataSource(it)
-            mediaPlayer.prepare()
+        MediaPlayer().apply {
+            this.isLooping = true
+            this.setOnPreparedListener {
+                it.start()
+            }
         }
     }
 
@@ -45,22 +40,24 @@ class VideoItemFragment(private val videoBean: VideoBean) :Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         tv_nickname.text = videoBean.userBean.nickName
         tv_content.text = videoBean.content
+        surface_view.holder.addCallback(object :SurfaceHolder.Callback{
+            override fun surfaceChanged(holder: SurfaceHolder?, format: Int, width: Int, height: Int) {
 
-        val holder = surface_view.holder.also {
-            it.addCallback(object : Callback {
-                override fun surfaceChanged(holder: SurfaceHolder?, format: Int, width: Int, height: Int) {
+            }
 
+            override fun surfaceDestroyed(holder: SurfaceHolder?) {
+
+            }
+
+            override fun surfaceCreated(holder: SurfaceHolder?) {
+                mediaPlayer.setDisplay(holder)
+                videoPath?.let{
+                    mediaPlayer.setDataSource(it)
+                    mediaPlayer.prepareAsync()
                 }
+            }
 
-                override fun surfaceCreated(holder: SurfaceHolder?) {
-                }
-
-                override fun surfaceDestroyed(holder: SurfaceHolder?) {
-
-                }
-            })
-        }
-        mediaPlayer.setDisplay(holder)
+        })
     }
 
     override fun onResume() {

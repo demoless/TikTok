@@ -17,9 +17,9 @@ data class VideoBean @JvmOverloads constructor(
         ) {
     data class UserBean @JvmOverloads constructor(var uid :Int = 0,var nickName: String = "",
                                                   var head: Int = 0,
-                                    var sign: String = "" ,
-                                     var isFocused: Boolean = false,
-                                     var subCount: Int = 0, var focusCount: Int = 0,
+                                                  var sign: String = "" ,
+                                                  var isFocused: Boolean = false,
+                                                  var subCount: Int = 0, var focusCount: Int = 0,
                                                   var fansCount: Int = 0,
                                                   var workCount: Int = 0,
                                                   var dynamicCount: Int = 0,

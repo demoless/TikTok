@@ -66,7 +66,7 @@ public class ControllerView extends RelativeLayout implements View.OnClickListen
     }
 
     private void init() {
-        View rootView = LayoutInflater.from(getContext()).inflate(R.layout.view_controller, this);
+        View rootView = LayoutInflater.from(getContext()).inflate(R.layout.view_controller, this,false);
         ButterKnife.bind(this, rootView);
 
         ivHead.setOnClickListener(this);
