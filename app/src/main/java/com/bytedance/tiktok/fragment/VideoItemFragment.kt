@@ -19,14 +19,9 @@ import kotlinx.android.synthetic.main.layout_recommend_text.*
  * created by demoless on 2020/7/5
  * description:
  */
-class VideoItemFragment(
-        private val videoBean: VideoBean) :Fragment() {
-
-    private var mediaPlayer: MediaPlayer? = null
-
-    constructor(videoBean: VideoBean,mediaPlayer: MediaPlayer) : this(videoBean) {
-        this.mediaPlayer = mediaPlayer
-    }
+class VideoItemFragment @JvmOverloads constructor(
+        private val videoBean: VideoBean,
+        private val mediaPlayer: MediaPlayer = MediaPlayer()) :Fragment() {
 
     val fileDescriptor: AssetFileDescriptor = resources.openRawResourceFd(videoBean.videoRes)
 
@@ -47,11 +42,11 @@ class VideoItemFragment(
             }
 
             override fun surfaceCreated(holder: SurfaceHolder?) {
-                mediaPlayer?.reset()
-                mediaPlayer?.setDataSource(fileDescriptor.fileDescriptor ,fileDescriptor.startOffset,
+                mediaPlayer.reset()
+                mediaPlayer.setDataSource(fileDescriptor.fileDescriptor ,fileDescriptor.startOffset,
                         fileDescriptor.length)
-                mediaPlayer?.prepareAsync()
-                mediaPlayer?.setOnPreparedListener{
+                mediaPlayer.prepareAsync()
+                mediaPlayer.setOnPreparedListener{
                     it.setDisplay(holder)
                     it.start()
                 }
@@ -62,20 +57,17 @@ class VideoItemFragment(
 
     override fun onResume() {
         super.onResume()
-        if (mediaPlayer == null) {
-            mediaPlayer = MediaPlayer()
-        }
         Log.e("message", "onResume")
     }
 
     override fun onPause() {
         super.onPause()
-        mediaPlayer?.pause()
+        mediaPlayer.pause()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        mediaPlayer?.stop()
-        mediaPlayer?.release()
+        mediaPlayer.stop()
+        mediaPlayer.release()
     }
 }
