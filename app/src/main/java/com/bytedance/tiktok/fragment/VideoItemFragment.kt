@@ -1,7 +1,9 @@
 package com.bytedance.tiktok.fragment
 
+import android.content.res.AssetFileDescriptor
 import android.media.MediaPlayer
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.SurfaceHolder
 import android.view.View
@@ -17,21 +19,16 @@ import kotlinx.android.synthetic.main.layout_recommend_text.*
  * created by demoless on 2020/7/5
  * description:
  */
-class VideoItemFragment(private val videoBean: VideoBean) :Fragment() {
-    private var videoPath: String? = null
+class VideoItemFragment(
+        private val videoBean: VideoBean) :Fragment() {
 
-    constructor(videoPath :String, videoBean: VideoBean) : this(videoBean){
-        this.videoPath = videoPath
+    private var mediaPlayer: MediaPlayer? = null
+
+    constructor(videoBean: VideoBean,mediaPlayer: MediaPlayer) : this(videoBean) {
+        this.mediaPlayer = mediaPlayer
     }
 
-    private val mediaPlayer:MediaPlayer by lazy {
-        MediaPlayer().apply {
-            this.isLooping = true
-            this.setOnPreparedListener {
-                it.start()
-            }
-        }
-    }
+    val fileDescriptor: AssetFileDescriptor = resources.openRawResourceFd(videoBean.videoRes)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_recommend_item,container,false)
@@ -50,10 +47,13 @@ class VideoItemFragment(private val videoBean: VideoBean) :Fragment() {
             }
 
             override fun surfaceCreated(holder: SurfaceHolder?) {
-                mediaPlayer.setDisplay(holder)
-                videoPath?.let{
-                    mediaPlayer.setDataSource(it)
-                    mediaPlayer.prepareAsync()
+                mediaPlayer?.reset()
+                mediaPlayer?.setDataSource(fileDescriptor.fileDescriptor ,fileDescriptor.startOffset,
+                        fileDescriptor.length)
+                mediaPlayer?.prepareAsync()
+                mediaPlayer?.setOnPreparedListener{
+                    it.setDisplay(holder)
+                    it.start()
                 }
             }
 
@@ -62,17 +62,20 @@ class VideoItemFragment(private val videoBean: VideoBean) :Fragment() {
 
     override fun onResume() {
         super.onResume()
-        mediaPlayer.start()
+        if (mediaPlayer == null) {
+            mediaPlayer = MediaPlayer()
+        }
+        Log.e("message", "onResume")
     }
 
     override fun onPause() {
         super.onPause()
-        mediaPlayer.pause()
+        mediaPlayer?.pause()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        mediaPlayer.stop()
-        mediaPlayer.release()
+        mediaPlayer?.stop()
+        mediaPlayer?.release()
     }
 }

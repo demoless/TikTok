@@ -41,7 +41,7 @@ class MainFragmentKt : Fragment() {
     }
     private val fragments by lazy { ArrayList<Fragment>().apply {
         this.add(currentLocationFragment)
-        this.add(recommendFragmentKt)
+        this.add(recommendFragment)
         }
     }
 

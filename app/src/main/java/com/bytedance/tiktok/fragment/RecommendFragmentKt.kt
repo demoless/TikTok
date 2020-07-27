@@ -14,12 +14,14 @@ import kotlinx.android.synthetic.main.fragment_recommend_kt.*
 
 class RecommendFragmentKt : Fragment() {
 
-    private var currVideoItem: VideoItemFragment? = null
-
-    private val mediaPlayer by lazy {
+    private val mediaPlayer:MediaPlayer by lazy {
         MediaPlayer().apply {
-            isLooping = true
+            this.isLooping = true
         }
+    }
+
+    private val adapter by lazy {
+        VideoListAdapter(context as FragmentActivity)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -40,6 +42,7 @@ class RecommendFragmentKt : Fragment() {
                 super.onPageSelected(position)
             }
         })
-        view_pager2.adapter = fragmentManager?.let { VideoListAdapter(context as FragmentActivity) }
+        view_pager2.adapter = adapter
+
     }
 }

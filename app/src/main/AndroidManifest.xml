@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.bytedance.tiktok">
+
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
@@ -11,8 +12,9 @@
         android:roundIcon="@mipmap/launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.MainKtActivity"></activity>
-        <activity android:name=".activity.TestActivity"></activity>
+        <activity android:name=".activity.EmptyVideoActivity"></activity>
+        <activity android:name=".activity.MainKtActivity" />
+        <activity android:name=".activity.TestActivity" />
         <activity
             android:name=".activity.SplashActivity"
             android:screenOrientation="portrait">

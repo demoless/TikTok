@@ -3,7 +3,6 @@ package com.bytedance.tiktok.bean;
 import androidx.fragment.app.Fragment;
 
 import com.bytedance.tiktok.R;
-import com.bytedance.tiktok.fragment.VideoItemFragment;
 
 import java.util.ArrayList;
 
@@ -224,23 +223,23 @@ public class DataCreate {
         datas.add(videoBeanSeven);
         datas.add(videoBeanEight);
 
-        videoFragments.add(new VideoItemFragment(videoBeanOne));
-        videoFragments.add(new VideoItemFragment(videoBeanTwo));
-        videoFragments.add(new VideoItemFragment(videoBeanThree));
-        videoFragments.add(new VideoItemFragment(videoBeanFour));
-        videoFragments.add(new VideoItemFragment(videoBeanFive));
-        videoFragments.add(new VideoItemFragment(videoBeanSix));
-        videoFragments.add(new VideoItemFragment(videoBeanSeven));
-        videoFragments.add(new VideoItemFragment(videoBeanEight));
-
-        videoFragments.add(new VideoItemFragment(videoBeanOne));
-        videoFragments.add(new VideoItemFragment(videoBeanTwo));
-        videoFragments.add(new VideoItemFragment(videoBeanThree));
-        videoFragments.add(new VideoItemFragment(videoBeanFour));
-        videoFragments.add(new VideoItemFragment(videoBeanFive));
-        videoFragments.add(new VideoItemFragment(videoBeanSix));
-        videoFragments.add(new VideoItemFragment(videoBeanSeven));
-        videoFragments.add(new VideoItemFragment(videoBeanEight));
+//        videoFragments.add(new VideoItemFragment(videoBeanOne));
+//        videoFragments.add(new VideoItemFragment(videoBeanTwo));
+//        videoFragments.add(new VideoItemFragment(videoBeanThree));
+//        videoFragments.add(new VideoItemFragment(videoBeanFour));
+//        videoFragments.add(new VideoItemFragment(videoBeanFive));
+//        videoFragments.add(new VideoItemFragment(videoBeanSix));
+//        videoFragments.add(new VideoItemFragment(videoBeanSeven));
+//        videoFragments.add(new VideoItemFragment(videoBeanEight));
+//
+//        videoFragments.add(new VideoItemFragment(videoBeanOne));
+//        videoFragments.add(new VideoItemFragment(videoBeanTwo));
+//        videoFragments.add(new VideoItemFragment(videoBeanThree));
+//        videoFragments.add(new VideoItemFragment(videoBeanFour));
+//        videoFragments.add(new VideoItemFragment(videoBeanFive));
+//        videoFragments.add(new VideoItemFragment(videoBeanSix));
+//        videoFragments.add(new VideoItemFragment(videoBeanSeven));
+//        videoFragments.add(new VideoItemFragment(videoBeanEight));
 
 
 
