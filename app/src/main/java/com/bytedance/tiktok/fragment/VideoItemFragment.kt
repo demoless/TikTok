@@ -20,7 +20,7 @@ import kotlinx.android.synthetic.main.layout_recommend_text.*
  * description:
  */
 class VideoItemFragment @JvmOverloads constructor(
-        videoBean: VideoBean,
+        private val videoBean: VideoBean,
         private val mediaPlayer: MediaPlayer = MediaPlayer()) :Fragment() {
 
     private val fileDescriptor: AssetFileDescriptor? by lazy {
@@ -32,8 +32,8 @@ class VideoItemFragment @JvmOverloads constructor(
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        //tv_nickname.text = videoBean.userBean.nickName
-        //tv_content.text = videoBean.content
+        tv_nickname.text = videoBean.userBean.nickName
+        tv_content.text = videoBean.content
         surface_view.holder.addCallback(object :SurfaceHolder.Callback{
             override fun surfaceChanged(holder: SurfaceHolder?, format: Int, width: Int, height: Int) {
 

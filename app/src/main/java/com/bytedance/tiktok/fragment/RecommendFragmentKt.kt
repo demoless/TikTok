@@ -21,7 +21,7 @@ class RecommendFragmentKt : Fragment() {
     }
 
     private val adapter by lazy {
-        VideoListAdapter(context as FragmentActivity)
+        VideoListAdapter(context as FragmentActivity,mediaPlayer)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
