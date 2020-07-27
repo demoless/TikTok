@@ -11,22 +11,22 @@
 
 
 
-    <include
-        layout="@layout/layout_recommend_text"
-        android:layout_marginLeft="12dp"
-        android:layout_marginBottom="18dp"
-        android:id="@+id/recommend_text"
-        android:layout_gravity="bottom"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+<!--    <include-->
+<!--        layout="@layout/layout_recommend_text"-->
+<!--        android:layout_marginLeft="12dp"-->
+<!--        android:layout_marginBottom="18dp"-->
+<!--        android:id="@+id/recommend_text"-->
+<!--        android:layout_gravity="bottom"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content" />-->
 
-    <include
-        layout="@layout/layout_recommend_utils"
-        android:id="@+id/recommend_utils"
-        tools:layout_height="380dp"
-        tools:layout_width="100dp"
-        android:layout_gravity="bottom|end"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+<!--    <include-->
+<!--        layout="@layout/layout_recommend_utils"-->
+<!--        android:id="@+id/recommend_utils"-->
+<!--        tools:layout_height="380dp"-->
+<!--        tools:layout_width="100dp"-->
+<!--        android:layout_gravity="bottom|end"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"/>-->
 
 </FrameLayout>

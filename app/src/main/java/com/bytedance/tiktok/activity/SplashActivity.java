@@ -29,7 +29,7 @@ public class SplashActivity extends BaseActivity {
 
             @Override
             public void onFinish() {
-                startActivity(new Intent(SplashActivity.this, MainKtActivity.class));
+                startActivity(new Intent(SplashActivity.this, TestActivity.class));
                 finish();
             }
         }.start();
