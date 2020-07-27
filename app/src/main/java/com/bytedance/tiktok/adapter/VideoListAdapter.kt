@@ -28,7 +28,7 @@ class VideoListAdapter constructor(fragmentActivity: FragmentActivity)
     }
 
     override fun createFragment(position: Int): Fragment {
-        return VideoItemFragment(DataCreate.datas[position])
+        return Fragment()
     }
 
     override fun onViewDetachedFromWindow(holder: FragmentViewHolder) {

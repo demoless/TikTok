@@ -39,7 +39,7 @@ class RecommendFragmentKt : Fragment() {
             }
 
             override fun onPageSelected(position: Int) {
-                super.onPageSelected(position)
+
             }
         })
         view_pager2.adapter = adapter
