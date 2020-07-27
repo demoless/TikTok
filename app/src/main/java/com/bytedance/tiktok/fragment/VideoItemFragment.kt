@@ -23,7 +23,9 @@ class VideoItemFragment @JvmOverloads constructor(
         videoBean: VideoBean,
         private val mediaPlayer: MediaPlayer = MediaPlayer()) :Fragment() {
 
-    val fileDescriptor: AssetFileDescriptor = resources.openRawResourceFd(videoBean.videoRes)
+    private val fileDescriptor: AssetFileDescriptor? by lazy {
+        context?.resources?.openRawResourceFd(videoBean.videoRes)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_recommend_item,container,false)
@@ -43,12 +45,14 @@ class VideoItemFragment @JvmOverloads constructor(
 
             override fun surfaceCreated(holder: SurfaceHolder?) {
                 mediaPlayer.reset()
-                mediaPlayer.setDataSource(fileDescriptor.fileDescriptor ,fileDescriptor.startOffset,
-                        fileDescriptor.length)
-                mediaPlayer.prepareAsync()
-                mediaPlayer.setOnPreparedListener{
-                    it.setDisplay(holder)
-                    it.start()
+                fileDescriptor?.let {
+                    mediaPlayer.setDataSource(it.fileDescriptor ,it.startOffset,
+                            it.length)
+                    mediaPlayer.prepareAsync()
+                    mediaPlayer.setOnPreparedListener{ player ->
+                        player.setDisplay(holder)
+                        player.start()
+                }
                 }
             }
 
