@@ -4,10 +4,7 @@ import android.content.res.AssetFileDescriptor
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.SurfaceHolder
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
 import com.bytedance.tiktok.R
 import com.bytedance.tiktok.bean.DataCreate
@@ -27,11 +24,16 @@ class VideoItemFragment @JvmOverloads constructor(
         context?.resources?.openRawResourceFd(videoBean.videoRes)
     }
 
+    private var isPrepared: Boolean = false
+
+    private var holder: SurfaceHolder? = null
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_recommend_item,container,false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        Log.e("message","VideoItemFragment: onViewCreated")
         tv_nickname.text = videoBean.userBean.nickName
         tv_content.text = videoBean.content
         surface_view.holder.addCallback(object :SurfaceHolder.Callback{
@@ -45,14 +47,16 @@ class VideoItemFragment @JvmOverloads constructor(
 
             override fun surfaceCreated(holder: SurfaceHolder?) {
                 mediaPlayer.reset()
+                this@VideoItemFragment.holder = holder
                 fileDescriptor?.let {
                     mediaPlayer.setDataSource(it.fileDescriptor ,it.startOffset,
                             it.length)
                     mediaPlayer.prepareAsync()
                     mediaPlayer.setOnPreparedListener{ player ->
+                        isPrepared = true
                         player.setDisplay(holder)
                         player.start()
-                }
+                    }
                 }
             }
 
@@ -61,16 +65,21 @@ class VideoItemFragment @JvmOverloads constructor(
 
     override fun onResume() {
         super.onResume()
-        Log.e("message", "onResume")
+        Log.e("message","VideoItemFragment: onResume")
+        if (!mediaPlayer.isPlaying && isPrepared) {
+            mediaPlayer.start()
+        }
     }
 
     override fun onPause() {
         super.onPause()
+        Log.e("message","VideoItemFragment: onPause")
         mediaPlayer.pause()
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        Log.e("message","VideoItemFragment: onDestroy")
         mediaPlayer.stop()
         mediaPlayer.release()
     }
