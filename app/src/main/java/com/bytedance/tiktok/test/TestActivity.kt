@@ -1,4 +1,4 @@
-package com.bytedance.tiktok.activity
+package com.bytedance.tiktok.test
 
 import android.os.Bundle
 import android.widget.Toast

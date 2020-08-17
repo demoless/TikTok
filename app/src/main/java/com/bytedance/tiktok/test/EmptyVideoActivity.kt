@@ -1,4 +1,4 @@
-package com.bytedance.tiktok.activity
+package com.bytedance.tiktok.test
 
 import android.annotation.SuppressLint
 import android.content.res.AssetFileDescriptor

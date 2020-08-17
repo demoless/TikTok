@@ -12,9 +12,10 @@
         android:roundIcon="@mipmap/launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.EmptyVideoActivity"></activity>
+        <activity android:name=".test.VideoDecoderActivity"></activity>
+        <activity android:name=".test.EmptyVideoActivity" />
         <activity android:name=".activity.MainKtActivity" />
-        <activity android:name=".activity.TestActivity" />
+        <activity android:name=".test.TestActivity" />
         <activity
             android:name=".activity.SplashActivity"
             android:screenOrientation="portrait">
