@@ -2,6 +2,7 @@ package com.bytedance.tiktok.test
 
 import android.app.PendingIntent.getActivity
 import android.content.res.AssetFileDescriptor
+import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.util.Log
@@ -24,7 +25,7 @@ class VideoDecoderActivity : AppCompatActivity() {
         initPlayer()
     }
     private fun initPlayer() {
-        val path = "/storage/emulated/0/DCIM/ScreenRecorder/test.mp4"
+        val path = Uri.parse("android.resource://"+packageName + "/" + R.raw.video1).toString()
         Toast.makeText(this,path,Toast.LENGTH_SHORT).show()
 
         //创建线程池
