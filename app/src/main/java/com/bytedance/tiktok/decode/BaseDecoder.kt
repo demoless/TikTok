@@ -46,7 +46,7 @@ abstract class BaseDecoder(private val mFilePath: String) :IDecoder{
 
     private var mState = DecodeState.STOP
 
-    private var mStateListener: IDecoderStateListener? = null
+    internal var mStateListener: IDecoderStateListener? = null
 
     private var mExtractor : IExtractor? = null
 
@@ -125,7 +125,7 @@ abstract class BaseDecoder(private val mFilePath: String) :IDecoder{
 
     private fun pullBufferFromDecoder(): Int {
         // 查询是否有解码完成的数据，index >=0 时，表示数据有效，并且index为缓冲区索引
-        var index = mCodec!!.dequeueOutputBuffer(mBufferInfo, 1000)
+        val index = mCodec!!.dequeueOutputBuffer(mBufferInfo, 1000)
         when (index) {
             MediaCodec.INFO_OUTPUT_FORMAT_CHANGED -> {}
             MediaCodec.INFO_TRY_AGAIN_LATER -> {}
