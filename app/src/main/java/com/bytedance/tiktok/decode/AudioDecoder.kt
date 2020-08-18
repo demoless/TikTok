@@ -1,9 +1,10 @@
 package com.bytedance.tiktok.decode
 
+import android.content.Context
 import android.media.*
 import java.nio.ByteBuffer
 
-class AudioDecoder(path: String): BaseDecoder(path) {
+class AudioDecoder(private val context: Context,path: String): BaseDecoder(path) {
     /**采样率*/
     private var mSampleRate = -1
 
@@ -24,7 +25,7 @@ class AudioDecoder(path: String): BaseDecoder(path) {
     }
 
     override fun initExtractor(path: String): IExtractor {
-        return AudioExtractor(path)
+        return AudioExtractor(context,path)
     }
 
     override fun initSpecParams(format: MediaFormat) {

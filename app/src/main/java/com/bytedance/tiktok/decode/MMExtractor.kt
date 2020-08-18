@@ -1,10 +1,12 @@
 package com.bytedance.tiktok.decode
 
+import android.content.Context
 import android.media.MediaExtractor
 import android.media.MediaFormat
+import android.net.Uri
 import java.nio.ByteBuffer
 
-class MMExtractor(filePath: String) {
+class MMExtractor(context: Context,filePath: String) {
     /**音视频分离器*/
     private val mExtractor: MediaExtractor by lazy {
         MediaExtractor()
@@ -24,7 +26,7 @@ class MMExtractor(filePath: String) {
 
     init {
         //【1，初始化】
-        mExtractor.setDataSource(filePath)
+        mExtractor.setDataSource(context,Uri.parse(filePath),null)
     }
 
     /**

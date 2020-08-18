@@ -16,27 +16,24 @@ import kotlinx.android.synthetic.main.activity_video_decoder.*
 import java.util.concurrent.Executors
 
 class VideoDecoderActivity : AppCompatActivity() {
-    private val fileDescriptor: AssetFileDescriptor? by lazy {
-        resources.openRawResourceFd(DataCreate.datas[0].videoRes)
-    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_video_decoder)
         initPlayer()
     }
     private fun initPlayer() {
-        val path = Uri.parse("android.resource://"+packageName + "/" + R.raw.video1).toString()
+        val path = "android.resource://"+packageName + "/" + R.raw.video1
         Toast.makeText(this,path,Toast.LENGTH_SHORT).show()
 
         //创建线程池
         val threadPool = Executors.newFixedThreadPool(2)
 
         //创建视频解码器
-        val videoDecoder = VideoDecoder(path, sfv, null)
+        val videoDecoder = VideoDecoder(this,path, sfv, null)
         threadPool.execute(videoDecoder)
 
         //创建音频解码器
-        val audioDecoder = AudioDecoder(path)
+        val audioDecoder = AudioDecoder(this,path)
         threadPool.execute(audioDecoder)
 
         //开启播放

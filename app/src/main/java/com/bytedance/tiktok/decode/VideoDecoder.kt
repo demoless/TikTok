@@ -1,5 +1,6 @@
 package com.bytedance.tiktok.decode
 
+import android.content.Context
 import android.media.MediaCodec
 import android.media.MediaFormat
 import android.view.Surface
@@ -7,18 +8,18 @@ import android.view.SurfaceHolder
 import android.view.SurfaceView
 import java.nio.ByteBuffer
 
-class VideoDecoder(filePath: String,private val surfaceView: SurfaceView?,private var surface: Surface?): BaseDecoder(filePath) {
+class VideoDecoder(private val context: Context,filePath: String,private val surfaceView: SurfaceView?,private var surface: Surface?): BaseDecoder(filePath) {
     private val TAG = "VideoDecoder"
     override fun check(): Boolean {
         if (surfaceView == null && surface == null) {
-            mStateListener?.decoderError(this,"显示器为空")
+            mStateListener?.decoderError(this,"surface is null")
             return false
         }
         return true
     }
 
     override fun initExtractor(path: String): IExtractor {
-        return VideoExtractor(path)
+        return VideoExtractor(context,path)
     }
 
     override fun initSpecParams(format: MediaFormat) {

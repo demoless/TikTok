@@ -1,11 +1,12 @@
 package com.bytedance.tiktok.decode
 
+import android.content.Context
 import android.media.MediaFormat
 import java.nio.ByteBuffer
 
-class AudioExtractor(filePath: String): IExtractor {
+class AudioExtractor(context: Context,filePath: String): IExtractor {
     private val mExtractor by lazy {
-        MMExtractor(filePath)
+        MMExtractor(context,filePath)
     }
     override fun getFormat(): MediaFormat? {
         return mExtractor.getAudioFormat()
