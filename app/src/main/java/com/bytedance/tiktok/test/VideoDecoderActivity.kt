@@ -20,10 +20,10 @@ class VideoDecoderActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_video_decoder)
         initPlayer()
+        frameInfo.text = ffmpegInfo()
     }
     private fun initPlayer() {
         val path = "android.resource://"+packageName + "/" + R.raw.video1
-        Toast.makeText(this,path,Toast.LENGTH_SHORT).show()
 
         //创建线程池
         val threadPool = Executors.newFixedThreadPool(2)
@@ -39,5 +39,13 @@ class VideoDecoderActivity : AppCompatActivity() {
         //开启播放
         videoDecoder.start()
         audioDecoder.start()
+    }
+
+    private external fun ffmpegInfo(): String
+
+    companion object {
+        init {
+            System.loadLibrary("native-lib")
+        }
     }
 }
