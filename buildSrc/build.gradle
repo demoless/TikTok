@@ -2,6 +2,8 @@ apply plugin: 'groovy'
 apply plugin: 'maven'
 apply plugin: 'kotlin'
 
+group("com.bytedance.plugin")
+
 
 
 buildscript {
@@ -22,9 +24,10 @@ repositories {
     jcenter()
 }
 
+
 dependencies {
-    implementation gradleApi()
-    implementation localGroovy()
+    api gradleApi()
+    api localGroovy()
 
     //常用io操作
     implementation "commons-io:commons-io:2.6"
