@@ -45,7 +45,7 @@ public class LikeView extends RelativeLayout {
                 addLikeView(e);
                 onLikeListener.onLikeListener();
                 return true;
-            }
+        }
 
             @Override
             public boolean onSingleTapConfirmed(MotionEvent e) {
