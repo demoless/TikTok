@@ -5,7 +5,6 @@ import android.os.CountDownTimer;
 
 import com.bytedance.tiktok.R;
 import com.bytedance.tiktok.base.BaseActivity;
-import com.bytedance.tiktok.test.VideoDecoderActivity;
 
 /**
  * create on 2020/5/19
@@ -30,7 +29,7 @@ public class SplashActivity extends BaseActivity {
 
             @Override
             public void onFinish() {
-                startActivity(new Intent(SplashActivity.this, MainActivity.class));
+                startActivity(new Intent(SplashActivity.this, MainKtActivity.class));
                 finish();
             }
         }.start();
