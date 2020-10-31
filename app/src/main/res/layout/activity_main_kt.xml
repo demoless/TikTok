@@ -14,22 +14,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tab_mainmenu"
-        app:tabSelectedTextColor="@color/white"
-        app:tabTextColor="#8F8F94"
-        app:tabTextAppearance="@style/TabLayoutTextStyle"
-        android:background="@color/black"
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
+        app:menu="@menu/menu"
+        app:itemTextColor="@color/white"
         android:layout_gravity="bottom"
-        app:tabIndicatorHeight="0dp"
         android:layout_height="50dp"/>
-
-    <ImageView
-        android:layout_gravity="bottom|center"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_marginBottom="5dp"
-        android:background="@mipmap/ic_main_menu" />
 
 </FrameLayout>
