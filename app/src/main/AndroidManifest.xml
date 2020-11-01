@@ -18,7 +18,7 @@
         <activity android:name=".activity.MainKtActivity" />
         <activity android:name=".test.TestActivity" />
         <activity
-            android:name=".activity.SplashActivity"
+            android:name=".activity.SplashActivityKt"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
