@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bytedance.tiktok.R;
-import com.bytedance.tiktok.adapter.GridVideoAdapter;
+import com.bytedance.tiktok.adapter.GridVideoAdapterKt;
 import com.bytedance.tiktok.base.BaseFragment;
 import com.bytedance.tiktok.bean.DataCreate;
 import com.bytedance.tiktok.viewmodels.MainFragmentViewModel;
@@ -26,7 +26,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 public class CurrentLocationFragment extends BaseFragment {
     @BindView(R.id.recyclerview)
     RecyclerView recyclerView;
-    private GridVideoAdapter adapter;
+    private GridVideoAdapterKt adapter;
 
     @BindView(R.id.refreshlayout)
     SwipeRefreshLayout refreshLayout;

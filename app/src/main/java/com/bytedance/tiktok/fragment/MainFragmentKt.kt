@@ -30,7 +30,7 @@ class MainFragmentKt : Fragment() {
     }
     private var pagerAdapter: CommPagerAdapter? = null
     private val currentLocationFragment by lazy{
-        CurrentLocationFragment()
+        CurrentLocationFragmentKt()
     }
     private val recommendFragment by lazy {
         RecommendFragment()
@@ -51,6 +51,7 @@ class MainFragmentKt : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         setFragments()
     }
 
