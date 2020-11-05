@@ -5,11 +5,11 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
+import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.bytedance.tiktok.R
-import com.bytedance.tiktok.adapter.ViewPager2Adapter
 import com.bytedance.tiktok.fragment.MainFragmentKt
-import com.bytedance.tiktok.fragment.ViewPagerFragment
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -23,7 +23,7 @@ class MainKtActivity : AppCompatActivity() {
         ArrayList<Fragment>().apply {
             this.add(MainFragmentKt())
             for (index in 0 ..3) {
-                this.add(ViewPagerFragment())
+                this.add(Fragment())
             }
         }
     }
@@ -38,7 +38,7 @@ class MainKtActivity : AppCompatActivity() {
         BottomNavigationViewHelper.disableShiftMode(bottom_navigation)
         view_pager_home.registerOnPageChangeCallback(pageChangeListener)
         bottom_navigation.setOnNavigationItemSelectedListener(navigationItemSelectedListener)
-        view_pager_home.adapter = ViewPager2Adapter(this,fragments)
+        view_pager_home.adapter = Adapter(this,fragments)
         view_pager_home.isUserInputEnabled = false
     }
 
@@ -68,6 +68,18 @@ class MainKtActivity : AppCompatActivity() {
             }
             return@OnNavigationItemSelectedListener false
         }
+    }
+
+    class Adapter(fragmentActivity: FragmentActivity, private val fragments: List<Fragment>): FragmentStateAdapter(fragmentActivity) {
+
+        override fun getItemCount(): Int {
+            return fragments.size
+        }
+
+        override fun createFragment(position: Int): Fragment {
+            return fragments[position]
+        }
+
     }
 
     class BottomNavigationViewHelper {

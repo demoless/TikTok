@@ -7,13 +7,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+
 import com.bytedance.tiktok.R;
 import com.bytedance.tiktok.base.BaseRvAdapter;
 import com.bytedance.tiktok.base.BaseRvViewHolder;
 import com.bytedance.tiktok.bean.VideoBean;
 import com.bytedance.tiktok.view.ControllerView;
 import com.bytedance.tiktok.view.LikeView;
+
 import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -56,13 +59,15 @@ public class VideoAdapter extends BaseRvAdapter<VideoBean, VideoAdapter.VideoVie
         return new VideoViewHolder(view);
     }
 
-    public class VideoViewHolder extends BaseRvViewHolder {
+    public static class VideoViewHolder extends BaseRvViewHolder {
         @BindView(R.id.likeview)
         LikeView likeView;
         @BindView(R.id.controller)
         ControllerView controllerView;
         @BindView(R.id.iv_cover)
         ImageView ivCover;
+        @BindView(R.id.iv_play)
+        ImageView ivPlay;
 
         public VideoViewHolder(View itemView) {
             super(itemView);
