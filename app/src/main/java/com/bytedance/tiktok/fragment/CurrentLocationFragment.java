@@ -45,7 +45,7 @@ public class CurrentLocationFragment extends BaseFragment {
         viewModel = ViewModelProviders.of((FragmentActivity) getContext()).get(MainFragmentViewModel.class);
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
 
-        adapter = new GridVideoAdapterKt
+        adapter = new GridVideoAdapter
                 (getActivity(), DataCreate.datas);
         recyclerView.setAdapter(adapter);
 
