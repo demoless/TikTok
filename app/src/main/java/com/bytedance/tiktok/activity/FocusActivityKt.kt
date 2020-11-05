@@ -27,7 +27,7 @@ class FocusActivityKt: AppCompatActivity() {
             tablayout.addTab(tablayout.newTab().setText(title))
         }
         adapter = CommPagerAdapter(supportFragmentManager, fragments, titles)
-        viewpager.setAdapter(adapter)
+        viewpager.adapter = adapter
         tablayout.setupWithViewPager(viewpager)
     }
 
