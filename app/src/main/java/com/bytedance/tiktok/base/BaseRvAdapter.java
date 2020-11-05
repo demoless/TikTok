@@ -2,7 +2,10 @@ package com.bytedance.tiktok.base;
 
 import android.content.Context;
 import android.view.View;
+
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import java.util.List;
 
 /**
@@ -37,7 +40,7 @@ public abstract class BaseRvAdapter<T,VH extends BaseRvViewHolder> extends Recyc
         return mDataList == null ? 0 : mDataList.size();
     }
 
-    protected abstract void onBindData(VH holder, T data, int position);
+    protected abstract void onBindData(@NonNull VH holder, @NonNull T data, int position);
 
     public void addData(T data) {
         mDataList.add(data);
