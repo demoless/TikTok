@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bytedance.tiktok.R;
-import com.bytedance.tiktok.adapter.GridVideoAdapterKt;
+import com.bytedance.tiktok.adapter.GridVideoAdapter;
 import com.bytedance.tiktok.base.BaseFragment;
 import com.bytedance.tiktok.bean.DataCreate;
 import com.bytedance.tiktok.viewmodels.MainFragmentViewModel;
@@ -27,7 +27,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 public class CurrentLocationFragment extends BaseFragment {
     @BindView(R.id.recyclerview)
     RecyclerView recyclerView;
-    private GridVideoAdapterKt adapter;
+    private GridVideoAdapter adapter;
 
     @BindView(R.id.refreshlayout)
     SwipeRefreshLayout refreshLayout;
@@ -46,8 +46,7 @@ public class CurrentLocationFragment extends BaseFragment {
         viewModel = ViewModelProviders.of((FragmentActivity) getContext()).get(MainFragmentViewModel.class);
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
 
-        adapter = new GridVideoAdapter
-                (getActivity(), DataCreate.datas);
+        adapter = new GridVideoAdapter(getActivity(), DataCreate.datas);
         recyclerView.setAdapter(adapter);
 
         refreshLayout.setColorSchemeResources(R.color.color_link);
