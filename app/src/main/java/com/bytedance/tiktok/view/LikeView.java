@@ -1,5 +1,6 @@
 package com.bytedance.tiktok.view;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Handler;
 import android.util.AttributeSet;
@@ -10,8 +11,10 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+
 import com.bytedance.tiktok.R;
 import com.bytedance.tiktok.utils.AnimUtils;
+
 import java.util.Random;
 
 /**
@@ -38,6 +41,7 @@ public class LikeView extends RelativeLayout {
         init();
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void init() {
         gestureDetector = new GestureDetector(new GestureDetector.SimpleOnGestureListener() {
             @Override

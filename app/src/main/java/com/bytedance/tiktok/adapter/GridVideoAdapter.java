@@ -7,7 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
+
 import com.bytedance.tiktok.R;
 import com.bytedance.tiktok.activity.PlayListActivity;
 import com.bytedance.tiktok.base.BaseRvAdapter;
@@ -16,6 +18,7 @@ import com.bytedance.tiktok.bean.VideoBean;
 import com.bytedance.tiktok.view.IconFontTextView;
 
 import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -49,7 +52,7 @@ public class GridVideoAdapter extends BaseRvAdapter<VideoBean, GridVideoAdapter.
         return new GridVideoViewHolder(view);
     }
 
-    public class GridVideoViewHolder extends BaseRvViewHolder {
+    public static class GridVideoViewHolder extends BaseRvViewHolder {
         @BindView(R.id.iv_cover)
         ImageView ivCover;
         @BindView(R.id.tv_content)

@@ -1,19 +1,24 @@
 package com.bytedance.tiktok.fragment;
 
-import android.os.CountDownTimer;
-
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.bytedance.tiktok.R;
 import com.bytedance.tiktok.adapter.GridVideoAdapter;
 import com.bytedance.tiktok.base.BaseFragment;
 import com.bytedance.tiktok.bean.DataCreate;
 import com.bytedance.tiktok.viewmodels.MainFragmentViewModel;
 
+import java.util.concurrent.TimeUnit;
+
 import butterknife.BindView;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 /**
  * create on 2020-05-19
@@ -28,6 +33,7 @@ public class CurrentLocationFragment extends BaseFragment {
     SwipeRefreshLayout refreshLayout;
 
     private MainFragmentViewModel viewModel;
+    private Disposable disposable;
 
     @Override
     protected int setLayoutId() {
@@ -43,20 +49,20 @@ public class CurrentLocationFragment extends BaseFragment {
         adapter = new GridVideoAdapter(getActivity(), DataCreate.datas);
         recyclerView.setAdapter(adapter);
 
-
-
         refreshLayout.setColorSchemeResources(R.color.color_link);
-        refreshLayout.setOnRefreshListener(() -> new CountDownTimer(1000, 1000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-
-            }
-
-            @Override
-            public void onFinish() {
-                refreshLayout.setRefreshing(false);
-            }
-        }.start());
+        refreshLayout.setOnRefreshListener(() -> {
+            disposable = Observable.timer(500, TimeUnit.MILLISECONDS)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(Along ->{
+                        refreshLayout.setRefreshing(false);
+                    });
+        });
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (disposable != null) disposable.dispose();
+    }
 }

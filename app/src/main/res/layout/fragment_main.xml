@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,43 +9,48 @@
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewpager"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
+    <com.androidkun.xtablayout.XTabLayout
+        android:id="@+id/tab_title"
+        android:layout_width="160dp"
+        app:xTabIndicatorColor="@color/white"
+        app:xTabSelectedTextColor="@color/white"
+        app:xTabTextColor="#CCCCCC"
+        app:xTabTextBold="true"
+        app:xTabTextSize="18sp"
+        app:xTabIndicatorWidth="20dp"
+        android:layout_height="44dp"
+        android:layout_marginTop="30dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_centerInParent="true"/>
+
+    <TextView
+        app:layout_constraintRight_toLeftOf="@+id/tab_title"
+        app:layout_constraintTop_toTopOf="@+id/tab_title"
+        app:layout_constraintBottom_toBottomOf="@+id/tab_title"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:text="直播"
+        android:textSize="14sp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="12dp"
+        android:textColor="#cccccc" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="直播"
-            android:textSize="14sp"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="12dp"
-            android:textColor="#cccccc"
-            android:padding="10dp"/>
+    <ImageView
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:background="@mipmap/iv_search"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/tab_title"
+        app:layout_constraintTop_toTopOf="@+id/tab_title"
+        app:layout_constraintBottom_toBottomOf="@+id/tab_title"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true" />
 
-        <com.androidkun.xtablayout.XTabLayout
-            android:id="@+id/tab_title"
-            android:layout_width="160dp"
-            app:xTabIndicatorColor="@color/white"
-            app:xTabSelectedTextColor="@color/white"
-            app:xTabTextColor="#CCCCCC"
-            app:xTabTextBold="true"
-            app:xTabTextSize="18sp"
-            app:xTabIndicatorWidth="20dp"
-            android:layout_height="44dp"
-            android:layout_centerInParent="true"/>
-
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:background="@mipmap/iv_search"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="20dp"/>
-    </RelativeLayout>
-
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

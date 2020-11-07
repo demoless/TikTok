@@ -3,7 +3,7 @@
     package="com.bytedance.tiktok">
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:name=".application.App"
@@ -13,12 +13,12 @@
         android:roundIcon="@mipmap/launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".test.VideoDecoderActivity"></activity>
+        <activity android:name=".test.VideoDecoderActivity" />
         <activity android:name=".test.EmptyVideoActivity" />
         <activity android:name=".activity.MainKtActivity" />
         <activity android:name=".test.TestActivity" />
         <activity
-            android:name=".activity.SplashActivity"
+            android:name=".activity.SplashActivityKt"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
