@@ -8,6 +8,7 @@ import com.bytedance.tiktok.adapter.GridVideoAdapterKt
 import com.bytedance.tiktok.base.BaseFragment
 import com.bytedance.tiktok.bean.DataCreate
 import com.bytedance.tiktok.viewmodels.MainFragmentViewModel
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -27,13 +28,16 @@ class CurrentLocationFragmentKt: BaseFragment() {
     override fun init() {
         recyclerview.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
 
-        adapter = activity?.let { GridVideoAdapterKt(it, DataCreate.datas) }
+        adapter = GridVideoAdapterKt(this.requireContext(),DataCreate.datas)
         recyclerview.adapter = adapter
 
         refreshlayout.setColorSchemeResources(R.color.color_link)
-        disposable = Single.timer(500, TimeUnit.MILLISECONDS)
-                .subscribeOn(Schedulers.io())
-                .subscribe { _: Long? -> refreshlayout.isRefreshing = false }
+        refreshlayout.setOnRefreshListener {
+            disposable = Single.timer(500, TimeUnit.MILLISECONDS)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe { _: Long? -> refreshlayout.isRefreshing = false }
+        }
     }
 
     override fun setLayoutId(): Int {

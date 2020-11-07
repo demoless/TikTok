@@ -10,13 +10,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+
 import com.bytedance.tiktok.R;
 import com.bytedance.tiktok.activity.PlayListActivity;
 import com.bytedance.tiktok.base.BaseRvAdapter;
 import com.bytedance.tiktok.base.BaseRvViewHolder;
 import com.bytedance.tiktok.bean.VideoBean;
 import com.bytedance.tiktok.utils.NumUtils;
+
 import java.util.List;
+
 import butterknife.BindView;
 
 /**
@@ -48,7 +51,7 @@ public class WorkAdapter extends BaseRvAdapter<VideoBean, WorkAdapter.WorkViewHo
         return new WorkViewHolder(rooView);
     }
 
-    public class WorkViewHolder extends BaseRvViewHolder {
+    public static class WorkViewHolder extends BaseRvViewHolder {
         @BindView(R.id.iv_cover)
         ImageView ivCover;
         @BindView(R.id.tv_likecount)

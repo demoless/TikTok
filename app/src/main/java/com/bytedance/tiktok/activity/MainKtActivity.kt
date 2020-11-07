@@ -35,7 +35,6 @@ class MainKtActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        BottomNavigationViewHelper.disableShiftMode(bottom_navigation)
         view_pager_home.registerOnPageChangeCallback(pageChangeListener)
         bottom_navigation.setOnNavigationItemSelectedListener(navigationItemSelectedListener)
         view_pager_home.adapter = Adapter(this,fragments)

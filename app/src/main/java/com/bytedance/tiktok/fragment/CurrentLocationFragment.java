@@ -15,7 +15,8 @@ import com.bytedance.tiktok.viewmodels.MainFragmentViewModel;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
-import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
@@ -50,11 +51,14 @@ public class CurrentLocationFragment extends BaseFragment {
         recyclerView.setAdapter(adapter);
 
         refreshLayout.setColorSchemeResources(R.color.color_link);
-        disposable = Single.timer(500, TimeUnit.MILLISECONDS)
-                .subscribeOn(Schedulers.io())
-                .subscribe(Along ->{
-                    refreshLayout.setRefreshing(false);
-                });
+        refreshLayout.setOnRefreshListener(() -> {
+            disposable = Observable.timer(500, TimeUnit.MILLISECONDS)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(Along ->{
+                        refreshLayout.setRefreshing(false);
+                    });
+        });
     }
 
     @Override
