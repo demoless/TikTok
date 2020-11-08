@@ -1,8 +1,14 @@
 package com.bytedance.tiktok.activity
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
+import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.MenuItem
+import android.view.WindowManager
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -10,6 +16,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.bytedance.tiktok.R
 import com.bytedance.tiktok.fragment.MainFragmentKt
+import com.bytedance.tiktok.performence.FpsMonitor
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -39,6 +46,33 @@ class MainKtActivity : AppCompatActivity() {
         bottom_navigation.setOnNavigationItemSelectedListener(navigationItemSelectedListener)
         view_pager_home.adapter = Adapter(this,fragments)
         view_pager_home.isUserInputEnabled = false
+        showFloatWindow()
+    }
+
+    private fun showFloatWindow() {
+        val windowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        val windowParams = WindowManager.LayoutParams().apply {
+            gravity = Gravity.TOP or Gravity.LEFT
+            x = 0
+            y = 0
+            type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT
+            flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or
+            WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN or WindowManager.LayoutParams.FLAG_LAYOUT_INSET_DECOR or
+            WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH
+            width = WindowManager.LayoutParams.WRAP_CONTENT
+            height = WindowManager.LayoutParams.WRAP_CONTENT
+        }
+        val view = LayoutInflater.from(this).inflate(R.layout.layout_float_window,null)
+        windowManager.addView(view, windowParams)
+        FpsMonitor.startMonitor { fps ->
+            Log.d("fps",String.format("fps: %s", fps))
+            view.findViewById<TextView>(R.id.tv_fps).text = String.format("fps: %s", fps)
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        FpsMonitor.stopMonitor()
     }
 
     private val pageChangeListener = object: ViewPager2.OnPageChangeCallback() {
