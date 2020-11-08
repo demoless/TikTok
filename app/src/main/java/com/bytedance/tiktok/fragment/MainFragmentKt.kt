@@ -30,7 +30,7 @@ class MainFragmentKt : Fragment() {
     }
     private var pagerAdapter: CommPagerAdapter? = null
     private val currentLocationFragment by lazy{
-        CurrentLocationFragmentKt()
+        CurrentLocationFragment()
     }
     private val recommendFragment by lazy {
         RecommendFragment()
@@ -42,7 +42,7 @@ class MainFragmentKt : Fragment() {
     private val fragments by lazy {
         ArrayList<Fragment>().apply {
             this.add(currentLocationFragment)
-            this.add(recommendFragmentKt)
+            this.add(recommendFragment)
         }
     }
 
