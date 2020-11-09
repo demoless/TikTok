@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.adapter.FragmentViewHolder
 import com.bytedance.tiktok.bean.DataCreate
 import com.bytedance.tiktok.fragment.VideoItemFragment
@@ -14,7 +15,7 @@ import com.bytedance.tiktok.fragment.VideoItemFragment
  * description:
  */
 class VideoListAdapter constructor(fragmentActivity: FragmentActivity)
-    : ViewPager2Adapter(fragmentActivity) {
+    : FragmentStateAdapter(fragmentActivity) {
 
     private var mediaPlayer:MediaPlayer? = null
 
