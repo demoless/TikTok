@@ -28,28 +28,16 @@ class VideoListAdapter constructor(fragmentActivity: FragmentActivity)
     }
 
     override fun createFragment(position: Int): Fragment {
-        mediaPlayer?.let {
-            return VideoItemFragment(DataCreate.datas[position],it)
-        }
         return VideoItemFragment(DataCreate.datas[position])
     }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
         Log.e("message","VideoListAdapter:onAttachedToRecyclerView")
-//        mediaPlayer?.apply {
-//            prepareAsync()
-//        }
     }
 
     override fun onViewDetachedFromWindow(holder: FragmentViewHolder) {
         super.onViewDetachedFromWindow(holder)
         Log.e("message","VideoListAdapter:onViewDetachedFromWindow")
-        mediaPlayer?.apply {
-            if (this.isPlaying) {
-                stop()
-            }
-            release()
-        }
     }
 }
