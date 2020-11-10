@@ -33,6 +33,5 @@ class RecommendFragmentKt : Fragment() {
 
         })
         recyclerview.adapter = adapter
-
     }
 }
