@@ -28,9 +28,6 @@ class VideoListAdapter constructor(fragmentActivity: FragmentActivity)
     }
 
     override fun createFragment(position: Int): Fragment {
-        mediaPlayer?.let {
-            return VideoItemFragment(DataCreate.datas[position],it)
-        }
         return VideoItemFragment(DataCreate.datas[position])
     }
 
@@ -45,11 +42,5 @@ class VideoListAdapter constructor(fragmentActivity: FragmentActivity)
     override fun onViewDetachedFromWindow(holder: FragmentViewHolder) {
         super.onViewDetachedFromWindow(holder)
         Log.e("message","VideoListAdapter:onViewDetachedFromWindow")
-        mediaPlayer?.apply {
-            if (this.isPlaying) {
-                stop()
-            }
-            release()
-        }
     }
 }
