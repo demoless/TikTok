@@ -34,9 +34,6 @@ class VideoListAdapter constructor(fragmentActivity: FragmentActivity)
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
         Log.e("message","VideoListAdapter:onAttachedToRecyclerView")
-//        mediaPlayer?.apply {
-//            prepareAsync()
-//        }
     }
 
     override fun onViewDetachedFromWindow(holder: FragmentViewHolder) {

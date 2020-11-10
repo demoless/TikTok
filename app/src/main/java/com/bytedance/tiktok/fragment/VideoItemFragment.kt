@@ -1,12 +1,12 @@
 package com.bytedance.tiktok.fragment
 
+import android.annotation.SuppressLint
 import android.content.res.AssetFileDescriptor
+import android.graphics.Color
 import android.media.MediaPlayer
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.SurfaceHolder
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
@@ -19,7 +19,8 @@ import kotlinx.android.synthetic.main.layout_recommend_text.*
  * created by demoless on 2020/7/5
  * description:
  */
-class VideoItemFragment @JvmOverloads constructor(
+@SuppressLint("UseCompatLoadingForDrawables")
+class VideoItemFragment constructor(
         private val videoBean: VideoBean) :Fragment(),MediaPlayer.OnPreparedListener {
 
     private val fileDescriptor: AssetFileDescriptor? by lazy {
@@ -36,29 +37,23 @@ class VideoItemFragment @JvmOverloads constructor(
 
     private var isPrepared: Boolean = false
 
-    private val holder: SurfaceHolder by lazy {
-        surface_view.holder
-    }
-
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        Log.e("message","VideoItemFragment${videoBean.videoRes}: onCreateView")
         return inflater.inflate(R.layout.fragment_recommend_item,container,false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        Log.e("message","VideoItemFragment: onViewCreated")
+        Log.e("message","VideoItemFragment${videoBean.videoRes}: onViewCreated")
         tv_nickname.text = videoBean.userBean.nickName
         tv_content.text = videoBean.content
+        video_background.background = coverDrawableRes
         mediaPlayer.reset()
         mediaPlayer.setOnPreparedListener(this)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            surface_view.foreground = coverDrawableRes
-        }
     }
 
     override fun onResume() {
         super.onResume()
-        Log.e("message","VideoItemFragment: onResume")
+        Log.e("message","VideoItemFragment${videoBean.videoRes} : onResume")
         if (!isPrepared) {
             fileDescriptor?.let {
                 Log.e("message","setDataSource")
@@ -73,7 +68,7 @@ class VideoItemFragment @JvmOverloads constructor(
 
     override fun onPause() {
         super.onPause()
-        Log.e("message","VideoItemFragment: onPause")
+        Log.e("message","VideoItemFragment${videoBean.videoRes}: onPause")
         if(mediaPlayer.isPlaying) {
             mediaPlayer.pause()
         }
@@ -81,13 +76,13 @@ class VideoItemFragment @JvmOverloads constructor(
 
     override fun onStop() {
         super.onStop()
-        Log.e("message","VideoItemFragment: onStop")
+        Log.e("message","VideoItemFragment${videoBean.videoRes}: onStop")
         mediaPlayer.stop()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.e("message","VideoItemFragment: onDestroy")
+        Log.e("message","VideoItemFragment${videoBean.videoRes}: onDestroy")
         if (mediaPlayer.isPlaying) {
             mediaPlayer.stop()
         }
@@ -95,17 +90,16 @@ class VideoItemFragment @JvmOverloads constructor(
     }
 
     override fun onPrepared(mp: MediaPlayer?) {
-        Log.e("message","VideoItemFragment: onPrepared")
+        Log.e("message","VideoItemFragment${videoBean.videoRes}: onPrepared")
         isPrepared = true
-        mediaPlayer.setDisplay(holder)
+        surface_view.visibility = View.VISIBLE
+        mediaPlayer.setDisplay(surface_view.holder)
         start()
+        video_background.setBackgroundColor(Color.TRANSPARENT)
     }
 
     private fun start() {
         if (isPrepared && !mediaPlayer.isPlaying) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                surface_view.foreground = null
-            }
             mediaPlayer.start()
         }
     }
