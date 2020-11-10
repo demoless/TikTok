@@ -5,10 +5,12 @@ import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.*
+import android.view.LayoutInflater
+import android.view.SurfaceHolder
+import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.bytedance.tiktok.R
-import com.bytedance.tiktok.bean.DataCreate
 import com.bytedance.tiktok.bean.VideoBean
 import kotlinx.android.synthetic.main.fragment_recommend_item.*
 import kotlinx.android.synthetic.main.layout_recommend_text.*
@@ -18,8 +20,7 @@ import kotlinx.android.synthetic.main.layout_recommend_text.*
  * description:
  */
 class VideoItemFragment @JvmOverloads constructor(
-        private val videoBean: VideoBean,
-        private val mediaPlayer: MediaPlayer = MediaPlayer()) :Fragment(),MediaPlayer.OnPreparedListener {
+        private val videoBean: VideoBean) :Fragment(),MediaPlayer.OnPreparedListener {
 
     private val fileDescriptor: AssetFileDescriptor? by lazy {
         context?.resources?.openRawResourceFd(videoBean.videoRes)
@@ -27,6 +28,10 @@ class VideoItemFragment @JvmOverloads constructor(
 
     private val coverDrawableRes by lazy {
         context?.resources?.getDrawable(videoBean.coverRes,null)
+    }
+
+    private val mediaPlayer: MediaPlayer by lazy{
+        MediaPlayer.create(context,videoBean.videoRes)
     }
 
     private var isPrepared: Boolean = false
@@ -69,7 +74,9 @@ class VideoItemFragment @JvmOverloads constructor(
     override fun onPause() {
         super.onPause()
         Log.e("message","VideoItemFragment: onPause")
-        mediaPlayer.pause()
+        if(mediaPlayer.isPlaying) {
+            mediaPlayer.pause()
+        }
     }
 
     override fun onStop() {
@@ -81,7 +88,9 @@ class VideoItemFragment @JvmOverloads constructor(
     override fun onDestroy() {
         super.onDestroy()
         Log.e("message","VideoItemFragment: onDestroy")
-        mediaPlayer.stop()
+        if (mediaPlayer.isPlaying) {
+            mediaPlayer.stop()
+        }
         mediaPlayer.release()
     }
 
