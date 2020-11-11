@@ -1,4 +1,4 @@
-package com.bytedance.plugin
+package plugin
 
 class FirstClickUtils {
     companion object {

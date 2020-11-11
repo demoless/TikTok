@@ -1,4 +1,4 @@
-package com.bytedance.plugin
+package plugin
 
 import org.objectweb.asm.ClassVisitor
 import org.objectweb.asm.Label
@@ -16,7 +16,7 @@ class DoubleClickClassVisitor(classVisitor: ClassVisitor): ClassVisitor(Opcodes.
     override fun visitMethod(access: Int, name: String?, descriptor: String?, signature: String?, exceptions: Array<out String>?): MethodVisitor {
         val methodVisitor = cv.visitMethod(access, name, descriptor, signature, exceptions)
         return if (name == METHOD_CLICK_NAME && descriptor == VIEW_VOID) {
-            FastClickMethodVisitor(api,methodVisitor,access,name,descriptor)
+            FastClickMethodVisitor(api, methodVisitor, access, name, descriptor)
         } else {
             methodVisitor
         }
@@ -30,7 +30,7 @@ class DoubleClickClassVisitor(classVisitor: ClassVisitor): ClassVisitor(Opcodes.
                                  descriptor: String): AdviceAdapter(api, methodVisitor, access, name, descriptor) {
         override fun onMethodEnter() {
             super.onMethodEnter()
-            mv.visitMethodInsn(INVOKESTATIC,"com.bytedance.plugin.FirstClickUtils","isDoubleClickHappen","()Z",false)
+            mv.visitMethodInsn(INVOKESTATIC,"com.demoless.plugin.FirstClickUtils","isDoubleClickHappen","()Z",false)
             val label = Label()
             mv.visitJumpInsn(IFEQ,label)
             mv.visitInsn(RETURN)
