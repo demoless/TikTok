@@ -1,4 +1,4 @@
-package com.bytedance.plugin
+package plugin
 
 import com.android.build.api.transform.Transform
 import com.android.build.gradle.AppExtension
