@@ -1,4 +1,4 @@
-package com.bytedance.plugin
+package plugin
 
 import org.objectweb.asm.ClassVisitor
 import org.objectweb.asm.MethodVisitor
