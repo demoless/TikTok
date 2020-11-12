@@ -50,12 +50,13 @@ class MainKtActivity : AppCompatActivity() {
         showFloatWindow()
     }
 
+    @SuppressLint("InflateParams", "RtlHardcoded")
     private fun showFloatWindow() {
         val windowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
         val windowParams = WindowManager.LayoutParams().apply {
             gravity = Gravity.TOP or Gravity.LEFT
             x = 0
-            y = 0
+            y = 50
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
             }
