@@ -7,6 +7,7 @@ import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.SurfaceHolder
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
@@ -20,8 +21,8 @@ import kotlinx.android.synthetic.main.layout_recommend_text.*
  * description:
  */
 @SuppressLint("UseCompatLoadingForDrawables")
-class VideoItemFragment constructor(
-        private val videoBean: VideoBean) :Fragment(),MediaPlayer.OnPreparedListener {
+class VideoItemFragment constructor(private val videoBean: VideoBean)
+    :Fragment(),MediaPlayer.OnPreparedListener, SurfaceHolder.Callback2{
 
     private val fileDescriptor: AssetFileDescriptor? by lazy {
         context?.resources?.openRawResourceFd(videoBean.videoRes)
@@ -47,6 +48,7 @@ class VideoItemFragment constructor(
         tv_nickname.text = videoBean.userBean.nickName
         tv_content.text = videoBean.content
         video_background.background = coverDrawableRes
+        surface_view.holder.addCallback(this)
         mediaPlayer.reset()
         mediaPlayer.setOnPreparedListener(this)
     }
@@ -102,5 +104,25 @@ class VideoItemFragment constructor(
         if (isPrepared && !mediaPlayer.isPlaying) {
             mediaPlayer.start()
         }
+    }
+
+    override fun surfaceCreated(holder: SurfaceHolder?) {
+        Log.e("message","VideoItemFragment${videoBean.videoRes}: surfaceCreated")
+    }
+
+    override fun surfaceChanged(holder: SurfaceHolder?, format: Int, width: Int, height: Int) {
+        mediaPlayer.setDisplay(holder)
+        Log.e("message","VideoItemFragment${videoBean.videoRes}: surfaceChanged")
+    }
+
+    override fun surfaceDestroyed(holder: SurfaceHolder?) {
+        if (mediaPlayer.isPlaying) {
+            mediaPlayer.pause()
+        }
+        Log.e("message","VideoItemFragment${videoBean.videoRes}: surfaceDestroyed")
+    }
+
+    override fun surfaceRedrawNeeded(holder: SurfaceHolder?) {
+        Log.e("message","VideoItemFragment${videoBean.videoRes}: surfaceRedrawNeeded")
     }
 }
