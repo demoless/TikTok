@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager.widget.ViewPager
 import com.bytedance.tiktok.R
@@ -53,6 +54,17 @@ class MainFragmentKt : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setFragments()
+        mainFragmentViewModel.videoStatus.observe(viewLifecycleOwner, Observer {  })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mainFragmentViewModel.videoStatus.value = (CUR_PAGE == 1 && mainFragmentViewModel.videoStatus.value == false)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mainFragmentViewModel.videoStatus.value = (CUR_PAGE == 1 && mainFragmentViewModel.videoStatus.value == true)
     }
 
     private fun setFragments() {
@@ -69,6 +81,7 @@ class MainFragmentKt : Fragment() {
                 CUR_PAGE = position
                 mainFragmentViewModel.currPageEvent.postValue(position)
                 mainActivityViewModel.state.postValue(position == 1)
+                mainFragmentViewModel.videoStatus.value = position == 1
             }
             override fun onPageScrollStateChanged(state: Int) {}
         })
