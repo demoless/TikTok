@@ -23,7 +23,7 @@ import kotlinx.android.synthetic.main.layout_recommend_text.*
  * description:
  */
 @SuppressLint("UseCompatLoadingForDrawables")
-class VideoItemFragment constructor(private val videoBean: VideoBean)
+class VideoItemFragment constructor(private val videoBean: VideoBean,val tag: Int)
     :Fragment(),MediaPlayer.OnPreparedListener, SurfaceHolder.Callback2, IVideoController {
 
     private val mainFragmentViewModel : MainFragmentViewModel by lazy {
@@ -38,9 +38,9 @@ class VideoItemFragment constructor(private val videoBean: VideoBean)
         context?.resources?.getDrawable(videoBean.coverRes,null)
     }
 
-    private val mediaPlayer: MediaPlayer by lazy{
-        MediaPlayer.create(context,videoBean.videoRes)
-    }
+    val position = tag
+
+    private val mediaPlayer: MediaPlayer = MediaPlayer()
 
     private var isPrepared: Boolean = false
 
@@ -50,7 +50,6 @@ class VideoItemFragment constructor(private val videoBean: VideoBean)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        Log.e("message","VideoItemFragment${videoBean.videoRes}: onViewCreated")
         tv_nickname.text = videoBean.userBean.nickName
         tv_content.text = videoBean.content
         video_background.background = coverDrawableRes
@@ -95,7 +94,6 @@ class VideoItemFragment constructor(private val videoBean: VideoBean)
     }
 
     override fun onPrepared(mp: MediaPlayer?) {
-        Log.e("message","VideoItemFragment${videoBean.videoRes}: onPrepared")
         isPrepared = true
         surface_view.visibility = View.VISIBLE
         mediaPlayer.setDisplay(surface_view.holder)
@@ -107,41 +105,36 @@ class VideoItemFragment constructor(private val videoBean: VideoBean)
         if (isPrepared && !mediaPlayer.isPlaying) {
             mediaPlayer.start()
         }
-        mainFragmentViewModel.videoStatus.value = true
     }
 
     override fun stopVideo() {
         if (mediaPlayer.isPlaying) {
             mediaPlayer.stop()
         }
-        mainFragmentViewModel.videoStatus.value = false
     }
 
     override fun pauseVideo() {
         if (mediaPlayer.isPlaying) {
-            mediaPlayer.start()
+            mediaPlayer.pause()
         }
-        mainFragmentViewModel.videoStatus.value = false
     }
 
     override fun surfaceCreated(holder: SurfaceHolder?) {
-        Log.e("message","VideoItemFragment${videoBean.videoRes}: surfaceCreated")
+
     }
 
     override fun surfaceChanged(holder: SurfaceHolder?, format: Int, width: Int, height: Int) {
         mediaPlayer.setDisplay(holder)
-        Log.e("message","VideoItemFragment${videoBean.videoRes}: surfaceChanged")
     }
 
     override fun surfaceDestroyed(holder: SurfaceHolder?) {
         if (mediaPlayer.isPlaying) {
             mediaPlayer.pause()
         }
-        Log.e("message","VideoItemFragment${videoBean.videoRes}: surfaceDestroyed")
     }
 
     override fun surfaceRedrawNeeded(holder: SurfaceHolder?) {
-        Log.e("message","VideoItemFragment${videoBean.videoRes}: surfaceRedrawNeeded")
+
     }
 
     override fun surfaceCreated(holder: SurfaceHolder?) {
