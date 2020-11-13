@@ -20,7 +20,7 @@ public class CommPagerAdapter extends FragmentStatePagerAdapter {
     private String[] mTitles;
 
     public CommPagerAdapter(FragmentManager fm, ArrayList< ? extends Fragment> items, String[] mTitles) {
-        super(fm);
+        super(fm,BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         this.items = items;
         this.mTitles = mTitles;
     }
