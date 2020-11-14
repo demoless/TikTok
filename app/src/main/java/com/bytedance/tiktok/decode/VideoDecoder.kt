@@ -51,6 +51,7 @@ class VideoDecoder(private val context: Context,filePath: String): BaseDecoder(f
 
                 override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
                     Log.d(TAG,"surfaceChanged")
+                    surface = holder.surface
                 }
 
                 override fun surfaceDestroyed(holder: SurfaceHolder) {
