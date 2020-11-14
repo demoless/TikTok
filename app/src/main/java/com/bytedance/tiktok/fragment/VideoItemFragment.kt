@@ -24,7 +24,7 @@ import kotlinx.android.synthetic.main.layout_recommend_text.*
  */
 @SuppressLint("UseCompatLoadingForDrawables")
 class VideoItemFragment constructor(private val videoBean: VideoBean,val tag: Int)
-    :Fragment(),MediaPlayer.OnPreparedListener, SurfaceHolder.Callback2, IVideoController {
+    :Fragment(),MediaPlayer.OnPreparedListener, SurfaceHolder.Callback2, IVideoController, View.OnClickListener {
 
     private val mainFragmentViewModel : MainFragmentViewModel by lazy {
         ViewModelProviders.of(this)[MainFragmentViewModel::class.java]
@@ -54,6 +54,7 @@ class VideoItemFragment constructor(private val videoBean: VideoBean,val tag: In
         tv_content.text = videoBean.content
         video_background.background = coverDrawableRes
         surface_view.holder.addCallback(this)
+        video_background.setOnClickListener(this)
         mediaPlayer.reset()
         mediaPlayer.setOnPreparedListener(this)
         if (!isPrepared) {
@@ -137,5 +138,15 @@ class VideoItemFragment constructor(private val videoBean: VideoBean,val tag: In
 
     override fun surfaceRedrawNeeded(holder: SurfaceHolder?) {
         Log.e("message","VideoItemFragment${videoBean.videoRes}: surfaceRedrawNeeded")
+    }
+
+    override fun onClick(v: View?) {
+        if (mediaPlayer.isPlaying) {
+            pauseVideo()
+            iv_play.visibility = View.VISIBLE
+        } else {
+            startVideo()
+            iv_play.visibility = View.GONE
+        }
     }
 }
