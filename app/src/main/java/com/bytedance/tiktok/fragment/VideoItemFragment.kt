@@ -120,24 +120,6 @@ class VideoItemFragment constructor(private val videoBean: VideoBean,val tag: In
     }
 
     override fun surfaceCreated(holder: SurfaceHolder?) {
-
-    }
-
-    override fun surfaceChanged(holder: SurfaceHolder?, format: Int, width: Int, height: Int) {
-        mediaPlayer.setDisplay(holder)
-    }
-
-    override fun surfaceDestroyed(holder: SurfaceHolder?) {
-        if (mediaPlayer.isPlaying) {
-            mediaPlayer.pause()
-        }
-    }
-
-    override fun surfaceRedrawNeeded(holder: SurfaceHolder?) {
-
-    }
-
-    override fun surfaceCreated(holder: SurfaceHolder?) {
         Log.e("message","VideoItemFragment${videoBean.videoRes}: surfaceCreated")
     }
 

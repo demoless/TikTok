@@ -2,7 +2,7 @@ package com.bytedance.tiktok.adapter
 
 import android.media.MediaPlayer
 import android.util.Log
-import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.adapter.FragmentViewHolder
@@ -15,16 +15,12 @@ import java.util.*
  * created by demoless on 2020/7/5
  * description:
  */
-class VideoListAdapter constructor(fragmentActivity: FragmentActivity)
-    : FragmentStateAdapter(fragmentActivity) {
+class VideoListAdapter constructor(fragment: Fragment)
+    : FragmentStateAdapter(fragment) {
 
     private var mediaPlayer:MediaPlayer? = null
     private var videoController: IVideoController? = null
     private val fragments = LinkedList<VideoItemFragment>()
-
-    constructor(fragmentActivity: FragmentActivity,mediaPlayer: MediaPlayer) :this(fragmentActivity) {
-        this.mediaPlayer = mediaPlayer
-    }
 
     fun pauseVideo() {
         videoController?.let {
