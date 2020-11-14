@@ -140,7 +140,7 @@ abstract class BaseDecoder(private val mFilePath: String) :IDecoder{
     }
 
     private fun pushBufferToDecoder(): Boolean {
-        var inputBufferIndex = mCodec!!.dequeueInputBuffer(2000)
+        val inputBufferIndex = mCodec!!.dequeueInputBuffer(2000)
         var isEndOfStream = false
 
         if (inputBufferIndex >= 0) {
