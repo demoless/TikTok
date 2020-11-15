@@ -38,7 +38,7 @@ open class ViewPager2Adapter(fragmentActivity: FragmentActivity)
 
     override fun createFragment(position: Int): Fragment {
         Log.d("msg","ViewPager2Adapter createFragment--position=${position}")
-        return VideoItemFragment(DataCreate.datas[position],position)
+        return VideoItemFragment(DataCreate.datas[position])
     }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
