@@ -11,10 +11,9 @@ import android.view.SurfaceHolder
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
 import com.bytedance.tiktok.R
+import com.bytedance.tiktok.adapter.VideoListAdapter
 import com.bytedance.tiktok.bean.VideoBean
-import com.bytedance.tiktok.viewmodels.MainFragmentViewModel
 import kotlinx.android.synthetic.main.fragment_recommend_item.*
 import kotlinx.android.synthetic.main.layout_recommend_text.*
 
@@ -23,15 +22,16 @@ import kotlinx.android.synthetic.main.layout_recommend_text.*
  * description:
  */
 @SuppressLint("UseCompatLoadingForDrawables")
-class VideoItemFragment constructor(private val videoBean: VideoBean,val tag: Int)
-    :Fragment(),MediaPlayer.OnPreparedListener, SurfaceHolder.Callback2, IVideoController, View.OnClickListener {
-
-    private val mainFragmentViewModel : MainFragmentViewModel by lazy {
-        ViewModelProviders.of(this)[MainFragmentViewModel::class.java]
-    }
+class VideoItemFragment constructor(
+        private val videoBean: VideoBean)
+    :Fragment(), MediaPlayer.OnPreparedListener, SurfaceHolder.Callback2, IVideoController, View.OnClickListener {
 
     private val fileDescriptor: AssetFileDescriptor? by lazy {
         context?.resources?.openRawResourceFd(videoBean.videoRes)
+    }
+
+    private val mediaPlayer: MediaPlayer by lazy {
+        MediaPlayerProvider.obtainMediaPlayer()
     }
 
     private val coverDrawableRes by lazy {
@@ -39,8 +39,6 @@ class VideoItemFragment constructor(private val videoBean: VideoBean,val tag: In
     }
 
     val position = tag
-
-    private val mediaPlayer: MediaPlayer = MediaPlayer()
 
     private var isPrepared: Boolean = false
 
@@ -55,8 +53,6 @@ class VideoItemFragment constructor(private val videoBean: VideoBean,val tag: In
         video_background.background = coverDrawableRes
         surface_view.holder.addCallback(this)
         video_background.setOnClickListener(this)
-        mediaPlayer.reset()
-        mediaPlayer.setOnPreparedListener(this)
         if (!isPrepared) {
             fileDescriptor?.let {
                 Log.e("message","setDataSource")
@@ -64,15 +60,14 @@ class VideoItemFragment constructor(private val videoBean: VideoBean,val tag: In
                         it.length)
             }
             mediaPlayer.prepareAsync()
+            mediaPlayer.setOnPreparedListener(this)
         }
     }
 
     override fun onResume() {
         super.onResume()
         Log.e("message","VideoItemFragment${videoBean.videoRes} : onResume")
-        if (isPrepared && !mediaPlayer.isPlaying) {
-            startVideo()
-        }
+        startVideo()
     }
 
     override fun onPause() {
@@ -87,14 +82,21 @@ class VideoItemFragment constructor(private val videoBean: VideoBean,val tag: In
         stopVideo()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        mediaPlayer.reset()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         Log.e("message","VideoItemFragment${videoBean.videoRes}: onDestroy")
-        onStop()
         mediaPlayer.release()
+        /*val node = VideoListAdapter.Node(null,mediaPlayer,MediaPlayerProvider.FLAG_STATS_FREE)
+        MediaPlayerProvider.recycleNode(node)*/
     }
 
     override fun onPrepared(mp: MediaPlayer?) {
+        Log.e("message","VideoItemFragment${videoBean.videoRes}: onPrepared")
         isPrepared = true
         surface_view.visibility = View.VISIBLE
         mediaPlayer.setDisplay(surface_view.holder)
@@ -122,6 +124,7 @@ class VideoItemFragment constructor(private val videoBean: VideoBean,val tag: In
 
     override fun surfaceCreated(holder: SurfaceHolder?) {
         Log.e("message","VideoItemFragment${videoBean.videoRes}: surfaceCreated")
+        mediaPlayer.setDisplay(holder)
     }
 
     override fun surfaceChanged(holder: SurfaceHolder?, format: Int, width: Int, height: Int) {
@@ -130,9 +133,7 @@ class VideoItemFragment constructor(private val videoBean: VideoBean,val tag: In
     }
 
     override fun surfaceDestroyed(holder: SurfaceHolder?) {
-        if (mediaPlayer.isPlaying) {
-            mediaPlayer.pause()
-        }
+        pauseVideo()
         Log.e("message","VideoItemFragment${videoBean.videoRes}: surfaceDestroyed")
     }
 
@@ -147,6 +148,48 @@ class VideoItemFragment constructor(private val videoBean: VideoBean,val tag: In
         } else {
             startVideo()
             iv_play.visibility = View.GONE
+        }
+    }
+
+    class MediaPlayerProvider {
+        companion object {
+            private const val TAG = "VideoListAdapter"
+            const val FLAG_STATS_FREE = 0
+            private const val FLAG_STATS_IN_USE = 1
+            @JvmStatic
+            private var mediaPlayerPool: VideoListAdapter.Node? = null
+
+            @JvmStatic
+            private var currSize = 0
+
+            @JvmStatic
+            fun obtainMediaPlayer(): MediaPlayer {
+                if (currSize == 0) {
+                    mediaPlayerPool = VideoListAdapter.Node(null, logNewMediaPlayer(), FLAG_STATS_FREE)
+                    currSize++
+                }
+                if (currSize > 0 && mediaPlayerPool != null) {
+                    val mediaPlayer = mediaPlayerPool!!
+                    mediaPlayerPool = mediaPlayer.next
+                    currSize--
+                    mediaPlayer.flag = FLAG_STATS_IN_USE
+                    return mediaPlayer.mediaPlayer
+                }
+                return logNewMediaPlayer()
+            }
+
+            @JvmStatic
+            fun recycleNode(itemNode: VideoListAdapter.Node) {
+                itemNode.next = mediaPlayerPool
+                mediaPlayerPool = itemNode
+                currSize++
+            }
+
+            @JvmStatic
+            private fun logNewMediaPlayer(): MediaPlayer {
+                Log.d(TAG,"new MediaPlayer====== currSize${currSize+1}")
+                return MediaPlayer()
+            }
         }
     }
 }
