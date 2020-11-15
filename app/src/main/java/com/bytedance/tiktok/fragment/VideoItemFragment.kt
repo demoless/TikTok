@@ -22,9 +22,8 @@ import kotlinx.android.synthetic.main.layout_recommend_text.*
  * description:
  */
 @SuppressLint("UseCompatLoadingForDrawables")
-class VideoItemFragment constructor(
-        private val videoBean: VideoBean)
-    :Fragment(), MediaPlayer.OnPreparedListener, SurfaceHolder.Callback2, IVideoController, View.OnClickListener {
+class VideoItemFragment constructor(private val videoBean: VideoBean) :Fragment(),
+        MediaPlayer.OnPreparedListener, SurfaceHolder.Callback2, IVideoController, View.OnClickListener {
 
     private val fileDescriptor: AssetFileDescriptor? by lazy {
         context?.resources?.openRawResourceFd(videoBean.videoRes)
@@ -37,8 +36,6 @@ class VideoItemFragment constructor(
     private val coverDrawableRes by lazy {
         context?.resources?.getDrawable(videoBean.coverRes,null)
     }
-
-    val position = tag
 
     private var isPrepared: Boolean = false
 
@@ -53,15 +50,11 @@ class VideoItemFragment constructor(
         video_background.background = coverDrawableRes
         surface_view.holder.addCallback(this)
         video_background.setOnClickListener(this)
-        if (!isPrepared) {
-            fileDescriptor?.let {
-                Log.e("message","setDataSource")
-                mediaPlayer.setDataSource(it.fileDescriptor ,it.startOffset,
-                        it.length)
-            }
-            mediaPlayer.prepareAsync()
-            mediaPlayer.setOnPreparedListener(this)
+        fileDescriptor?.let {
+            mediaPlayer.setDataSource(it.fileDescriptor ,it.startOffset, it.length)
         }
+        mediaPlayer.prepareAsync()
+        mediaPlayer.setOnPreparedListener(this)
     }
 
     override fun onResume() {
@@ -91,8 +84,6 @@ class VideoItemFragment constructor(
         super.onDestroy()
         Log.e("message","VideoItemFragment${videoBean.videoRes}: onDestroy")
         mediaPlayer.release()
-        /*val node = VideoListAdapter.Node(null,mediaPlayer,MediaPlayerProvider.FLAG_STATS_FREE)
-        MediaPlayerProvider.recycleNode(node)*/
     }
 
     override fun onPrepared(mp: MediaPlayer?) {
@@ -154,7 +145,7 @@ class VideoItemFragment constructor(
     class MediaPlayerProvider {
         companion object {
             private const val TAG = "VideoListAdapter"
-            const val FLAG_STATS_FREE = 0
+            private const val FLAG_STATS_FREE = 0
             private const val FLAG_STATS_IN_USE = 1
             @JvmStatic
             private var mediaPlayerPool: VideoListAdapter.Node? = null
