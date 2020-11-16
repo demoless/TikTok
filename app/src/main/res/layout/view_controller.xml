@@ -38,7 +38,7 @@
         <com.bytedance.tiktok.view.MarqueeTextView
             android:layout_width="180dp"
             android:layout_height="wrap_content"
-            android:text=" @大致爱高清 创作的原生 - 大致爱高清"
+            android:text="@大致爱高清 创作的原生 - 大致爱高清"
             android:textColor="@color/white"
             android:textSize="14sp"
             android:ellipsize="marquee"

@@ -11,6 +11,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
+    <com.bytedance.tiktok.view.ControllerView
+        android:id="@+id/controller"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"/>
+
     <ImageView
         android:id="@+id/iv_play"
         android:layout_width="60dp"
@@ -21,7 +27,7 @@
         tools:visibility="visible"
         android:visibility="gone"/>
 
-    <include
+    <!--<include
         layout="@layout/layout_recommend_text"
         android:layout_marginLeft="12dp"
         android:layout_marginBottom="18dp"
@@ -37,6 +43,6 @@
         tools:layout_width="100dp"
         android:layout_gravity="bottom|end"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"/>-->
 
 </FrameLayout>
