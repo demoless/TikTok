@@ -2,6 +2,7 @@ package com.bytedance.tiktok.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
@@ -10,6 +11,7 @@ import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.airbnb.lottie.LottieAnimationView;
 import com.bytedance.tiktok.R;
 import com.bytedance.tiktok.bean.VideoBean;
@@ -17,8 +19,10 @@ import com.bytedance.tiktok.utils.AutoLinkHerfManager;
 import com.bytedance.tiktok.utils.NumUtils;
 import com.bytedance.tiktok.utils.OnVideoControllerListener;
 import com.bytedance.tiktok.utils.autolinktextview.AutoLinkTextView;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
 import static android.view.animation.Animation.INFINITE;
 
 /**
@@ -60,12 +64,20 @@ public class ControllerView extends RelativeLayout implements View.OnClickListen
     private VideoBean videoData;
 
     public ControllerView(Context context, AttributeSet attrs) {
-        super(context, attrs);
+        this(context, attrs,0);
+    }
 
+    public ControllerView(Context context, AttributeSet attrs, int defStyleAttr) {
+        this(context, attrs, defStyleAttr, 0);
+    }
+
+    public ControllerView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
         init();
     }
 
     private void init() {
+        Log.e("ControllerView","init");
         View rootView = LayoutInflater.from(getContext()).inflate(R.layout.view_controller, this,false);
         ButterKnife.bind(this, rootView);
 

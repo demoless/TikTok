@@ -14,8 +14,8 @@ import androidx.fragment.app.Fragment
 import com.bytedance.tiktok.R
 import com.bytedance.tiktok.adapter.VideoListAdapter
 import com.bytedance.tiktok.bean.VideoBean
+import com.bytedance.tiktok.utils.OnVideoControllerListener
 import kotlinx.android.synthetic.main.fragment_recommend_item.*
-import kotlinx.android.synthetic.main.layout_recommend_text.*
 
 /**
  * created by demoless on 2020/7/5
@@ -23,7 +23,7 @@ import kotlinx.android.synthetic.main.layout_recommend_text.*
  */
 @SuppressLint("UseCompatLoadingForDrawables")
 class VideoItemFragment constructor(private val videoBean: VideoBean) :Fragment(),
-        MediaPlayer.OnPreparedListener, SurfaceHolder.Callback2, IVideoController, View.OnClickListener {
+        MediaPlayer.OnPreparedListener, SurfaceHolder.Callback2, IVideoController, View.OnClickListener, OnVideoControllerListener {
 
     private val fileDescriptor: AssetFileDescriptor? by lazy {
         context?.resources?.openRawResourceFd(videoBean.videoRes)
@@ -45,8 +45,10 @@ class VideoItemFragment constructor(private val videoBean: VideoBean) :Fragment(
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        tv_nickname.text = videoBean.userBean.nickName
-        tv_content.text = videoBean.content
+        /*tv_nickname.text = videoBean.userBean.nickName
+        tv_content.text = videoBean.content*/
+        controller.setVideoData(videoBean)
+        controller.setListener(this)
         video_background.background = coverDrawableRes
         surface_view.holder.addCallback(this)
         video_background.setOnClickListener(this)
@@ -182,5 +184,21 @@ class VideoItemFragment constructor(private val videoBean: VideoBean) :Fragment(
                 return MediaPlayer()
             }
         }
+    }
+
+    override fun onHeadClick() {
+        Log.e("message","VideoItemFragment${videoBean.videoRes}: onHeadClick")
+    }
+
+    override fun onLikeClick() {
+        Log.e("message","VideoItemFragment${videoBean.videoRes}: onLikeClick")
+    }
+
+    override fun onCommentClick() {
+        Log.e("message","VideoItemFragment${videoBean.videoRes}: onCommentClick")
+    }
+
+    override fun onShareClick() {
+        Log.e("message","VideoItemFragment${videoBean.videoRes}: onShareClick")
     }
 }
