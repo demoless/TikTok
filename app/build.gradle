@@ -66,6 +66,8 @@ dependencies {
 
     implementation 'com.androidkun:XTabLayout:1.1.4'
 
+    implementation 'com.github.open-android:Zxing:v1.0.3'
+
     implementation "io.reactivex.rxjava3:rxjava:3.0.4"
     implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
 
