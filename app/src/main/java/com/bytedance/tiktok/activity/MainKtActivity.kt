@@ -21,7 +21,11 @@ import com.bytedance.tiktok.performence.FpsMonitor
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.gson.Gson
+import com.google.gson.annotations.SerializedName
 import kotlinx.android.synthetic.main.activity_main_kt.*
+import okhttp3.*
+import java.io.IOException
 
 class MainKtActivity : AppCompatActivity() {
 
@@ -48,6 +52,7 @@ class MainKtActivity : AppCompatActivity() {
         view_pager_home.adapter = Adapter(this,fragments)
         view_pager_home.isUserInputEnabled = false
         showFloatWindow()
+        getLoginMsg()
     }
 
     @SuppressLint("InflateParams", "RtlHardcoded")
@@ -77,6 +82,49 @@ class MainKtActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         FpsMonitor.stopMonitor()
+    }
+
+    private fun getLoginMsg() {
+        val url = "https://passport.bilibili.com/x/passport-tv-login/qrcode/auth_code"
+        val okHttpClient = OkHttpClient()
+        val requestBody = FormBody.Builder()
+                .add("appkey","4409e2ce8ffd12b8")
+                .add("local_id","0")
+                .add("ts","0")
+                .add("sign","e134154ed6add881d28fbdf68653cd9c")
+                .build()
+        val request = Request.Builder().url(url).post(requestBody).build()
+        val call = okHttpClient.newCall(request)
+        call.enqueue(object: Callback {
+            override fun onFailure(call: Call, e: IOException) {
+
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                val gson = Gson()
+                val result = gson.fromJson<LoginInfo>(response.body?.string(),LoginInfo::class.java)
+            }
+
+        })
+    }
+
+    data class LoginInfo(@SerializedName("code") val  code: Int,
+                         @SerializedName("message") val message: String,
+                         @SerializedName("ttl") val ttl: Int,
+                         @SerializedName("data") val data: Data) {
+        override fun toString(): String {
+            return "code:$code" +
+                    "message:$message" +
+                    "ttl:$ttl" +
+                    "data:"+data.toString()
+        }
+    }
+
+    data class Data(@SerializedName("url") val url:String,@SerializedName("auth_code") val auth_code:String) {
+        override fun toString(): String {
+            return "url:$url" +
+                    "auth_code:$auth_code"
+        }
     }
 
     private val pageChangeListener = object: ViewPager2.OnPageChangeCallback() {
