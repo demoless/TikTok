@@ -2,13 +2,11 @@ package com.bytedance.tiktok.activity
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Bitmap
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.MenuItem
-import android.view.WindowManager
+import android.view.*
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -23,9 +21,16 @@ import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
+import com.google.zxing.BarcodeFormat
+import com.google.zxing.EncodeHintType
+import com.google.zxing.WriterException
+import com.google.zxing.common.BitMatrix
+import com.google.zxing.qrcode.QRCodeWriter
 import kotlinx.android.synthetic.main.activity_main_kt.*
 import okhttp3.*
 import java.io.IOException
+import java.util.*
+import kotlin.collections.ArrayList
 
 class MainKtActivity : AppCompatActivity() {
 
@@ -49,10 +54,11 @@ class MainKtActivity : AppCompatActivity() {
         super.onResume()
         view_pager_home.registerOnPageChangeCallback(pageChangeListener)
         bottom_navigation.setOnNavigationItemSelectedListener(navigationItemSelectedListener)
-        view_pager_home.adapter = Adapter(this,fragments)
+        view_pager_home.adapter = Adapter(this, fragments)
         view_pager_home.isUserInputEnabled = false
         showFloatWindow()
         getLoginMsg()
+        login_qc.setOnClickListener { login_qc.visibility = View.GONE }
     }
 
     @SuppressLint("InflateParams", "RtlHardcoded")
@@ -71,7 +77,7 @@ class MainKtActivity : AppCompatActivity() {
             width = WindowManager.LayoutParams.WRAP_CONTENT
             height = WindowManager.LayoutParams.WRAP_CONTENT
         }
-        val view = LayoutInflater.from(this).inflate(R.layout.layout_float_window,null)
+        val view = LayoutInflater.from(this).inflate(R.layout.layout_float_window, null)
         windowManager.addView(view, windowParams)
         FpsMonitor.startMonitor { fps ->
             Log.d("fps", String.format("fps: %s", fps))
@@ -88,27 +94,65 @@ class MainKtActivity : AppCompatActivity() {
         val url = "https://passport.bilibili.com/x/passport-tv-login/qrcode/auth_code"
         val okHttpClient = OkHttpClient()
         val requestBody = FormBody.Builder()
-                .add("appkey","4409e2ce8ffd12b8")
-                .add("local_id","0")
-                .add("ts","0")
-                .add("sign","e134154ed6add881d28fbdf68653cd9c")
+                .add("appkey", "4409e2ce8ffd12b8")
+                .add("local_id", "0")
+                .add("ts", "0")
+                .add("sign", "e134154ed6add881d28fbdf68653cd9c")
                 .build()
         val request = Request.Builder().url(url).post(requestBody).build()
         val call = okHttpClient.newCall(request)
-        call.enqueue(object: Callback {
+        call.enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
 
             }
 
             override fun onResponse(call: Call, response: Response) {
                 val gson = Gson()
-                val result = gson.fromJson<LoginInfo>(response.body?.string(),LoginInfo::class.java)
+                val result = gson.fromJson<LoginInfo>(response.body?.string(), LoginInfo::class.java)
+                createQRImage(result.data.url)
             }
 
         })
     }
 
-    data class LoginInfo(@SerializedName("code") val  code: Int,
+    val QR_WIDTH = 120
+    val QR_HEIGHT = 120
+    fun createQRImage(url: String?) {
+        try {
+            //判断URL合法性
+            if (url == null || "" == url || url.length < 1) {
+                return
+            }
+            val hints: Hashtable<EncodeHintType, String> = Hashtable<EncodeHintType, String>()
+            hints.put(EncodeHintType.CHARACTER_SET, "utf-8")
+            //图像数据转换，使用了矩阵转换
+            val bitMatrix: BitMatrix = QRCodeWriter().encode(url, BarcodeFormat.QR_CODE, QR_WIDTH, QR_HEIGHT, hints)
+            val pixels = IntArray(QR_WIDTH * QR_HEIGHT)
+            //下面这里按照二维码的算法，逐个生成二维码的图片，
+            //两个for循环是图片横列扫描的结果
+            for (y in 0 until QR_HEIGHT) {
+                for (x in 0 until QR_WIDTH) {
+                    if (bitMatrix.get(x, y)) {
+                        pixels[y * QR_WIDTH + x] = -0x1000000
+                    } else {
+                        pixels[y * QR_WIDTH + x] = -0x1
+                    }
+                }
+            }
+            //生成二维码图片的格式，使用ARGB_8888
+            val bitmap: Bitmap = Bitmap.createBitmap(QR_WIDTH, QR_HEIGHT, Bitmap.Config.ARGB_8888)
+            bitmap.setPixels(pixels, 0, QR_WIDTH, 0, 0, QR_WIDTH, QR_HEIGHT)
+            //显示到一个ImageView上面
+            runOnUiThread {
+                login_qc.visibility = View.VISIBLE
+                login_qc.setImageBitmap(bitmap)
+            }
+        } catch (e: WriterException) {
+            e.printStackTrace()
+        }
+    }
+
+    data class LoginInfo(@SerializedName("code") val code: Int,
                          @SerializedName("message") val message: String,
                          @SerializedName("ttl") val ttl: Int,
                          @SerializedName("data") val data: Data) {
@@ -120,7 +164,7 @@ class MainKtActivity : AppCompatActivity() {
         }
     }
 
-    data class Data(@SerializedName("url") val url:String,@SerializedName("auth_code") val auth_code:String) {
+    data class Data(@SerializedName("url") val url: String, @SerializedName("auth_code") val auth_code: String) {
         override fun toString(): String {
             return "url:$url" +
                     "auth_code:$auth_code"
@@ -176,7 +220,7 @@ class MainKtActivity : AppCompatActivity() {
                 try {
                     val shiftMode = tabView.javaClass.getDeclaredField("mShiftingMode")
                     shiftMode.isAccessible = true
-                    shiftMode.setBoolean(tabView,false)
+                    shiftMode.setBoolean(tabView, false)
                     shiftMode.isAccessible = false
                     for (index in 0 ..tabView.childCount) {
                         val itemView = tabView.getChildAt(index) as BottomNavigationItemView

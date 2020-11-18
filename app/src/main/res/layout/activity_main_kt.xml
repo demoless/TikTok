@@ -22,4 +22,11 @@
         android:layout_gravity="bottom"
         android:layout_height="50dp"/>
 
+    <ImageView
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:id="@+id/login_qc"
+        android:layout_width="120dp"
+        android:layout_height="120dp"/>
+
 </FrameLayout>
