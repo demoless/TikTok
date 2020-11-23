@@ -93,12 +93,16 @@ class MainKtActivity : AppCompatActivity() {
     private val loginInfoListener: ILoginInfoListener by lazy {
         object : ILoginInfoListener {
             override fun onLoginInfoSucess(data: RQData) {
-                login_qc.visibility = View.GONE
+                runOnUiThread {
+                    login_qc.visibility = View.GONE
+                }
             }
 
             override fun onLoginInfoFail(msg: String) {
-                login_qc.visibility = View.GONE
-                Toast.makeText(this@MainKtActivity,"登陆失败",Toast.LENGTH_SHORT).show()
+                runOnUiThread {
+                    login_qc.visibility = View.GONE
+                    Toast.makeText(this@MainKtActivity,"登陆失败",Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
