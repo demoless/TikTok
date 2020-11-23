@@ -7,6 +7,7 @@ import android.os.*
 import android.util.Log
 import android.view.*
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -89,9 +90,25 @@ class MainKtActivity : AppCompatActivity() {
         FpsMonitor.stopMonitor()
     }
 
+    private val loginInfoListener: ILoginInfoListener by lazy {
+        object : ILoginInfoListener {
+            override fun onLoginInfoSucess(data: RQData) {
+                login_qc.visibility = View.GONE
+            }
+
+            override fun onLoginInfoFail(msg: String) {
+                login_qc.visibility = View.GONE
+                Toast.makeText(this@MainKtActivity,"登陆失败",Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private val okHttpClient: OkHttpClient by lazy {
+        OkHttpClient()
+    }
+
     private fun getLoginMsg() {
         val url = "https://passport.bilibili.com/x/passport-tv-login/qrcode/auth_code"
-        val okHttpClient = OkHttpClient()
         val requestBody = FormBody.Builder()
                 .add("appkey", "4409e2ce8ffd12b8")
                 .add("local_id", "0")
@@ -146,6 +163,7 @@ class MainKtActivity : AppCompatActivity() {
                 login_qc.visibility = View.VISIBLE
                 login_qc.setImageBitmap(bitmap)
             }
+            getLoginResult()
         } catch (e: WriterException) {
             e.printStackTrace()
         }
@@ -157,11 +175,17 @@ class MainKtActivity : AppCompatActivity() {
     private fun getLoginResult() {
         val handlerThread = HandlerThread("login-result-check")
         handlerThread.start()
-        val handler = RetryHandler(handlerThread.looper)
+        val handler = RetryHandler(handlerThread.looper,loginInfoListener)
         handler.sendEmptyMessage(RETRY_GET_INFO)
     }
 
-    class RetryHandler(looper: Looper): Handler(looper) {
+    interface ILoginInfoListener {
+        fun onLoginInfoSucess(data: RQData)
+
+        fun onLoginInfoFail(msg: String)
+    }
+
+    class RetryHandler(looper: Looper,private val listener: ILoginInfoListener): Handler(looper) {
         companion object {
             const val RETRY_GET_INFO = -1
             const val SUCESS_GET_INFO = 1
@@ -170,7 +194,7 @@ class MainKtActivity : AppCompatActivity() {
             super.handleMessage(msg)
             when(msg.what) {
                 RETRY_GET_INFO -> {
-
+                    getLoginResultByNet()
                 }
             }
         }
@@ -195,8 +219,17 @@ class MainKtActivity : AppCompatActivity() {
                 override fun onResponse(call: Call, response: Response) {
                     val gson = Gson()
                     val result = gson.fromJson<LoginInfo<RQData>>(response.body?.string(), LoginInfo::class.java)
-                    if (result.code != 0) {
-                        sendEmptyMessageDelayed(RETRY_GET_INFO,1000)
+                    when(result.code) {
+                        0 -> {
+                            listener.onLoginInfoSucess(result.data)
+                        }
+                        //API校验密匙错误 请求错误 二维码已失效
+                        -3, -400,86038 -> {
+                            listener.onLoginInfoFail(result.message)
+                        }
+                        86039 -> {
+                            sendEmptyMessageDelayed(RETRY_GET_INFO,1000)
+                        }
                     }
                 }
 
