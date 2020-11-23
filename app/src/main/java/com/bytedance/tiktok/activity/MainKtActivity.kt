@@ -3,8 +3,7 @@ package com.bytedance.tiktok.activity
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
-import android.os.Build
-import android.os.Bundle
+import android.os.*
 import android.util.Log
 import android.view.*
 import android.widget.TextView
@@ -108,7 +107,7 @@ class MainKtActivity : AppCompatActivity() {
 
             override fun onResponse(call: Call, response: Response) {
                 val gson = Gson()
-                val result = gson.fromJson<LoginInfo>(response.body?.string(), LoginInfo::class.java)
+                val result = gson.fromJson<LoginInfo<Data>>(response.body?.string(), LoginInfo::class.java)
                 createQRImage(result.data.url)
             }
 
@@ -152,10 +151,63 @@ class MainKtActivity : AppCompatActivity() {
         }
     }
 
-    data class LoginInfo(@SerializedName("code") val code: Int,
+    val RETRY_GET_INFO = -1
+    val SUCESS_GET_INFO = 1
+
+    private fun getLoginResult() {
+        val handlerThread = HandlerThread("login-result-check")
+        handlerThread.start()
+        val handler = RetryHandler(handlerThread.looper)
+        handler.sendEmptyMessage(RETRY_GET_INFO)
+    }
+
+    class RetryHandler(looper: Looper): Handler(looper) {
+        companion object {
+            const val RETRY_GET_INFO = -1
+            const val SUCESS_GET_INFO = 1
+        }
+        override fun handleMessage(msg: Message) {
+            super.handleMessage(msg)
+            when(msg.what) {
+                RETRY_GET_INFO -> {
+
+                }
+            }
+        }
+
+        private fun getLoginResultByNet() {
+            val url = "https://passport.bilibili.com/x/passport-tv-login/qrcode/poll"
+            val okHttpClient = OkHttpClient()
+            val requestBody = FormBody.Builder()
+                    .add("appkey", "4409e2ce8ffd12b8")
+                    .add("auth_code","6214464b3025541abf6f654cf7569a01")
+                    .add("local_id", "0")
+                    .add("ts", "0")
+                    .add("sign", "e134154ed6add881d28fbdf68653cd9c")
+                    .build()
+            val request = Request.Builder().url(url).post(requestBody).build()
+            val call = okHttpClient.newCall(request)
+            call.enqueue(object : okhttp3.Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    sendEmptyMessage(RETRY_GET_INFO)
+                }
+
+                override fun onResponse(call: Call, response: Response) {
+                    val gson = Gson()
+                    val result = gson.fromJson<LoginInfo<RQData>>(response.body?.string(), LoginInfo::class.java)
+                    if (result.code != 0) {
+                        sendEmptyMessageDelayed(RETRY_GET_INFO,1000)
+                    }
+                }
+
+            })
+        }
+    }
+
+    data class LoginInfo<T>(@SerializedName("code") val code: Int,
                          @SerializedName("message") val message: String,
                          @SerializedName("ttl") val ttl: Int,
-                         @SerializedName("data") val data: Data) {
+                         @SerializedName("data") val data: T) {
         override fun toString(): String {
             return "code:$code" +
                     "message:$message" +
@@ -168,6 +220,16 @@ class MainKtActivity : AppCompatActivity() {
         override fun toString(): String {
             return "url:$url" +
                     "auth_code:$auth_code"
+        }
+    }
+
+    data class RQData(@SerializedName("mid") val mid: Long,
+                      @SerializedName("access_token") val accessToken: String,
+                      @SerializedName("refresh_token") val refashToken: String) {
+        override fun toString(): String {
+            return "mid:$mid\t"+
+                    "access_token$accessToken\t"+
+                    "refresh_token$refashToken\t"
         }
     }
 
