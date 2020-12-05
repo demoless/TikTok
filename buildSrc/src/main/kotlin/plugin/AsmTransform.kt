@@ -3,7 +3,7 @@ package plugin
 import com.android.build.api.transform.*
 import com.android.build.gradle.internal.pipeline.TransformManager
 import com.android.ide.common.internal.WaitableExecutor
-import org.gradle.internal.impldep.org.apache.commons.io.FileUtils
+import org.apache.commons.io.FileUtils
 import org.objectweb.asm.ClassReader
 import org.objectweb.asm.ClassVisitor
 import org.objectweb.asm.ClassWriter
@@ -43,25 +43,41 @@ class AsmTransform: Transform() {
 
     override fun transform(transformInvocation: TransformInvocation) {
         super.transform(transformInvocation)
-        val transformOutputProvider = transformInvocation.outputProvider
+        val inputs: Collection<TransformInput>? = transformInvocation.inputs
+        val outputProvider: TransformOutputProvider? = transformInvocation.outputProvider
         val isIncremental = transformInvocation.isIncremental
 
-        transformInvocation.inputs.forEach { input ->
+        if(!isIncremental) {
+            //非增量编译 删除之前的所有文件
+            outputProvider?.deleteAll()
+        }
+        println("inputs size: ${inputs?.size}")
+        inputs?.forEach { input ->
             input.jarInputs.forEach { jarInput ->
-                //处理jar
-                mWaitableExecutor.execute {
-                    processJarInput(jarInput, transformOutputProvider,isIncremental)
+                try {
+                    //处理jar
+                    mWaitableExecutor.execute {
+                        processJarInput(jarInput, outputProvider!!, isIncremental)
+                        return@execute null
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
                 }
             }
 
             input.directoryInputs.forEach { directoryInput ->
-                //处理源码文件
-                mWaitableExecutor.execute {
-                    processDirectoryInput(directoryInput, transformOutputProvider,isIncremental)
+                try {
+                    //处理源码文件
+                    mWaitableExecutor.execute {
+                        processDirectoryInput(directoryInput, outputProvider!!, isIncremental)
+                        return@execute null
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
                 }
             }
-
         }
+        mWaitableExecutor.waitForTasksWithQuickFail<Any>(true)
     }
 
     private fun processDirectoryInput(directoryInput: DirectoryInput, outputProvider: TransformOutputProvider,isIncremental: Boolean) {
@@ -78,7 +94,7 @@ class AsmTransform: Transform() {
                 val destFile = File(destFilePath)
                 when (status) {
                     Status.NOTCHANGED -> return
-                    Status.CHANGED,Status.ADDED -> {
+                    Status.CHANGED, Status.ADDED -> {
                         FileUtils.touch(destFile)
                         transformSingleFile(inputFile,destFile)
                     }

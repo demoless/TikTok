@@ -1,6 +1,9 @@
+import plugin.AsmPlugin
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: AsmPlugin.class
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
