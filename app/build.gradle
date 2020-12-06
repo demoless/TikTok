@@ -3,14 +3,14 @@ import plugin.AsmPlugin
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: AsmPlugin.class
+apply plugin: AsmPlugin
 android {
-    compileSdkVersion 29
-    buildToolsVersion "29.0.2"
+    compileSdkVersion 30
+    buildToolsVersion "30.0.2"
     defaultConfig {
         applicationId "com.bytedance.tiktok"
         minSdkVersion 21
-        targetSdkVersion 29
+        targetSdkVersion 30
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -26,6 +26,16 @@ android {
             abiFilters 'armeabi-v7a'
         }
     }
+
+    packagingOptions {
+        pickFirst 'lib/armeabi-v7a/libavcodec.so'
+        pickFirst 'ib/armeabi-v7a/libswscale.so'
+        pickFirst 'ib/armeabi-v7a/libavdevice.so'
+        pickFirst 'ib/armeabi-v7a/libavfilter.so'
+        pickFirst 'ib/armeabi-v7a/libavformat.so'
+        pickFirst 'ib/armeabi-v7a/libavutil.so'
+        pickFirst 'ib/armeabi-v7a/libswresample.so'
+    }
     buildTypes {
         release {
             minifyEnabled true
@@ -38,10 +48,6 @@ android {
         cmake {
             path "src/main/cpp/CMakeLists.txt"
         }
-    }
-
-    dataBinding {
-        enabled = true
     }
 
     //支持lambda语法
