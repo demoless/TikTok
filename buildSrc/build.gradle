@@ -7,7 +7,7 @@ group("com.bytedance.plugin")
 
 
 buildscript {
-    ext.kotlin_version = '1.3.50'
+    ext.kotlin_version = '1.4.10'
     repositories {
         maven{url 'http://maven.aliyun.com/nexus/content/groups/public/'}
         maven { url "https://jitpack.io" }
