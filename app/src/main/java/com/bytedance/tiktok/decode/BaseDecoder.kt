@@ -229,7 +229,7 @@ abstract class BaseDecoder(private val mFilePath: String) :IDecoder{
     private fun initCodec(): Boolean {
         try {
             //1.根据音视频编码格式初始化解码器
-            val type = mExtractor!!.getFormat()!!.getString(MediaFormat.KEY_MIME)
+            val type = mExtractor!!.getFormat()!!.getString(MediaFormat.KEY_MIME) ?: ""
             mCodec = MediaCodec.createDecoderByType(type)
             //2.配置解码器
             if (!configCodec(mCodec!!, mExtractor!!.getFormat()!!)) {
