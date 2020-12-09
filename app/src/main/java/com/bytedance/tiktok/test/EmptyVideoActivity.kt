@@ -26,16 +26,16 @@ class EmptyVideoActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         surface_view.holder.addCallback(object:SurfaceHolder.Callback{
-            override fun surfaceChanged(holder: SurfaceHolder?, format: Int, width: Int, height: Int) {
+            override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
 
             }
 
-            override fun surfaceDestroyed(holder: SurfaceHolder?) {
+            override fun surfaceDestroyed(holder: SurfaceHolder) {
 
             }
 
             @SuppressLint("ResourceType")
-            override fun surfaceCreated(holder: SurfaceHolder?) {
+            override fun surfaceCreated(holder: SurfaceHolder) {
                 val fileDescriptor: AssetFileDescriptor = resources.openRawResourceFd(2131623936)
                 mediaPlayer.setDataSource(fileDescriptor.fileDescriptor ,fileDescriptor.startOffset,
                         fileDescriptor.length)

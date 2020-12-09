@@ -36,7 +36,7 @@ class MMExtractor(context: Context,filePath: String) {
         //【2.1，获取视频多媒体格式】
         for (i in 0 until mExtractor.trackCount) {
             val mediaFormat = mExtractor.getTrackFormat(i)
-            val mime = mediaFormat.getString(MediaFormat.KEY_MIME)
+            val mime = mediaFormat.getString(MediaFormat.KEY_MIME) ?: ""
             if (mime.startsWith("video/")) {
                 mVideoTrack = i
                 break
@@ -54,14 +54,14 @@ class MMExtractor(context: Context,filePath: String) {
         //【2.2，获取音频频多媒体格式】
         for (i in 0 until mExtractor.trackCount) {
             val mediaFormat = mExtractor.getTrackFormat(i)
-            val mime = mediaFormat.getString(MediaFormat.KEY_MIME)
+            val mime = mediaFormat.getString(MediaFormat.KEY_MIME) ?: ""
             if (mime.startsWith("audio/")) {
                 mAudioTrack = i
                 break
             }
         }
         return if (mAudioTrack >= 0) {
-            mExtractor!!.getTrackFormat(mAudioTrack)
+            mExtractor.getTrackFormat(mAudioTrack)
         } else null
     }
 

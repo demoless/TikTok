@@ -115,22 +115,22 @@ class VideoItemFragment constructor(private val videoBean: VideoBean) :Fragment(
         }
     }
 
-    override fun surfaceCreated(holder: SurfaceHolder?) {
+    override fun surfaceCreated(holder: SurfaceHolder) {
         Log.e("message","VideoItemFragment${videoBean.videoRes}: surfaceCreated")
         mediaPlayer.setDisplay(holder)
     }
 
-    override fun surfaceChanged(holder: SurfaceHolder?, format: Int, width: Int, height: Int) {
+    override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
         mediaPlayer.setDisplay(holder)
         Log.e("message","VideoItemFragment${videoBean.videoRes}: surfaceChanged")
     }
 
-    override fun surfaceDestroyed(holder: SurfaceHolder?) {
+    override fun surfaceDestroyed(holder: SurfaceHolder) {
         pauseVideo()
         Log.e("message","VideoItemFragment${videoBean.videoRes}: surfaceDestroyed")
     }
 
-    override fun surfaceRedrawNeeded(holder: SurfaceHolder?) {
+    override fun surfaceRedrawNeeded(holder: SurfaceHolder) {
         Log.e("message","VideoItemFragment${videoBean.videoRes}: surfaceRedrawNeeded")
     }
 

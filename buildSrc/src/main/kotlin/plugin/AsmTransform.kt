@@ -1,17 +1,22 @@
-package plugin
+package com.four.buildsrc.hotfix
 
 import com.android.build.api.transform.*
 import com.android.build.gradle.internal.pipeline.TransformManager
 import com.android.ide.common.internal.WaitableExecutor
-import org.apache.commons.io.FileUtils
 import org.objectweb.asm.ClassReader
 import org.objectweb.asm.ClassVisitor
 import org.objectweb.asm.ClassWriter
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
+import org.apache.commons.io.FileUtils
+import org.apache.commons.io.IOUtils
+import org.gradle.internal.impldep.org.apache.ivy.util.FileUtil
+import java.util.jar.JarFile
+import java.util.jar.JarOutputStream
+import java.util.zip.ZipEntry
 
-class AsmTransform: Transform() {
+abstract class AsmTransform: Transform() {
     companion object {
         private const val TAG = "AsmTransform"
     }
@@ -27,7 +32,7 @@ class AsmTransform: Transform() {
 
     override fun isIncremental(): Boolean {
         //是否增量编译
-        return true
+        return false
     }
 
     override fun getScopes(): MutableSet<in QualifiedContent.Scope> {
@@ -41,6 +46,8 @@ class AsmTransform: Transform() {
         }
     }
 
+    abstract fun getClassVisitor(classWriter: ClassWriter): ClassVisitor
+
     override fun transform(transformInvocation: TransformInvocation) {
         super.transform(transformInvocation)
         val inputs: Collection<TransformInput>? = transformInvocation.inputs
@@ -51,38 +58,53 @@ class AsmTransform: Transform() {
             //非增量编译 删除之前的所有文件
             outputProvider?.deleteAll()
         }
-        println("inputs size: ${inputs?.size}")
         inputs?.forEach { input ->
+
+            if(outputProvider == null) {
+                println("--------------outputProvider == null-----------------")
+            }
             input.jarInputs.forEach { jarInput ->
                 try {
                     //处理jar
                     mWaitableExecutor.execute {
                         processJarInput(jarInput, outputProvider!!, isIncremental)
-                        return@execute null
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
             }
-
-            input.directoryInputs.forEach { directoryInput ->
+            /*input.directoryInputs.forEach { directoryInput ->
                 try {
                     //处理源码文件
                     mWaitableExecutor.execute {
                         processDirectoryInput(directoryInput, outputProvider!!, isIncremental)
-                        return@execute null
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
-            }
+            }*/
         }
         mWaitableExecutor.waitForTasksWithQuickFail<Any>(true)
     }
 
     private fun processDirectoryInput(directoryInput: DirectoryInput, outputProvider: TransformOutputProvider,isIncremental: Boolean) {
+        /*if(directoryInput.file.isDirectory) {
+            val extensions = arrayOf("class")
+            //递归地去获取该文件夹下面所有的文件
+            val fileList = FileUtils.listFiles(directoryInput.file,extensions,true)
+
+            fileList.forEach { inputFile ->
+                val classReader = ClassReader(inputFile.readBytes())
+                val classWriter = ClassWriter(classReader,ClassWriter.COMPUTE_MAXS)
+                classReader.accept(HelloWorldClassVisitor(classWriter), ClassReader.EXPAND_FRAMES)
+                val outputStream = FileOutputStream(inputFile.parentFile.absolutePath + File.separator + inputFile.name)
+                outputStream.write(classWriter.toByteArray())
+                outputStream.close()
+            }
+        }
         val directory = outputProvider.getContentLocation(directoryInput.name,directoryInput.contentTypes,directoryInput.scopes,Format.DIRECTORY)
-        FileUtils.forceMkdir(directory)
+        FileUtils.copyDirectory(directoryInput.file,directory)*/
+        val directory = outputProvider.getContentLocation(directoryInput.name,directoryInput.contentTypes,directoryInput.scopes,Format.DIRECTORY)
         if (isIncremental) {
             val srcPath = directoryInput.file.absolutePath
             val destPath = directory.absolutePath
@@ -92,49 +114,93 @@ class AsmTransform: Transform() {
                 val inputFile = changeFile.key
                 val destFilePath = inputFile.absolutePath.replace(srcPath,destPath)
                 val destFile = File(destFilePath)
-                when (status) {
-                    Status.NOTCHANGED -> return
-                    Status.CHANGED, Status.ADDED -> {
-                        FileUtils.touch(destFile)
-                        transformSingleFile(inputFile,destFile)
-                    }
-                    Status.REMOVED -> {
-                        if (destFile.exists()) {
-                            FileUtils.forceDelete(destFile)
-                        }
-                    }
+                if(status == Status.REMOVED && destFile.exists()) {
+                    FileUtils.forceDelete(destFile)
+                } else if (status == Status.CHANGED || status == Status.ADDED) {
+                    FileUtils.touch(destFile)
+                    transformSingleFile(inputFile,destFile)
                 }
             }
         } else {
-            transformDirectory(directoryInput,directory)
+            transformDirectory(directoryInput, directory)
+            FileUtils.copyDirectory(directoryInput.file,directory)
         }
     }
 
     private fun processJarInput(jarInput: JarInput, outputProvider: TransformOutputProvider,isIncremental: Boolean) {
-        val dest = outputProvider.getContentLocation(jarInput.name,jarInput.contentTypes,jarInput.scopes,Format.JAR)
-        if (isIncremental) {
-            when(jarInput.status) {
-                Status.NOTCHANGED -> {
-                    return
-                }
 
-                Status.ADDED,Status.CHANGED -> {
-                    FileUtils.copyFile(jarInput.file,dest)
-                }
+        var jarName = jarInput.name
+        if (jarName.endsWith(".jar")) {
+            jarName = jarName.substring(0,jarName.length - 4)
+        }
 
-                Status.REMOVED -> {
-                    if (dest.exists()) {
-                        FileUtils.forceDelete(dest)
-                    }
-                }
+        //临时文件存放正在操作中的文件
+        val tempFile = File(jarInput.file.parent,File.separator + "temp_file.jar")
+        //之前的缓存存在避免重复插桩
+        if (tempFile.exists()) {
+            tempFile.delete()
+        }
+
+        val tempOutputStream = JarOutputStream(FileOutputStream(tempFile))
+
+        val jarFile = JarFile(jarInput.file)
+        val jarFileEntries = jarFile.entries()
+        while (jarFileEntries.hasMoreElements()) {
+            val jarEntry = jarFileEntries.nextElement()
+            val entryName = jarEntry.name
+            val zipEntry = ZipEntry(entryName)
+            if (zipEntry.isDirectory) continue
+            //读取jar中的输入流
+            val inputStream = jarFile.getInputStream(zipEntry)
+
+            tempOutputStream.putNextEntry(zipEntry)
+
+            println("--------------当前文件为:$entryName-----------------")
+            if (entryName.endsWith(".class") && !(entryName.startsWith("R\$")
+                            || entryName.startsWith("R.") || "BuildConfig.class".equals(entryName))) {
+                //执行插桩
+                val classReader = ClassReader(IOUtils.toByteArray(inputStream))
+                val classWriter = ClassWriter(classReader,ClassWriter.COMPUTE_MAXS)
+                classReader.accept(getClassVisitor(classWriter), ClassReader.EXPAND_FRAMES)
+                tempOutputStream.write(classWriter.toByteArray())
+            } else {
+                tempOutputStream.write(IOUtils.toByteArray(inputStream))
             }
-        } else {
-            FileUtils.copyFile(jarInput.file,dest)
+            tempOutputStream.closeEntry()
+        }
+        tempOutputStream.close()
+        jarFile.close()
+        val dest = outputProvider.getContentLocation(jarInput.name,jarInput.contentTypes,jarInput.scopes,Format.JAR)
+        FileUtils.copyFile(tempFile,dest)
+        tempFile.delete()
+    }
+
+    private fun transformDirectory(directoryInput: DirectoryInput,dest: File) {
+        if (dest.exists()) {
+            FileUtils.forceDelete(dest)
+        }
+        FileUtils.forceMkdir(dest)
+        val extensions = arrayOf("class")
+        //递归地去获取该文件夹下面所有的文件
+        val fileList = FileUtils.listFiles(directoryInput.file,extensions,true)
+        val outputFilePath = dest.absolutePath
+        val inputFilePath = directoryInput.file.absolutePath
+        fileList.forEach { inputFile ->
+            val outputFullPath = inputFile.absolutePath.replace(inputFilePath, outputFilePath)
+            val outputFile = File(outputFullPath)
+            if (inputFile.isDirectory) {
+                transformDirectory(inputFile as DirectoryInput,outputFile)
+            } else {
+                //创建文件
+                FileUtils.touch(outputFile)
+                //单个单个地复制文件
+                transformSingleFile(inputFile, outputFile)
+            }
         }
     }
 
     private fun transformSingleFile(inputFile: File, destFile: File) {
-        println("拷贝单个文件")
+        println("扫描单个文件")
         traceFile(inputFile, destFile)
     }
 
@@ -151,37 +217,14 @@ class AsmTransform: Transform() {
 
             inputStream.close()
             outputStream.close()
-        } else {
-            FileUtils.copyFile(inputFile, outputFile)
         }
     }
 
     private fun isNeedTraceClass(inputFile: File):Boolean {
         val name = inputFile.name
-        return !(!name.endsWith(".class")
-                || name.startsWith("R.class")
-                || name.startsWith("R$"))
-    }
-
-    private fun getClassVisitor(classWriter:ClassWriter): ClassVisitor {
-        return DoubleClickClassVisitor(classWriter)
-    }
-
-    private fun transformDirectory(directoryInput: DirectoryInput,dest: File) {
-        val extensions = arrayOf("class")
-        //递归地去获取该文件夹下面所有的文件
-        val fileList = FileUtils.listFiles(directoryInput.file,extensions,true)
-        val outputFilePath = dest.absolutePath
-        val inputFilePath = directoryInput.file.absolutePath
-        fileList.forEach { inputFile ->
-            println("替换前  file.absolutePath = ${inputFile.absolutePath}")
-            val outputFullPath = inputFile.absolutePath.replace(inputFilePath, outputFilePath)
-            println("替换后  file.absolutePath = ${outputFullPath}")
-            val outputFile = File(outputFullPath)
-            //创建文件
-            FileUtils.touch(outputFile)
-            //单个单个地复制文件
-            transformSingleFile(inputFile, outputFile)
-        }
+        val result = name.endsWith(".class") &&
+                !(name.startsWith("R$") || name.startsWith("R.") || "BuildConfig.class".equals(name))
+        println("输入文件为：$name,isNeedTraceClass: $result")
+        return result
     }
 }
