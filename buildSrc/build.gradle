@@ -1,0 +1,46 @@
+apply plugin: 'groovy'
+apply plugin: 'maven'
+apply plugin: 'kotlin'
+
+group("com.bytedance.plugin")
+
+
+
+buildscript {
+    ext.kotlin_version = '1.4.10'
+    repositories {
+        maven{url 'http://maven.aliyun.com/nexus/content/groups/public/'}
+        maven { url "https://jitpack.io" }
+
+        google()
+        //jcenter()
+
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+repositories {
+    maven{url 'http://maven.aliyun.com/nexus/content/groups/public/'}
+    google()
+    //jcenter()
+}
+
+
+dependencies {
+    api gradleApi()
+    api localGroovy()
+
+    //常用io操作
+    implementation "commons-io:commons-io:2.6"
+
+    implementation 'com.android.tools.build:gradle:4.1.1'
+    implementation 'com.android.tools.build:gradle-api:4.1.1'
+
+    //ASM依赖
+    implementation 'org.ow2.asm:asm:8.0'
+    implementation 'org.ow2.asm:asm-util:8.0'
+    implementation 'org.ow2.asm:asm-commons:8.0'
+}
