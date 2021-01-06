@@ -57,8 +57,8 @@ abstract class AsmTransform: Transform() {
     }
 
     override fun transform(transformInvocation: TransformInvocation) {
-        super.transform(transformInvocation)
         println("-----------------$name start--------------------")
+        super.transform(transformInvocation)
         val startTime = System.currentTimeMillis()
         val transformOutputProvider = transformInvocation.outputProvider
         val isIncremental = transformInvocation.isIncremental
@@ -97,9 +97,6 @@ abstract class AsmTransform: Transform() {
                 val destFilePath = inputFile.absolutePath.replace(srcPath,destPath)
                 val destFile = File(destFilePath)
                 when (status) {
-                    Status.NOTCHANGED -> {
-
-                    }
                     Status.CHANGED,Status.ADDED -> {
                         FileUtils.touch(destFile)
                         //单个单个地复制文件
@@ -109,6 +106,9 @@ abstract class AsmTransform: Transform() {
                         if (destFile.exists()) {
                             FileUtils.forceDelete(destFile)
                         }
+                    }
+                    else -> {
+
                     }
                 }
             }
@@ -124,9 +124,9 @@ abstract class AsmTransform: Transform() {
         val outputFilePath = dest.absolutePath
         val inputFilePath = directoryInput.file.absolutePath
         fileList.forEach { inputFile ->
-            println("替换前  file.absolutePath = ${inputFile.absolutePath}")
+            //println("替换前  file.absolutePath = ${inputFile.absolutePath}")
             val outputFullPath = inputFile.absolutePath.replace(inputFilePath, outputFilePath)
-            println("替换后  file.absolutePath = ${outputFullPath}")
+            //println("替换后  file.absolutePath = $outputFullPath")
             val outputFile = File(outputFullPath)
             //创建文件
             FileUtils.touch(outputFile)
@@ -139,10 +139,6 @@ abstract class AsmTransform: Transform() {
         val dest = outputProvider.getContentLocation(jarInput.name,jarInput.contentTypes,jarInput.scopes,Format.JAR)
         if (isIncremental) {
             when(jarInput.status) {
-                Status.NOTCHANGED -> {
-                    return
-                }
-
                 Status.ADDED,Status.CHANGED -> {
                     transformJar(jarInput,dest)
                 }
@@ -151,6 +147,9 @@ abstract class AsmTransform: Transform() {
                     if (dest.exists()) {
                         FileUtils.forceDelete(dest)
                     }
+                }
+                else -> {
+
                 }
             }
         } else {
@@ -188,7 +187,6 @@ abstract class AsmTransform: Transform() {
             jarOutputStream.close()
             jarFile.close()
         } else {
-            println("${jarInput.file.name} 不处理")
             FileUtils.copyFile(jarInput.file,dest)
         }
 
@@ -200,16 +198,14 @@ abstract class AsmTransform: Transform() {
     }
 
     private fun transformSingleFile(inputFile: File, destFile: File) {
-        println("扫描单个文件")
         if (isNeedTraceClass(destFile.name)) {
-            traceFile(inputFile.inputStream(), FileOutputStream(destFile))
+            traceFile(inputFile, destFile)
         } else {
             FileUtils.copyFile(inputFile, destFile)
         }
     }
 
     protected open fun isNeedTraceClass(name: String):Boolean {
-        println("输入文件为：$name")
         if (name.startsWith("androidx/")
                 || name.startsWith("android/")
                 || name.startsWith("kotlin/")
@@ -229,12 +225,12 @@ abstract class AsmTransform: Transform() {
         return newName.endsWith(".class") &&
                 !(newName.startsWith("R$")
                         || newName.startsWith("R.")
-                        || newName.contains('$')
-                        || newName.equals("BuildConfig.class"))
+                        || newName.contains('$'))
     }
 
-    private fun traceFile(inputStream: FileInputStream, outputStream:FileOutputStream) {
-
+    private fun traceFile(inputFile: File, destFile:File) {
+        val inputStream = inputFile.inputStream()
+        val outputStream = FileOutputStream(destFile)
         val classReader = ClassReader(inputStream)
         val classWriter = ClassWriter(classReader,ClassWriter.COMPUTE_MAXS)
         classReader.accept(getClassVisitor(classWriter), ClassReader.EXPAND_FRAMES)
