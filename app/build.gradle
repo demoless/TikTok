@@ -1,9 +1,7 @@
-import plugin.AsmPlugin
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: AsmPlugin
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.2"
@@ -17,24 +15,20 @@ android {
         externalNativeBuild {
             cmake {
                 cppFlags " -frtti -fexceptions -std=c++11  "
-                abiFilters 'armeabi-v7a', 'arm64-v8a'
                 cFlags "-DSTDC_HEADERS"
                 version "3.10.2"
             }
-        }
-        ndk {
-            abiFilters 'armeabi-v7a'
         }
     }
 
     packagingOptions {
         pickFirst 'lib/armeabi-v7a/libavcodec.so'
-        pickFirst 'ib/armeabi-v7a/libswscale.so'
-        pickFirst 'ib/armeabi-v7a/libavdevice.so'
-        pickFirst 'ib/armeabi-v7a/libavfilter.so'
-        pickFirst 'ib/armeabi-v7a/libavformat.so'
-        pickFirst 'ib/armeabi-v7a/libavutil.so'
-        pickFirst 'ib/armeabi-v7a/libswresample.so'
+        pickFirst 'lib/armeabi-v7a/libswscale.so'
+        pickFirst 'lib/armeabi-v7a/libavdevice.so'
+        pickFirst 'lib/armeabi-v7a/libavfilter.so'
+        pickFirst 'lib/armeabi-v7a/libavformat.so'
+        pickFirst 'lib/armeabi-v7a/libavutil.so'
+        pickFirst 'lib/armeabi-v7a/libswresample.so'
     }
     buildTypes {
         release {
@@ -55,6 +49,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    ndkVersion '21.3.6528147'
 }
 
 dependencies {
