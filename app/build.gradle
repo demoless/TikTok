@@ -14,7 +14,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         externalNativeBuild {
             cmake {
-                cppFlags " -frtti -fexceptions -std=c++11  "
+                cppFlags " -frtti -fexceptions -std=c++11"
                 cFlags "-DSTDC_HEADERS"
                 version "3.10.2"
             }
@@ -22,6 +22,7 @@ android {
     }
 
     packagingOptions {
+        pickFirst("lib/arm64-v8a/libopencv_java4.so")
         pickFirst 'lib/armeabi-v7a/libavcodec.so'
         pickFirst 'lib/armeabi-v7a/libswscale.so'
         pickFirst 'lib/armeabi-v7a/libavdevice.so'
@@ -29,6 +30,10 @@ android {
         pickFirst 'lib/armeabi-v7a/libavformat.so'
         pickFirst 'lib/armeabi-v7a/libavutil.so'
         pickFirst 'lib/armeabi-v7a/libswresample.so'
+    }
+
+    sourceSets {
+        getAt("main").jniLibs.srcDirs("src/main/jniLibs")
     }
     buildTypes {
         release {
@@ -40,7 +45,7 @@ android {
 
     externalNativeBuild {
         cmake {
-            path "src/main/cpp/CMakeLists.txt"
+            path "src/main/CMakeLists.txt"
         }
     }
 
