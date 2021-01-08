@@ -14,7 +14,6 @@ class VideoDecoderActivity : AppCompatActivity() {
             super.onCreate(savedInstanceState)
             setContentView(R.layout.activity_video_decoder)
             initPlayer()
-            frameInfo.text = ffmpegInfo()
             frameInfo.setOnClickListener {
                 test_view.startAnim()
             }
@@ -41,8 +40,6 @@ class VideoDecoderActivity : AppCompatActivity() {
             videoDecoder.start()
             audioDecoder.start()
         }
-
-        private external fun ffmpegInfo(): String
 
         companion object {
         init {
