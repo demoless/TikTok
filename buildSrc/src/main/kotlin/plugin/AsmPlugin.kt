@@ -12,18 +12,11 @@ import org.objectweb.asm.ClassWriter
 class AsmPlugin: AsmTransform(),Plugin<Project>{
     override fun apply(target: Project) {
         //register transform
-        var extension: BaseExtension? = null
-        //App模块下能拿到AppExtension 但library执行会抛异常 不想为library单独写插件 直接try catch了
-        try {
-            extension= target.extensions.getByType(AppExtension::class.java)
-        }catch (e: UnknownDomainObjectException) {
-            println("${target.name}模块查找 AppExtension失败 开始查找LibraryExtension")
-        }
-        if(extension == null) {
-            extension = target.extensions.getByType(LibraryExtension::class.java)
+        val extension: BaseExtension= target.extensions.getByType(BaseExtension::class.java)
+        if(extension is LibraryExtension) {
             isLibraryModule = true
         }
-        extension?.registerTransform(this)
+        extension.registerTransform(this)
     }
 
     override fun getName(): String {
